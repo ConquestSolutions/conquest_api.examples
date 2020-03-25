@@ -27,23 +27,23 @@ type Client struct {
 
 // ClientService is the interface for Client methods
 type ClientService interface {
-	ApplyStandardAction(params *ApplyStandardActionParams) (*ApplyStandardActionOK, error)
+	ApplyStandardAction(params *ApplyStandardActionParams, authInfo runtime.ClientAuthInfoWriter) (*ApplyStandardActionOK, error)
 
-	CompleteAction(params *CompleteActionParams) (*CompleteActionOK, error)
+	CompleteAction(params *CompleteActionParams, authInfo runtime.ClientAuthInfoWriter) (*CompleteActionOK, error)
 
-	CreateSucceedingAction(params *CreateSucceedingActionParams) (*CreateSucceedingActionOK, error)
+	CreateSucceedingAction(params *CreateSucceedingActionParams, authInfo runtime.ClientAuthInfoWriter) (*CreateSucceedingActionOK, error)
 
-	DeleteAction(params *DeleteActionParams) (*DeleteActionOK, error)
+	DeleteAction(params *DeleteActionParams, authInfo runtime.ClientAuthInfoWriter) (*DeleteActionOK, error)
 
-	GetAction(params *GetActionParams) (*GetActionOK, error)
+	GetAction(params *GetActionParams, authInfo runtime.ClientAuthInfoWriter) (*GetActionOK, error)
 
-	GetActionCompletionDetails(params *GetActionCompletionDetailsParams) (*GetActionCompletionDetailsOK, error)
+	GetActionCompletionDetails(params *GetActionCompletionDetailsParams, authInfo runtime.ClientAuthInfoWriter) (*GetActionCompletionDetailsOK, error)
 
-	MoveAction(params *MoveActionParams) (*MoveActionOK, error)
+	MoveAction(params *MoveActionParams, authInfo runtime.ClientAuthInfoWriter) (*MoveActionOK, error)
 
-	ReverseActionCompletion(params *ReverseActionCompletionParams) (*ReverseActionCompletionOK, error)
+	ReverseActionCompletion(params *ReverseActionCompletionParams, authInfo runtime.ClientAuthInfoWriter) (*ReverseActionCompletionOK, error)
 
-	UpdateAction(params *UpdateActionParams) (*UpdateActionOK, error)
+	UpdateAction(params *UpdateActionParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateActionOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
@@ -51,7 +51,7 @@ type ClientService interface {
 /*
   ApplyStandardAction apply standard action API
 */
-func (a *Client) ApplyStandardAction(params *ApplyStandardActionParams) (*ApplyStandardActionOK, error) {
+func (a *Client) ApplyStandardAction(params *ApplyStandardActionParams, authInfo runtime.ClientAuthInfoWriter) (*ApplyStandardActionOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewApplyStandardActionParams()
@@ -66,6 +66,7 @@ func (a *Client) ApplyStandardAction(params *ApplyStandardActionParams) (*ApplyS
 		Schemes:            []string{"https"},
 		Params:             params,
 		Reader:             &ApplyStandardActionReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -85,7 +86,7 @@ func (a *Client) ApplyStandardAction(params *ApplyStandardActionParams) (*ApplyS
 /*
   CompleteAction complete action API
 */
-func (a *Client) CompleteAction(params *CompleteActionParams) (*CompleteActionOK, error) {
+func (a *Client) CompleteAction(params *CompleteActionParams, authInfo runtime.ClientAuthInfoWriter) (*CompleteActionOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCompleteActionParams()
@@ -100,6 +101,7 @@ func (a *Client) CompleteAction(params *CompleteActionParams) (*CompleteActionOK
 		Schemes:            []string{"https"},
 		Params:             params,
 		Reader:             &CompleteActionReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -119,7 +121,7 @@ func (a *Client) CompleteAction(params *CompleteActionParams) (*CompleteActionOK
 /*
   CreateSucceedingAction create succeeding action API
 */
-func (a *Client) CreateSucceedingAction(params *CreateSucceedingActionParams) (*CreateSucceedingActionOK, error) {
+func (a *Client) CreateSucceedingAction(params *CreateSucceedingActionParams, authInfo runtime.ClientAuthInfoWriter) (*CreateSucceedingActionOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateSucceedingActionParams()
@@ -134,6 +136,7 @@ func (a *Client) CreateSucceedingAction(params *CreateSucceedingActionParams) (*
 		Schemes:            []string{"https"},
 		Params:             params,
 		Reader:             &CreateSucceedingActionReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -153,7 +156,7 @@ func (a *Client) CreateSucceedingAction(params *CreateSucceedingActionParams) (*
 /*
   DeleteAction delete action API
 */
-func (a *Client) DeleteAction(params *DeleteActionParams) (*DeleteActionOK, error) {
+func (a *Client) DeleteAction(params *DeleteActionParams, authInfo runtime.ClientAuthInfoWriter) (*DeleteActionOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewDeleteActionParams()
@@ -168,6 +171,7 @@ func (a *Client) DeleteAction(params *DeleteActionParams) (*DeleteActionOK, erro
 		Schemes:            []string{"https"},
 		Params:             params,
 		Reader:             &DeleteActionReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -187,7 +191,7 @@ func (a *Client) DeleteAction(params *DeleteActionParams) (*DeleteActionOK, erro
 /*
   GetAction get action API
 */
-func (a *Client) GetAction(params *GetActionParams) (*GetActionOK, error) {
+func (a *Client) GetAction(params *GetActionParams, authInfo runtime.ClientAuthInfoWriter) (*GetActionOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetActionParams()
@@ -202,6 +206,7 @@ func (a *Client) GetAction(params *GetActionParams) (*GetActionOK, error) {
 		Schemes:            []string{"https"},
 		Params:             params,
 		Reader:             &GetActionReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -221,7 +226,7 @@ func (a *Client) GetAction(params *GetActionParams) (*GetActionOK, error) {
 /*
   GetActionCompletionDetails get action completion details API
 */
-func (a *Client) GetActionCompletionDetails(params *GetActionCompletionDetailsParams) (*GetActionCompletionDetailsOK, error) {
+func (a *Client) GetActionCompletionDetails(params *GetActionCompletionDetailsParams, authInfo runtime.ClientAuthInfoWriter) (*GetActionCompletionDetailsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetActionCompletionDetailsParams()
@@ -236,6 +241,7 @@ func (a *Client) GetActionCompletionDetails(params *GetActionCompletionDetailsPa
 		Schemes:            []string{"https"},
 		Params:             params,
 		Reader:             &GetActionCompletionDetailsReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -255,7 +261,7 @@ func (a *Client) GetActionCompletionDetails(params *GetActionCompletionDetailsPa
 /*
   MoveAction move action API
 */
-func (a *Client) MoveAction(params *MoveActionParams) (*MoveActionOK, error) {
+func (a *Client) MoveAction(params *MoveActionParams, authInfo runtime.ClientAuthInfoWriter) (*MoveActionOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewMoveActionParams()
@@ -270,6 +276,7 @@ func (a *Client) MoveAction(params *MoveActionParams) (*MoveActionOK, error) {
 		Schemes:            []string{"https"},
 		Params:             params,
 		Reader:             &MoveActionReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -289,7 +296,7 @@ func (a *Client) MoveAction(params *MoveActionParams) (*MoveActionOK, error) {
 /*
   ReverseActionCompletion reverse action completion API
 */
-func (a *Client) ReverseActionCompletion(params *ReverseActionCompletionParams) (*ReverseActionCompletionOK, error) {
+func (a *Client) ReverseActionCompletion(params *ReverseActionCompletionParams, authInfo runtime.ClientAuthInfoWriter) (*ReverseActionCompletionOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewReverseActionCompletionParams()
@@ -304,6 +311,7 @@ func (a *Client) ReverseActionCompletion(params *ReverseActionCompletionParams) 
 		Schemes:            []string{"https"},
 		Params:             params,
 		Reader:             &ReverseActionCompletionReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -323,7 +331,7 @@ func (a *Client) ReverseActionCompletion(params *ReverseActionCompletionParams) 
 /*
   UpdateAction update action API
 */
-func (a *Client) UpdateAction(params *UpdateActionParams) (*UpdateActionOK, error) {
+func (a *Client) UpdateAction(params *UpdateActionParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateActionOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewUpdateActionParams()
@@ -338,6 +346,7 @@ func (a *Client) UpdateAction(params *UpdateActionParams) (*UpdateActionOK, erro
 		Schemes:            []string{"https"},
 		Params:             params,
 		Reader:             &UpdateActionReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})

@@ -11,7 +11,7 @@ func GetAPIVersion() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	response, err := api.SystemService.ApplicationVersion(nil)
+	response, err := api.SystemService.ApplicationVersion(nil, nil)
 	if err != nil {
 		return "", err
 	}

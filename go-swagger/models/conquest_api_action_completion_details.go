@@ -23,13 +23,13 @@ type ConquestAPIActionCompletionDetails struct {
 	ActionType ConquestAPIActionType `json:"ActionType,omitempty"`
 
 	// actual cost
-	ActualCost *ConquestAPIDecimal `json:"ActualCost,omitempty"`
+	ActualCost ConquestAPIDecimal `json:"ActualCost,omitempty"`
 
 	// asset
 	Asset *ConquestAPIObjectHeader `json:"Asset,omitempty"`
 
 	// estimated cost
-	EstimatedCost *ConquestAPIDecimal `json:"EstimatedCost,omitempty"`
+	EstimatedCost ConquestAPIDecimal `json:"EstimatedCost,omitempty"`
 }
 
 // Validate validates this conquest api action completion details
@@ -102,13 +102,11 @@ func (m *ConquestAPIActionCompletionDetails) validateActualCost(formats strfmt.R
 		return nil
 	}
 
-	if m.ActualCost != nil {
-		if err := m.ActualCost.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("ActualCost")
-			}
-			return err
+	if err := m.ActualCost.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("ActualCost")
 		}
+		return err
 	}
 
 	return nil
@@ -138,13 +136,11 @@ func (m *ConquestAPIActionCompletionDetails) validateEstimatedCost(formats strfm
 		return nil
 	}
 
-	if m.EstimatedCost != nil {
-		if err := m.EstimatedCost.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("EstimatedCost")
-			}
-			return err
+	if err := m.EstimatedCost.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("EstimatedCost")
 		}
+		return err
 	}
 
 	return nil

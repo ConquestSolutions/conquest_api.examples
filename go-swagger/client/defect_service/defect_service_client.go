@@ -27,15 +27,15 @@ type Client struct {
 
 // ClientService is the interface for Client methods
 type ClientService interface {
-	CalculateDefectResponseDate(params *CalculateDefectResponseDateParams) (*CalculateDefectResponseDateOK, error)
+	CalculateDefectResponseDate(params *CalculateDefectResponseDateParams, authInfo runtime.ClientAuthInfoWriter) (*CalculateDefectResponseDateOK, error)
 
-	CreateActionForDefect(params *CreateActionForDefectParams) (*CreateActionForDefectOK, error)
+	CreateActionForDefect(params *CreateActionForDefectParams, authInfo runtime.ClientAuthInfoWriter) (*CreateActionForDefectOK, error)
 
-	DeleteDefect(params *DeleteDefectParams) (*DeleteDefectOK, error)
+	DeleteDefect(params *DeleteDefectParams, authInfo runtime.ClientAuthInfoWriter) (*DeleteDefectOK, error)
 
-	GetDefect(params *GetDefectParams) (*GetDefectOK, error)
+	GetDefect(params *GetDefectParams, authInfo runtime.ClientAuthInfoWriter) (*GetDefectOK, error)
 
-	UpdateDefect(params *UpdateDefectParams) (*UpdateDefectOK, error)
+	UpdateDefect(params *UpdateDefectParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateDefectOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
@@ -43,7 +43,7 @@ type ClientService interface {
 /*
   CalculateDefectResponseDate calculate defect response date API
 */
-func (a *Client) CalculateDefectResponseDate(params *CalculateDefectResponseDateParams) (*CalculateDefectResponseDateOK, error) {
+func (a *Client) CalculateDefectResponseDate(params *CalculateDefectResponseDateParams, authInfo runtime.ClientAuthInfoWriter) (*CalculateDefectResponseDateOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCalculateDefectResponseDateParams()
@@ -58,6 +58,7 @@ func (a *Client) CalculateDefectResponseDate(params *CalculateDefectResponseDate
 		Schemes:            []string{"https"},
 		Params:             params,
 		Reader:             &CalculateDefectResponseDateReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -77,7 +78,7 @@ func (a *Client) CalculateDefectResponseDate(params *CalculateDefectResponseDate
 /*
   CreateActionForDefect create action for defect API
 */
-func (a *Client) CreateActionForDefect(params *CreateActionForDefectParams) (*CreateActionForDefectOK, error) {
+func (a *Client) CreateActionForDefect(params *CreateActionForDefectParams, authInfo runtime.ClientAuthInfoWriter) (*CreateActionForDefectOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateActionForDefectParams()
@@ -92,6 +93,7 @@ func (a *Client) CreateActionForDefect(params *CreateActionForDefectParams) (*Cr
 		Schemes:            []string{"https"},
 		Params:             params,
 		Reader:             &CreateActionForDefectReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -111,7 +113,7 @@ func (a *Client) CreateActionForDefect(params *CreateActionForDefectParams) (*Cr
 /*
   DeleteDefect delete defect API
 */
-func (a *Client) DeleteDefect(params *DeleteDefectParams) (*DeleteDefectOK, error) {
+func (a *Client) DeleteDefect(params *DeleteDefectParams, authInfo runtime.ClientAuthInfoWriter) (*DeleteDefectOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewDeleteDefectParams()
@@ -126,6 +128,7 @@ func (a *Client) DeleteDefect(params *DeleteDefectParams) (*DeleteDefectOK, erro
 		Schemes:            []string{"https"},
 		Params:             params,
 		Reader:             &DeleteDefectReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -145,7 +148,7 @@ func (a *Client) DeleteDefect(params *DeleteDefectParams) (*DeleteDefectOK, erro
 /*
   GetDefect get defect API
 */
-func (a *Client) GetDefect(params *GetDefectParams) (*GetDefectOK, error) {
+func (a *Client) GetDefect(params *GetDefectParams, authInfo runtime.ClientAuthInfoWriter) (*GetDefectOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetDefectParams()
@@ -160,6 +163,7 @@ func (a *Client) GetDefect(params *GetDefectParams) (*GetDefectOK, error) {
 		Schemes:            []string{"https"},
 		Params:             params,
 		Reader:             &GetDefectReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -179,7 +183,7 @@ func (a *Client) GetDefect(params *GetDefectParams) (*GetDefectOK, error) {
 /*
   UpdateDefect update defect API
 */
-func (a *Client) UpdateDefect(params *UpdateDefectParams) (*UpdateDefectOK, error) {
+func (a *Client) UpdateDefect(params *UpdateDefectParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateDefectOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewUpdateDefectParams()
@@ -194,6 +198,7 @@ func (a *Client) UpdateDefect(params *UpdateDefectParams) (*UpdateDefectOK, erro
 		Schemes:            []string{"https"},
 		Params:             params,
 		Reader:             &UpdateDefectReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})

@@ -17,7 +17,7 @@ import (
 type ConquestAPIDecimalValue struct {
 
 	// value
-	Value *ConquestAPIDecimal `json:"value,omitempty"`
+	Value ConquestAPIDecimal `json:"value,omitempty"`
 }
 
 // Validate validates this conquest api decimal value
@@ -40,13 +40,11 @@ func (m *ConquestAPIDecimalValue) validateValue(formats strfmt.Registry) error {
 		return nil
 	}
 
-	if m.Value != nil {
-		if err := m.Value.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("value")
-			}
-			return err
+	if err := m.Value.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("value")
 		}
+		return err
 	}
 
 	return nil

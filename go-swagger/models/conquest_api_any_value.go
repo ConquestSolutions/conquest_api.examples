@@ -34,7 +34,7 @@ type ConquestAPIAnyValue struct {
 	DateValue strfmt.DateTime `json:"dateValue,omitempty"`
 
 	// decimal value
-	DecimalValue *ConquestAPIDecimal `json:"decimalValue,omitempty"`
+	DecimalValue ConquestAPIDecimal `json:"decimalValue,omitempty"`
 
 	// duration value
 	DurationValue *ConquestAPIDuration `json:"durationValue,omitempty"`
@@ -96,32 +96,17 @@ type ConquestAPIAnyValue struct {
 	// n string value
 	NStringValue string `json:"nStringValue,omitempty"`
 
-	// n Uri value
-	NURIValue *ConquestAPIURIValue `json:"nUriValue,omitempty"`
-
-	// n Uuid value
-	NUUIDValue *ConquestAPIUUIDValue `json:"nUuidValue,omitempty"`
-
 	// number value
 	NumberValue float64 `json:"numberValue,omitempty"`
 
 	// object key value
 	ObjectKeyValue *ConquestAPIObjectKey `json:"objectKeyValue,omitempty"`
 
-	// string list value
-	StringListValue *ConquestAPIStringList `json:"stringListValue,omitempty"`
-
 	// string value
 	StringValue string `json:"stringValue,omitempty"`
 
 	// unknown value
 	UnknownValue bool `json:"unknownValue,omitempty"`
-
-	// uri value
-	URIValue *ConquestAPIURI `json:"uriValue,omitempty"`
-
-	// uuid value
-	UUIDValue *ConquestAPIUUID `json:"uuidValue,omitempty"`
 }
 
 // Validate validates this conquest api any value
@@ -180,27 +165,7 @@ func (m *ConquestAPIAnyValue) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
-	if err := m.validateNURIValue(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateNUUIDValue(formats); err != nil {
-		res = append(res, err)
-	}
-
 	if err := m.validateObjectKeyValue(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateStringListValue(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateURIValue(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateUUIDValue(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -242,13 +207,11 @@ func (m *ConquestAPIAnyValue) validateDecimalValue(formats strfmt.Registry) erro
 		return nil
 	}
 
-	if m.DecimalValue != nil {
-		if err := m.DecimalValue.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("decimalValue")
-			}
-			return err
+	if err := m.DecimalValue.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("decimalValue")
 		}
+		return err
 	}
 
 	return nil
@@ -434,42 +397,6 @@ func (m *ConquestAPIAnyValue) validateNObjectKeyValue(formats strfmt.Registry) e
 	return nil
 }
 
-func (m *ConquestAPIAnyValue) validateNURIValue(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.NURIValue) { // not required
-		return nil
-	}
-
-	if m.NURIValue != nil {
-		if err := m.NURIValue.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("nUriValue")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (m *ConquestAPIAnyValue) validateNUUIDValue(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.NUUIDValue) { // not required
-		return nil
-	}
-
-	if m.NUUIDValue != nil {
-		if err := m.NUUIDValue.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("nUuidValue")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
 func (m *ConquestAPIAnyValue) validateObjectKeyValue(formats strfmt.Registry) error {
 
 	if swag.IsZero(m.ObjectKeyValue) { // not required
@@ -480,60 +407,6 @@ func (m *ConquestAPIAnyValue) validateObjectKeyValue(formats strfmt.Registry) er
 		if err := m.ObjectKeyValue.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("objectKeyValue")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (m *ConquestAPIAnyValue) validateStringListValue(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.StringListValue) { // not required
-		return nil
-	}
-
-	if m.StringListValue != nil {
-		if err := m.StringListValue.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("stringListValue")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (m *ConquestAPIAnyValue) validateURIValue(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.URIValue) { // not required
-		return nil
-	}
-
-	if m.URIValue != nil {
-		if err := m.URIValue.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("uriValue")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (m *ConquestAPIAnyValue) validateUUIDValue(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.UUIDValue) { // not required
-		return nil
-	}
-
-	if m.UUIDValue != nil {
-		if err := m.UUIDValue.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("uuidValue")
 			}
 			return err
 		}

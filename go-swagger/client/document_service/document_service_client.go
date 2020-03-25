@@ -27,13 +27,13 @@ type Client struct {
 
 // ClientService is the interface for Client methods
 type ClientService interface {
-	AddDocument(params *AddDocumentParams) (*AddDocumentOK, error)
+	AddDocument(params *AddDocumentParams, authInfo runtime.ClientAuthInfoWriter) (*AddDocumentOK, error)
 
-	GenerateDocumentLink(params *GenerateDocumentLinkParams) (*GenerateDocumentLinkOK, error)
+	GenerateDocumentLink(params *GenerateDocumentLinkParams, authInfo runtime.ClientAuthInfoWriter) (*GenerateDocumentLinkOK, error)
 
-	GetDocuments(params *GetDocumentsParams) (*GetDocumentsOK, error)
+	GetDocuments(params *GetDocumentsParams, authInfo runtime.ClientAuthInfoWriter) (*GetDocumentsOK, error)
 
-	RemoveDocument(params *RemoveDocumentParams) (*RemoveDocumentOK, error)
+	RemoveDocument(params *RemoveDocumentParams, authInfo runtime.ClientAuthInfoWriter) (*RemoveDocumentOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
@@ -41,7 +41,7 @@ type ClientService interface {
 /*
   AddDocument add document API
 */
-func (a *Client) AddDocument(params *AddDocumentParams) (*AddDocumentOK, error) {
+func (a *Client) AddDocument(params *AddDocumentParams, authInfo runtime.ClientAuthInfoWriter) (*AddDocumentOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewAddDocumentParams()
@@ -56,6 +56,7 @@ func (a *Client) AddDocument(params *AddDocumentParams) (*AddDocumentOK, error) 
 		Schemes:            []string{"https"},
 		Params:             params,
 		Reader:             &AddDocumentReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -75,7 +76,7 @@ func (a *Client) AddDocument(params *AddDocumentParams) (*AddDocumentOK, error) 
 /*
   GenerateDocumentLink generate document link API
 */
-func (a *Client) GenerateDocumentLink(params *GenerateDocumentLinkParams) (*GenerateDocumentLinkOK, error) {
+func (a *Client) GenerateDocumentLink(params *GenerateDocumentLinkParams, authInfo runtime.ClientAuthInfoWriter) (*GenerateDocumentLinkOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGenerateDocumentLinkParams()
@@ -90,6 +91,7 @@ func (a *Client) GenerateDocumentLink(params *GenerateDocumentLinkParams) (*Gene
 		Schemes:            []string{"https"},
 		Params:             params,
 		Reader:             &GenerateDocumentLinkReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -109,7 +111,7 @@ func (a *Client) GenerateDocumentLink(params *GenerateDocumentLinkParams) (*Gene
 /*
   GetDocuments get documents API
 */
-func (a *Client) GetDocuments(params *GetDocumentsParams) (*GetDocumentsOK, error) {
+func (a *Client) GetDocuments(params *GetDocumentsParams, authInfo runtime.ClientAuthInfoWriter) (*GetDocumentsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetDocumentsParams()
@@ -124,6 +126,7 @@ func (a *Client) GetDocuments(params *GetDocumentsParams) (*GetDocumentsOK, erro
 		Schemes:            []string{"https"},
 		Params:             params,
 		Reader:             &GetDocumentsReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -143,7 +146,7 @@ func (a *Client) GetDocuments(params *GetDocumentsParams) (*GetDocumentsOK, erro
 /*
   RemoveDocument remove document API
 */
-func (a *Client) RemoveDocument(params *RemoveDocumentParams) (*RemoveDocumentOK, error) {
+func (a *Client) RemoveDocument(params *RemoveDocumentParams, authInfo runtime.ClientAuthInfoWriter) (*RemoveDocumentOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewRemoveDocumentParams()
@@ -158,6 +161,7 @@ func (a *Client) RemoveDocument(params *RemoveDocumentParams) (*RemoveDocumentOK
 		Schemes:            []string{"https"},
 		Params:             params,
 		Reader:             &RemoveDocumentReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})

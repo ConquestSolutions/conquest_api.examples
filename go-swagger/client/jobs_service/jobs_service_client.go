@@ -27,7 +27,7 @@ type Client struct {
 
 // ClientService is the interface for Client methods
 type ClientService interface {
-	GetJobState(params *GetJobStateParams) (*GetJobStateOK, error)
+	GetJobState(params *GetJobStateParams, authInfo runtime.ClientAuthInfoWriter) (*GetJobStateOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
@@ -35,7 +35,7 @@ type ClientService interface {
 /*
   GetJobState get job state API
 */
-func (a *Client) GetJobState(params *GetJobStateParams) (*GetJobStateOK, error) {
+func (a *Client) GetJobState(params *GetJobStateParams, authInfo runtime.ClientAuthInfoWriter) (*GetJobStateOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetJobStateParams()
@@ -50,6 +50,7 @@ func (a *Client) GetJobState(params *GetJobStateParams) (*GetJobStateOK, error) 
 		Schemes:            []string{"https"},
 		Params:             params,
 		Reader:             &GetJobStateReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})

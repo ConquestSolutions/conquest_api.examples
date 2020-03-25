@@ -27,17 +27,17 @@ type Client struct {
 
 // ClientService is the interface for Client methods
 type ClientService interface {
-	DescribeEnumeration(params *DescribeEnumerationParams) (*DescribeEnumerationOK, error)
+	DescribeEnumeration(params *DescribeEnumerationParams, authInfo runtime.ClientAuthInfoWriter) (*DescribeEnumerationOK, error)
 
-	GetAttributeSetFieldNames(params *GetAttributeSetFieldNamesParams) (*GetAttributeSetFieldNamesOK, error)
+	GetAttributeSetFieldNames(params *GetAttributeSetFieldNamesParams, authInfo runtime.ClientAuthInfoWriter) (*GetAttributeSetFieldNamesOK, error)
 
-	GetCodeLists(params *GetCodeListsParams) (*GetCodeListsOK, error)
+	GetCodeLists(params *GetCodeListsParams, authInfo runtime.ClientAuthInfoWriter) (*GetCodeListsOK, error)
 
-	ListAttributeSets(params *ListAttributeSetsParams) (*ListAttributeSetsOK, error)
+	ListAttributeSets(params *ListAttributeSetsParams, authInfo runtime.ClientAuthInfoWriter) (*ListAttributeSetsOK, error)
 
-	ListStandardDefectResponses(params *ListStandardDefectResponsesParams) (*ListStandardDefectResponsesOK, error)
+	ListStandardDefectResponses(params *ListStandardDefectResponsesParams, authInfo runtime.ClientAuthInfoWriter) (*ListStandardDefectResponsesOK, error)
 
-	ListViewFields(params *ListViewFieldsParams) (*ListViewFieldsOK, error)
+	ListViewFields(params *ListViewFieldsParams, authInfo runtime.ClientAuthInfoWriter) (*ListViewFieldsOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
@@ -45,7 +45,7 @@ type ClientService interface {
 /*
   DescribeEnumeration describe enumeration API
 */
-func (a *Client) DescribeEnumeration(params *DescribeEnumerationParams) (*DescribeEnumerationOK, error) {
+func (a *Client) DescribeEnumeration(params *DescribeEnumerationParams, authInfo runtime.ClientAuthInfoWriter) (*DescribeEnumerationOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewDescribeEnumerationParams()
@@ -60,6 +60,7 @@ func (a *Client) DescribeEnumeration(params *DescribeEnumerationParams) (*Descri
 		Schemes:            []string{"https"},
 		Params:             params,
 		Reader:             &DescribeEnumerationReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -79,7 +80,7 @@ func (a *Client) DescribeEnumeration(params *DescribeEnumerationParams) (*Descri
 /*
   GetAttributeSetFieldNames get attribute set field names API
 */
-func (a *Client) GetAttributeSetFieldNames(params *GetAttributeSetFieldNamesParams) (*GetAttributeSetFieldNamesOK, error) {
+func (a *Client) GetAttributeSetFieldNames(params *GetAttributeSetFieldNamesParams, authInfo runtime.ClientAuthInfoWriter) (*GetAttributeSetFieldNamesOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetAttributeSetFieldNamesParams()
@@ -94,6 +95,7 @@ func (a *Client) GetAttributeSetFieldNames(params *GetAttributeSetFieldNamesPara
 		Schemes:            []string{"https"},
 		Params:             params,
 		Reader:             &GetAttributeSetFieldNamesReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -113,7 +115,7 @@ func (a *Client) GetAttributeSetFieldNames(params *GetAttributeSetFieldNamesPara
 /*
   GetCodeLists get code lists API
 */
-func (a *Client) GetCodeLists(params *GetCodeListsParams) (*GetCodeListsOK, error) {
+func (a *Client) GetCodeLists(params *GetCodeListsParams, authInfo runtime.ClientAuthInfoWriter) (*GetCodeListsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetCodeListsParams()
@@ -128,6 +130,7 @@ func (a *Client) GetCodeLists(params *GetCodeListsParams) (*GetCodeListsOK, erro
 		Schemes:            []string{"https"},
 		Params:             params,
 		Reader:             &GetCodeListsReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -147,7 +150,7 @@ func (a *Client) GetCodeLists(params *GetCodeListsParams) (*GetCodeListsOK, erro
 /*
   ListAttributeSets list attribute sets API
 */
-func (a *Client) ListAttributeSets(params *ListAttributeSetsParams) (*ListAttributeSetsOK, error) {
+func (a *Client) ListAttributeSets(params *ListAttributeSetsParams, authInfo runtime.ClientAuthInfoWriter) (*ListAttributeSetsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewListAttributeSetsParams()
@@ -162,6 +165,7 @@ func (a *Client) ListAttributeSets(params *ListAttributeSetsParams) (*ListAttrib
 		Schemes:            []string{"https"},
 		Params:             params,
 		Reader:             &ListAttributeSetsReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -181,7 +185,7 @@ func (a *Client) ListAttributeSets(params *ListAttributeSetsParams) (*ListAttrib
 /*
   ListStandardDefectResponses list standard defect responses API
 */
-func (a *Client) ListStandardDefectResponses(params *ListStandardDefectResponsesParams) (*ListStandardDefectResponsesOK, error) {
+func (a *Client) ListStandardDefectResponses(params *ListStandardDefectResponsesParams, authInfo runtime.ClientAuthInfoWriter) (*ListStandardDefectResponsesOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewListStandardDefectResponsesParams()
@@ -196,6 +200,7 @@ func (a *Client) ListStandardDefectResponses(params *ListStandardDefectResponses
 		Schemes:            []string{"https"},
 		Params:             params,
 		Reader:             &ListStandardDefectResponsesReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -215,7 +220,7 @@ func (a *Client) ListStandardDefectResponses(params *ListStandardDefectResponses
 /*
   ListViewFields list view fields API
 */
-func (a *Client) ListViewFields(params *ListViewFieldsParams) (*ListViewFieldsOK, error) {
+func (a *Client) ListViewFields(params *ListViewFieldsParams, authInfo runtime.ClientAuthInfoWriter) (*ListViewFieldsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewListViewFieldsParams()
@@ -230,6 +235,7 @@ func (a *Client) ListViewFields(params *ListViewFieldsParams) (*ListViewFieldsOK
 		Schemes:            []string{"https"},
 		Params:             params,
 		Reader:             &ListViewFieldsReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})

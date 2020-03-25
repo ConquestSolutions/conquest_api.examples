@@ -27,13 +27,13 @@ type Client struct {
 
 // ClientService is the interface for Client methods
 type ClientService interface {
-	CreateRequest(params *CreateRequestParams) (*CreateRequestOK, error)
+	CreateRequest(params *CreateRequestParams, authInfo runtime.ClientAuthInfoWriter) (*CreateRequestOK, error)
 
-	DeleteRequest(params *DeleteRequestParams) (*DeleteRequestOK, error)
+	DeleteRequest(params *DeleteRequestParams, authInfo runtime.ClientAuthInfoWriter) (*DeleteRequestOK, error)
 
-	GetRequest(params *GetRequestParams) (*GetRequestOK, error)
+	GetRequest(params *GetRequestParams, authInfo runtime.ClientAuthInfoWriter) (*GetRequestOK, error)
 
-	UpdateRequest(params *UpdateRequestParams) (*UpdateRequestOK, error)
+	UpdateRequest(params *UpdateRequestParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateRequestOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
@@ -41,7 +41,7 @@ type ClientService interface {
 /*
   CreateRequest create request API
 */
-func (a *Client) CreateRequest(params *CreateRequestParams) (*CreateRequestOK, error) {
+func (a *Client) CreateRequest(params *CreateRequestParams, authInfo runtime.ClientAuthInfoWriter) (*CreateRequestOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateRequestParams()
@@ -56,6 +56,7 @@ func (a *Client) CreateRequest(params *CreateRequestParams) (*CreateRequestOK, e
 		Schemes:            []string{"https"},
 		Params:             params,
 		Reader:             &CreateRequestReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -75,7 +76,7 @@ func (a *Client) CreateRequest(params *CreateRequestParams) (*CreateRequestOK, e
 /*
   DeleteRequest delete request API
 */
-func (a *Client) DeleteRequest(params *DeleteRequestParams) (*DeleteRequestOK, error) {
+func (a *Client) DeleteRequest(params *DeleteRequestParams, authInfo runtime.ClientAuthInfoWriter) (*DeleteRequestOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewDeleteRequestParams()
@@ -90,6 +91,7 @@ func (a *Client) DeleteRequest(params *DeleteRequestParams) (*DeleteRequestOK, e
 		Schemes:            []string{"https"},
 		Params:             params,
 		Reader:             &DeleteRequestReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -109,7 +111,7 @@ func (a *Client) DeleteRequest(params *DeleteRequestParams) (*DeleteRequestOK, e
 /*
   GetRequest get request API
 */
-func (a *Client) GetRequest(params *GetRequestParams) (*GetRequestOK, error) {
+func (a *Client) GetRequest(params *GetRequestParams, authInfo runtime.ClientAuthInfoWriter) (*GetRequestOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetRequestParams()
@@ -124,6 +126,7 @@ func (a *Client) GetRequest(params *GetRequestParams) (*GetRequestOK, error) {
 		Schemes:            []string{"https"},
 		Params:             params,
 		Reader:             &GetRequestReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -143,7 +146,7 @@ func (a *Client) GetRequest(params *GetRequestParams) (*GetRequestOK, error) {
 /*
   UpdateRequest update request API
 */
-func (a *Client) UpdateRequest(params *UpdateRequestParams) (*UpdateRequestOK, error) {
+func (a *Client) UpdateRequest(params *UpdateRequestParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateRequestOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewUpdateRequestParams()
@@ -158,6 +161,7 @@ func (a *Client) UpdateRequest(params *UpdateRequestParams) (*UpdateRequestOK, e
 		Schemes:            []string{"https"},
 		Params:             params,
 		Reader:             &UpdateRequestReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})

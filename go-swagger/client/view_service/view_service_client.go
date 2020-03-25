@@ -27,11 +27,11 @@ type Client struct {
 
 // ClientService is the interface for Client methods
 type ClientService interface {
-	Find(params *FindParams) (*FindOK, error)
+	Find(params *FindParams, authInfo runtime.ClientAuthInfoWriter) (*FindOK, error)
 
-	ListFilters(params *ListFiltersParams) (*ListFiltersOK, error)
+	ListFilters(params *ListFiltersParams, authInfo runtime.ClientAuthInfoWriter) (*ListFiltersOK, error)
 
-	ListHierarchyNodes(params *ListHierarchyNodesParams) (*ListHierarchyNodesOK, error)
+	ListHierarchyNodes(params *ListHierarchyNodesParams, authInfo runtime.ClientAuthInfoWriter) (*ListHierarchyNodesOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
@@ -39,7 +39,7 @@ type ClientService interface {
 /*
   Find find API
 */
-func (a *Client) Find(params *FindParams) (*FindOK, error) {
+func (a *Client) Find(params *FindParams, authInfo runtime.ClientAuthInfoWriter) (*FindOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewFindParams()
@@ -54,6 +54,7 @@ func (a *Client) Find(params *FindParams) (*FindOK, error) {
 		Schemes:            []string{"https"},
 		Params:             params,
 		Reader:             &FindReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -73,7 +74,7 @@ func (a *Client) Find(params *FindParams) (*FindOK, error) {
 /*
   ListFilters list filters API
 */
-func (a *Client) ListFilters(params *ListFiltersParams) (*ListFiltersOK, error) {
+func (a *Client) ListFilters(params *ListFiltersParams, authInfo runtime.ClientAuthInfoWriter) (*ListFiltersOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewListFiltersParams()
@@ -88,6 +89,7 @@ func (a *Client) ListFilters(params *ListFiltersParams) (*ListFiltersOK, error) 
 		Schemes:            []string{"https"},
 		Params:             params,
 		Reader:             &ListFiltersReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -107,7 +109,7 @@ func (a *Client) ListFilters(params *ListFiltersParams) (*ListFiltersOK, error) 
 /*
   ListHierarchyNodes list hierarchy nodes API
 */
-func (a *Client) ListHierarchyNodes(params *ListHierarchyNodesParams) (*ListHierarchyNodesOK, error) {
+func (a *Client) ListHierarchyNodes(params *ListHierarchyNodesParams, authInfo runtime.ClientAuthInfoWriter) (*ListHierarchyNodesOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewListHierarchyNodesParams()
@@ -122,6 +124,7 @@ func (a *Client) ListHierarchyNodes(params *ListHierarchyNodesParams) (*ListHier
 		Schemes:            []string{"https"},
 		Params:             params,
 		Reader:             &ListHierarchyNodesReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})

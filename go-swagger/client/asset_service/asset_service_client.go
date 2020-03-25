@@ -27,25 +27,25 @@ type Client struct {
 
 // ClientService is the interface for Client methods
 type ClientService interface {
-	ChangeAssetType(params *ChangeAssetTypeParams) (*ChangeAssetTypeOK, error)
+	ChangeAssetType(params *ChangeAssetTypeParams, authInfo runtime.ClientAuthInfoWriter) (*ChangeAssetTypeOK, error)
 
-	CreateActionForAsset(params *CreateActionForAssetParams) (*CreateActionForAssetOK, error)
+	CreateActionForAsset(params *CreateActionForAssetParams, authInfo runtime.ClientAuthInfoWriter) (*CreateActionForAssetOK, error)
 
-	CreateAsset(params *CreateAssetParams) (*CreateAssetOK, error)
+	CreateAsset(params *CreateAssetParams, authInfo runtime.ClientAuthInfoWriter) (*CreateAssetOK, error)
 
-	CreateDefectForAsset(params *CreateDefectForAssetParams) (*CreateDefectForAssetOK, error)
+	CreateDefectForAsset(params *CreateDefectForAssetParams, authInfo runtime.ClientAuthInfoWriter) (*CreateDefectForAssetOK, error)
 
-	DeleteAsset(params *DeleteAssetParams) (*DeleteAssetOK, error)
+	DeleteAsset(params *DeleteAssetParams, authInfo runtime.ClientAuthInfoWriter) (*DeleteAssetOK, error)
 
-	GetAsset(params *GetAssetParams) (*GetAssetOK, error)
+	GetAsset(params *GetAssetParams, authInfo runtime.ClientAuthInfoWriter) (*GetAssetOK, error)
 
-	ListInspectionsForAsset(params *ListInspectionsForAssetParams) (*ListInspectionsForAssetOK, error)
+	ListInspectionsForAsset(params *ListInspectionsForAssetParams, authInfo runtime.ClientAuthInfoWriter) (*ListInspectionsForAssetOK, error)
 
-	MoveAsset(params *MoveAssetParams) (*MoveAssetOK, error)
+	MoveAsset(params *MoveAssetParams, authInfo runtime.ClientAuthInfoWriter) (*MoveAssetOK, error)
 
-	NewConditionInspection(params *NewConditionInspectionParams) (*NewConditionInspectionOK, error)
+	NewConditionInspection(params *NewConditionInspectionParams, authInfo runtime.ClientAuthInfoWriter) (*NewConditionInspectionOK, error)
 
-	UpdateAsset(params *UpdateAssetParams) (*UpdateAssetOK, error)
+	UpdateAsset(params *UpdateAssetParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateAssetOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
@@ -53,7 +53,7 @@ type ClientService interface {
 /*
   ChangeAssetType change asset type API
 */
-func (a *Client) ChangeAssetType(params *ChangeAssetTypeParams) (*ChangeAssetTypeOK, error) {
+func (a *Client) ChangeAssetType(params *ChangeAssetTypeParams, authInfo runtime.ClientAuthInfoWriter) (*ChangeAssetTypeOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewChangeAssetTypeParams()
@@ -68,6 +68,7 @@ func (a *Client) ChangeAssetType(params *ChangeAssetTypeParams) (*ChangeAssetTyp
 		Schemes:            []string{"https"},
 		Params:             params,
 		Reader:             &ChangeAssetTypeReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -87,7 +88,7 @@ func (a *Client) ChangeAssetType(params *ChangeAssetTypeParams) (*ChangeAssetTyp
 /*
   CreateActionForAsset create action for asset API
 */
-func (a *Client) CreateActionForAsset(params *CreateActionForAssetParams) (*CreateActionForAssetOK, error) {
+func (a *Client) CreateActionForAsset(params *CreateActionForAssetParams, authInfo runtime.ClientAuthInfoWriter) (*CreateActionForAssetOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateActionForAssetParams()
@@ -102,6 +103,7 @@ func (a *Client) CreateActionForAsset(params *CreateActionForAssetParams) (*Crea
 		Schemes:            []string{"https"},
 		Params:             params,
 		Reader:             &CreateActionForAssetReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -121,7 +123,7 @@ func (a *Client) CreateActionForAsset(params *CreateActionForAssetParams) (*Crea
 /*
   CreateAsset create asset API
 */
-func (a *Client) CreateAsset(params *CreateAssetParams) (*CreateAssetOK, error) {
+func (a *Client) CreateAsset(params *CreateAssetParams, authInfo runtime.ClientAuthInfoWriter) (*CreateAssetOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateAssetParams()
@@ -136,6 +138,7 @@ func (a *Client) CreateAsset(params *CreateAssetParams) (*CreateAssetOK, error) 
 		Schemes:            []string{"https"},
 		Params:             params,
 		Reader:             &CreateAssetReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -155,7 +158,7 @@ func (a *Client) CreateAsset(params *CreateAssetParams) (*CreateAssetOK, error) 
 /*
   CreateDefectForAsset create defect for asset API
 */
-func (a *Client) CreateDefectForAsset(params *CreateDefectForAssetParams) (*CreateDefectForAssetOK, error) {
+func (a *Client) CreateDefectForAsset(params *CreateDefectForAssetParams, authInfo runtime.ClientAuthInfoWriter) (*CreateDefectForAssetOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateDefectForAssetParams()
@@ -170,6 +173,7 @@ func (a *Client) CreateDefectForAsset(params *CreateDefectForAssetParams) (*Crea
 		Schemes:            []string{"https"},
 		Params:             params,
 		Reader:             &CreateDefectForAssetReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -189,7 +193,7 @@ func (a *Client) CreateDefectForAsset(params *CreateDefectForAssetParams) (*Crea
 /*
   DeleteAsset delete asset API
 */
-func (a *Client) DeleteAsset(params *DeleteAssetParams) (*DeleteAssetOK, error) {
+func (a *Client) DeleteAsset(params *DeleteAssetParams, authInfo runtime.ClientAuthInfoWriter) (*DeleteAssetOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewDeleteAssetParams()
@@ -204,6 +208,7 @@ func (a *Client) DeleteAsset(params *DeleteAssetParams) (*DeleteAssetOK, error) 
 		Schemes:            []string{"https"},
 		Params:             params,
 		Reader:             &DeleteAssetReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -223,7 +228,7 @@ func (a *Client) DeleteAsset(params *DeleteAssetParams) (*DeleteAssetOK, error) 
 /*
   GetAsset get asset API
 */
-func (a *Client) GetAsset(params *GetAssetParams) (*GetAssetOK, error) {
+func (a *Client) GetAsset(params *GetAssetParams, authInfo runtime.ClientAuthInfoWriter) (*GetAssetOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetAssetParams()
@@ -238,6 +243,7 @@ func (a *Client) GetAsset(params *GetAssetParams) (*GetAssetOK, error) {
 		Schemes:            []string{"https"},
 		Params:             params,
 		Reader:             &GetAssetReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -257,7 +263,7 @@ func (a *Client) GetAsset(params *GetAssetParams) (*GetAssetOK, error) {
 /*
   ListInspectionsForAsset list inspections for asset API
 */
-func (a *Client) ListInspectionsForAsset(params *ListInspectionsForAssetParams) (*ListInspectionsForAssetOK, error) {
+func (a *Client) ListInspectionsForAsset(params *ListInspectionsForAssetParams, authInfo runtime.ClientAuthInfoWriter) (*ListInspectionsForAssetOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewListInspectionsForAssetParams()
@@ -272,6 +278,7 @@ func (a *Client) ListInspectionsForAsset(params *ListInspectionsForAssetParams) 
 		Schemes:            []string{"https"},
 		Params:             params,
 		Reader:             &ListInspectionsForAssetReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -291,7 +298,7 @@ func (a *Client) ListInspectionsForAsset(params *ListInspectionsForAssetParams) 
 /*
   MoveAsset move asset API
 */
-func (a *Client) MoveAsset(params *MoveAssetParams) (*MoveAssetOK, error) {
+func (a *Client) MoveAsset(params *MoveAssetParams, authInfo runtime.ClientAuthInfoWriter) (*MoveAssetOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewMoveAssetParams()
@@ -306,6 +313,7 @@ func (a *Client) MoveAsset(params *MoveAssetParams) (*MoveAssetOK, error) {
 		Schemes:            []string{"https"},
 		Params:             params,
 		Reader:             &MoveAssetReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -325,7 +333,7 @@ func (a *Client) MoveAsset(params *MoveAssetParams) (*MoveAssetOK, error) {
 /*
   NewConditionInspection new condition inspection API
 */
-func (a *Client) NewConditionInspection(params *NewConditionInspectionParams) (*NewConditionInspectionOK, error) {
+func (a *Client) NewConditionInspection(params *NewConditionInspectionParams, authInfo runtime.ClientAuthInfoWriter) (*NewConditionInspectionOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewNewConditionInspectionParams()
@@ -340,6 +348,7 @@ func (a *Client) NewConditionInspection(params *NewConditionInspectionParams) (*
 		Schemes:            []string{"https"},
 		Params:             params,
 		Reader:             &NewConditionInspectionReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -359,7 +368,7 @@ func (a *Client) NewConditionInspection(params *NewConditionInspectionParams) (*
 /*
   UpdateAsset update asset API
 */
-func (a *Client) UpdateAsset(params *UpdateAssetParams) (*UpdateAssetOK, error) {
+func (a *Client) UpdateAsset(params *UpdateAssetParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateAssetOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewUpdateAssetParams()
@@ -374,6 +383,7 @@ func (a *Client) UpdateAsset(params *UpdateAssetParams) (*UpdateAssetOK, error) 
 		Schemes:            []string{"https"},
 		Params:             params,
 		Reader:             &UpdateAssetReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})

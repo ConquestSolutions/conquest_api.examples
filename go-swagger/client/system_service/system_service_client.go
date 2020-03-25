@@ -27,7 +27,7 @@ type Client struct {
 
 // ClientService is the interface for Client methods
 type ClientService interface {
-	ApplicationVersion(params *ApplicationVersionParams) (*ApplicationVersionOK, error)
+	ApplicationVersion(params *ApplicationVersionParams, authInfo runtime.ClientAuthInfoWriter) (*ApplicationVersionOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
@@ -35,7 +35,7 @@ type ClientService interface {
 /*
   ApplicationVersion application version API
 */
-func (a *Client) ApplicationVersion(params *ApplicationVersionParams) (*ApplicationVersionOK, error) {
+func (a *Client) ApplicationVersion(params *ApplicationVersionParams, authInfo runtime.ClientAuthInfoWriter) (*ApplicationVersionOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewApplicationVersionParams()
@@ -50,6 +50,7 @@ func (a *Client) ApplicationVersion(params *ApplicationVersionParams) (*Applicat
 		Schemes:            []string{"https"},
 		Params:             params,
 		Reader:             &ApplicationVersionReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})

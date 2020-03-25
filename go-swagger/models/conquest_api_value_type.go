@@ -44,6 +44,7 @@ import (
 //  - ValueType_Hierarchy: Hierarchy (ObjectKey) is an item in a hierarchy such as an Asset tree, the Asset Priority hierarchy lists and Action Categories.
 //  - ValueType_ObjectKey: ObjectKey is an item with an ID and a type such as an Asset, AssetType, View, Document and DocumentContainer (eg. folder). See ObjectTypes.
 //  - ValueType_Enumeration: Enumeration (int32) is fixed size ordered list of values. Enumerations have specific business rules attached.
+//  - ValueType_GeographyCoordinate: ValueType_StringList = 14;
 //
 // swagger:model conquest_apiValueType
 type ConquestAPIValueType string
@@ -92,17 +93,8 @@ const (
 	// ConquestAPIValueTypeValueTypeEnumeration captures enum value "ValueType_Enumeration"
 	ConquestAPIValueTypeValueTypeEnumeration ConquestAPIValueType = "ValueType_Enumeration"
 
-	// ConquestAPIValueTypeValueTypeStringList captures enum value "ValueType_StringList"
-	ConquestAPIValueTypeValueTypeStringList ConquestAPIValueType = "ValueType_StringList"
-
 	// ConquestAPIValueTypeValueTypeGeographyCoordinate captures enum value "ValueType_GeographyCoordinate"
 	ConquestAPIValueTypeValueTypeGeographyCoordinate ConquestAPIValueType = "ValueType_GeographyCoordinate"
-
-	// ConquestAPIValueTypeValueTypeURI captures enum value "ValueType_Uri"
-	ConquestAPIValueTypeValueTypeURI ConquestAPIValueType = "ValueType_Uri"
-
-	// ConquestAPIValueTypeValueTypeUUID captures enum value "ValueType_Uuid"
-	ConquestAPIValueTypeValueTypeUUID ConquestAPIValueType = "ValueType_Uuid"
 )
 
 // for schema
@@ -110,7 +102,7 @@ var conquestApiValueTypeEnum []interface{}
 
 func init() {
 	var res []ConquestAPIValueType
-	if err := json.Unmarshal([]byte(`["ValueType_Unknown","ValueType_String","ValueType_Boolean","ValueType_Number","ValueType_Int32","ValueType_Int64","ValueType_Decimal","ValueType_Date","ValueType_DateTime","ValueType_Duration","ValueType_Code","ValueType_Hierarchy","ValueType_ObjectKey","ValueType_Enumeration","ValueType_StringList","ValueType_GeographyCoordinate","ValueType_Uri","ValueType_Uuid"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["ValueType_Unknown","ValueType_String","ValueType_Boolean","ValueType_Number","ValueType_Int32","ValueType_Int64","ValueType_Decimal","ValueType_Date","ValueType_DateTime","ValueType_Duration","ValueType_Code","ValueType_Hierarchy","ValueType_ObjectKey","ValueType_Enumeration","ValueType_GeographyCoordinate"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {

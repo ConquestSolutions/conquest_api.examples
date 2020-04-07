@@ -1,6 +1,7 @@
 package conquest_api
 
 import (
+	"crypto/tls"
 	"encoding/json"
 	"fmt"
 	"github.com/ConquestSolutions/apiv2.examples/go-swagger/client"
@@ -8,12 +9,14 @@ import (
 	httptransport "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
 	"io/ioutil"
+	"net/http"
 	"net/url"
 )
 
 type Config struct {
-	Address     string `json:"address"`
-	AccessToken string `json:"access_token"`
+	Address            string `json:"address"`
+	InsecureSkipVerify bool   `json:"insecure"`
+	AccessToken        string `json:"access_token"`
 }
 
 func LoadConfig(filename string) (*Config, error) {
@@ -43,11 +46,24 @@ func NewClient(config Config) (*client.ConquestAPIV2, error) {
 	if err != nil {
 		return nil, fmt.Errorf("invalid Conquest API 'address'")
 	}
-	if u.Host != "https" {
+	if u.Scheme != "https" {
 		return nil, fmt.Errorf("invalid Conquest API 'address', must use https")
 	}
 
-	transport := httptransport.New(u.Host, u.Path, []string{"https"})
+	var transport *httptransport.Runtime
+
+	// If you are using a self-signed dev certificate, skip the cert check
+	if config.InsecureSkipVerify {
+		transport = httptransport.NewWithClient(u.Host, u.Path, []string{"https"}, &http.Client{
+			Transport: &http.Transport{
+				TLSClientConfig: &tls.Config{
+					InsecureSkipVerify: config.InsecureSkipVerify,
+				},
+			},
+		})
+	} else {
+		transport = httptransport.New(u.Host, u.Path, []string{"https"})
+	}
 
 	transport.DefaultAuthentication = useAccessToken(config.AccessToken)
 

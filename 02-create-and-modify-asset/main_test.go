@@ -7,6 +7,7 @@ import (
 	"github.com/go-openapi/strfmt"
 	"github.com/stretchr/testify/require"
 	"testing"
+	"time"
 )
 
 // TestAssetCRUD is a complete demonstration of how to
@@ -43,7 +44,7 @@ func TestAssetCRUD(t *testing.T) {
 
 	// Make an edit
 
-	now := strfmt.NewDateTime()
+	now := strfmt.DateTime(time.Now().UTC())
 	newDescription += " (updated!)"
 	updatedAsset := *originalAsset // shallow copy
 	updatedAsset.AssetDescription = newDescription
@@ -68,13 +69,19 @@ func TestAssetCRUD(t *testing.T) {
 	getAssetRequest = asset_service.NewGetAssetParams().WithValue(facilityId)
 	getAssetResponse, err = api.AssetService.GetAsset(getAssetRequest, nil)
 	require.NoError(t, err)
+	lastEdit = getAssetResponse.GetPayload().EditDate
 	retrievedAsset := getAssetResponse.GetPayload().Record
 	require.Equal(t, newDescription, retrievedAsset.AssetDescription)
-	require.Equal(t, now, retrievedAsset.YearCreated)
+	require.NotNil(t, retrievedAsset.YearCreated)
+
+	// BUG: There will be a few millisecond difference. Be sure to compare with a rounded value until fixed.
+	roundedNow := time.Time(now).Round(1 * time.Second)
+	roundedYearCreated := time.Time(retrievedAsset.YearCreated.Value).Round(1 * time.Second)
+	require.Equal(t, roundedNow, roundedYearCreated)
 
 	// Unset the year created
-
 	updatedAsset = *retrievedAsset // shallow copy
+	updatedAsset.YearCreated = nil
 	updateAssetCommand = asset_service.NewUpdateAssetParams().WithBody(&models.ConquestAPIAssetRecordChangeSet{
 		AssetID: facilityId,
 		Changes: []string{
@@ -109,4 +116,5 @@ func TestAssetCRUD(t *testing.T) {
 	getAssetRequest = asset_service.NewGetAssetParams().WithValue(facilityId)
 	_, err = api.AssetService.GetAsset(getAssetRequest, nil)
 	require.Error(t, err)
+	require.Equal(t, conquest_api.ErrStatusCode(err), 404)
 }

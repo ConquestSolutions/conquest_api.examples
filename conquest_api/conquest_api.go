@@ -77,3 +77,12 @@ func New() (*client.ConquestAPIV2, error) {
 	}
 	return NewClient(*cfg)
 }
+
+var _ runtime.ClientResponseReaderFunc
+
+func ErrStatusCode(err error) int {
+	if e, ok := err.(*runtime.APIError); ok {
+		return e.Code
+	}
+	return 0
+}

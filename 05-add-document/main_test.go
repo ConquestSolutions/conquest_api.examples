@@ -13,6 +13,7 @@ import (
 )
 
 // TestAddDocument is a complete demonstration of how to add a document to an object
+// This test is flaky due to how the ObjectKey is serialized.
 func TestAddDocument(t *testing.T) {
 
 	cfg, err := conquest_api.DefaultConfig()

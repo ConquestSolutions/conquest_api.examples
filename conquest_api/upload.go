@@ -57,8 +57,18 @@ func (config *Config) uploadFileViaPost(file io.ReadCloser, uploadInfo *models.C
 		uploadEndpoint = strings.TrimSuffix(config.Address, "/") + uploadInfo.UploadURI
 	}
 
+	// Build a multi-part request body
+	body := &bytes.Buffer{}
+	writer := multipart.NewWriter(body)
+	part, err := writer.CreateFormFile("document", filepath.Base("my-file"))
+	if err != nil {
+		return err
+	}
+	_, err = io.Copy(part, file)
+	writer.Close()
+
 	// Instantiate a request with the provided parameters.
-	httpReq, err := http.NewRequest(http.MethodPost, uploadEndpoint, file)
+	httpReq, err := http.NewRequest(http.MethodPost, uploadEndpoint, body)
 	if err != nil {
 		return err
 	}
@@ -68,15 +78,6 @@ func (config *Config) uploadFileViaPost(file io.ReadCloser, uploadInfo *models.C
 	if useCredentials {
 		httpReq.Header.Add("Authorization", "Bearer "+config.AccessToken)
 	}
-
-	// Build a multi-part request body
-	body := &bytes.Buffer{}
-	writer := multipart.NewWriter(body)
-	part, err := writer.CreateFormFile("document", filepath.Base("my-file"))
-	if err != nil {
-		return err
-	}
-	_, err = io.Copy(part, file)
 	httpReq.Header.Set("Content-Type", writer.FormDataContentType())
 
 	// Send

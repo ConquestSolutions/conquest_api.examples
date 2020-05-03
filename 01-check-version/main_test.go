@@ -8,5 +8,5 @@ import (
 func TestCheckVersion(t *testing.T) {
 	version, err := GetAPIVersion()
 	require.NoError(t, err)
-	require.Contains(t, version, "2.0.10")
+	require.Contains(t, version, "2.0.")
 }

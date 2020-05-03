@@ -16,6 +16,7 @@ import (
 type Config struct {
 	Address            string `json:"address"`
 	InsecureSkipVerify bool   `json:"insecure"`
+	Debug              bool   `json:"debug"`
 	AccessToken        string `json:"access_token"`
 }
 
@@ -67,11 +68,17 @@ func NewClient(config Config) (*client.ConquestAPIV2, error) {
 
 	transport.DefaultAuthentication = useAccessToken(config.AccessToken)
 
+	transport.SetDebug(config.Debug)
+
 	return client.New(transport, nil), nil
 }
 
+func DefaultConfig() (*Config, error) {
+	return LoadConfig("conquest_api.credentials.json")
+}
+
 func New() (*client.ConquestAPIV2, error) {
-	cfg, err := LoadConfig("conquest_api.credentials.json")
+	cfg, err := DefaultConfig()
 	if err != nil {
 		return nil, err
 	}

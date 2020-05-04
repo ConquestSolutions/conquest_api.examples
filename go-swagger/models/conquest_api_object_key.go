@@ -28,7 +28,7 @@ type ConquestAPIObjectKey struct {
 
 	// timestamp value
 	// Format: date-time
-	TimestampValue strfmt.DateTime `json:"timestampValue,omitempty"`
+	TimestampValue *strfmt.DateTime `json:"timestampValue,omitempty"`
 }
 
 // Validate validates this conquest api object key
@@ -67,7 +67,7 @@ func (m *ConquestAPIObjectKey) validateObjectType(formats strfmt.Registry) error
 
 func (m *ConquestAPIObjectKey) validateTimestampValue(formats strfmt.Registry) error {
 
-	if swag.IsZero(m.TimestampValue) { // not required
+	if m.TimestampValue == nil || swag.IsZero(m.TimestampValue) { // not required
 		return nil
 	}
 

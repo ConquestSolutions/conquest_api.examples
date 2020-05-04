@@ -13,7 +13,10 @@ import (
 )
 
 // TestAddDocument is a complete demonstration of how to add a document to an object
-// This test is flaky due to how the ObjectKey is serialized.
+//
+// This test is flaky due to how the ObjectKey is serialized with the default generated code in go-swagger.
+//
+// The work around is to make ObjectKey.TimestampValue a pointer, that way, if it's not set, it's not serialized.
 func TestAddDocument(t *testing.T) {
 
 	cfg, err := conquest_api.DefaultConfig()
@@ -47,8 +50,6 @@ func TestAddDocument(t *testing.T) {
 		// This is an instance of the problem https://conquestsolutions.github.io/specification/optional_values/
 		//
 		// 'oneof' appears in OpenAPI 3.0, 'go-swagger' implements OpenAPI 2.0
-		//
-		// API 2.0.11 works around this and treats a zero date as null
 		ObjectKey: &models.ConquestAPIObjectKey{
 			ObjectType: models.ConquestAPIObjectTypeObjectTypeAsset,
 			Int32Value: assetId,

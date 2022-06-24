@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -57,7 +59,6 @@ func (m *ConquestAPIRequestRecordChangeSet) Validate(formats strfmt.Registry) er
 }
 
 func (m *ConquestAPIRequestRecordChangeSet) validateLastEdit(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.LastEdit) { // not required
 		return nil
 	}
@@ -70,7 +71,6 @@ func (m *ConquestAPIRequestRecordChangeSet) validateLastEdit(formats strfmt.Regi
 }
 
 func (m *ConquestAPIRequestRecordChangeSet) validateOriginal(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Original) { // not required
 		return nil
 	}
@@ -79,6 +79,8 @@ func (m *ConquestAPIRequestRecordChangeSet) validateOriginal(formats strfmt.Regi
 		if err := m.Original.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("Original")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("Original")
 			}
 			return err
 		}
@@ -88,7 +90,6 @@ func (m *ConquestAPIRequestRecordChangeSet) validateOriginal(formats strfmt.Regi
 }
 
 func (m *ConquestAPIRequestRecordChangeSet) validateUpdated(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Updated) { // not required
 		return nil
 	}
@@ -97,6 +98,58 @@ func (m *ConquestAPIRequestRecordChangeSet) validateUpdated(formats strfmt.Regis
 		if err := m.Updated.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("Updated")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("Updated")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api request record change set based on the context it is used
+func (m *ConquestAPIRequestRecordChangeSet) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateOriginal(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUpdated(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPIRequestRecordChangeSet) contextValidateOriginal(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Original != nil {
+		if err := m.Original.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("Original")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("Original")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIRequestRecordChangeSet) contextValidateUpdated(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Updated != nil {
+		if err := m.Updated.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("Updated")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("Updated")
 			}
 			return err
 		}

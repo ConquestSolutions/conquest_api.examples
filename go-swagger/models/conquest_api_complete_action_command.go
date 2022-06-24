@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -44,7 +45,6 @@ func (m *ConquestAPICompleteActionCommand) Validate(formats strfmt.Registry) err
 }
 
 func (m *ConquestAPICompleteActionCommand) validateCompletionOptions(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CompletionOptions) { // not required
 		return nil
 	}
@@ -53,6 +53,8 @@ func (m *ConquestAPICompleteActionCommand) validateCompletionOptions(formats str
 		if err := m.CompletionOptions.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("CompletionOptions")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("CompletionOptions")
 			}
 			return err
 		}
@@ -62,7 +64,6 @@ func (m *ConquestAPICompleteActionCommand) validateCompletionOptions(formats str
 }
 
 func (m *ConquestAPICompleteActionCommand) validateSubActionCompletionOptions(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.SubActionCompletionOptions) { // not required
 		return nil
 	}
@@ -76,6 +77,62 @@ func (m *ConquestAPICompleteActionCommand) validateSubActionCompletionOptions(fo
 			if err := m.SubActionCompletionOptions[i].Validate(formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("SubActionCompletionOptions" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("SubActionCompletionOptions" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api complete action command based on the context it is used
+func (m *ConquestAPICompleteActionCommand) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCompletionOptions(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSubActionCompletionOptions(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPICompleteActionCommand) contextValidateCompletionOptions(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CompletionOptions != nil {
+		if err := m.CompletionOptions.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("CompletionOptions")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("CompletionOptions")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPICompleteActionCommand) contextValidateSubActionCompletionOptions(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.SubActionCompletionOptions); i++ {
+
+		if m.SubActionCompletionOptions[i] != nil {
+			if err := m.SubActionCompletionOptions[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("SubActionCompletionOptions" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("SubActionCompletionOptions" + "." + strconv.Itoa(i))
 				}
 				return err
 			}

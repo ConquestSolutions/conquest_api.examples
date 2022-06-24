@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -55,7 +57,6 @@ func (m *ConquestAPIListHierarchyNodesQuery) Validate(formats strfmt.Registry) e
 }
 
 func (m *ConquestAPIListHierarchyNodesQuery) validateObjectKey(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ObjectKey) { // not required
 		return nil
 	}
@@ -64,6 +65,38 @@ func (m *ConquestAPIListHierarchyNodesQuery) validateObjectKey(formats strfmt.Re
 		if err := m.ObjectKey.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("ObjectKey")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ObjectKey")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api list hierarchy nodes query based on the context it is used
+func (m *ConquestAPIListHierarchyNodesQuery) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateObjectKey(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPIListHierarchyNodesQuery) contextValidateObjectKey(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ObjectKey != nil {
+		if err := m.ObjectKey.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ObjectKey")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ObjectKey")
 			}
 			return err
 		}

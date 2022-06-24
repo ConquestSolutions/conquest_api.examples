@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/go-openapi/errors"
@@ -17,6 +18,15 @@ import (
 //
 // swagger:model conquest_apiFilterType
 type ConquestAPIFilterType string
+
+func NewConquestAPIFilterType(value ConquestAPIFilterType) *ConquestAPIFilterType {
+	return &value
+}
+
+// Pointer returns a pointer to a freshly-allocated ConquestAPIFilterType.
+func (m ConquestAPIFilterType) Pointer() *ConquestAPIFilterType {
+	return &m
+}
 
 const (
 
@@ -38,7 +48,7 @@ func init() {
 }
 
 func (m ConquestAPIFilterType) validateConquestAPIFilterTypeEnum(path, location string, value ConquestAPIFilterType) error {
-	if err := validate.Enum(path, location, value, conquestApiFilterTypeEnum); err != nil {
+	if err := validate.EnumCase(path, location, value, conquestApiFilterTypeEnum, true); err != nil {
 		return err
 	}
 	return nil
@@ -56,5 +66,10 @@ func (m ConquestAPIFilterType) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// ContextValidate validates this conquest api filter type based on context it is used
+func (m ConquestAPIFilterType) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }

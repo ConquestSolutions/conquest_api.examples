@@ -6,54 +6,57 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 )
 
-// ConquestAPIAddDocumentCommand AddDocumentCommand works in two steps, first you add a record using this command. The command may return AddDocumentCommand.UploadURI
-// use that URI to post file content. See AddDocumentResult
+// ConquestAPIAddDocumentCommand AddDocumentCommand works in two steps, first you add a record using this command.
+//
+// If content must be uploaded, see AddDocumentResult, it contains parameters required for an uploading data:
+// - UploadMethod
+// - UploadURI
+// - UploadHeaders
 //
 // swagger:model conquest_apiAddDocumentCommand
 type ConquestAPIAddDocumentCommand struct {
 
 	// Address is a URI with a supported scheme (blob://, file://, https://, conquest://, trim://).
 	//
-	// - URIs use the canonical '/' path separator (not '\').
+	// Addresses tell the server in what location a document should be put. Use ListDocumentLocationsQuery to list available locations.
 	//
-	// - If the path component of a URI contains hex encoded characters, eg. '%20' for a space ' ', the path will be decoded and saved as ' '.
+	// Locations are pre-defined and are identified by prefixes, which are of the form "{scheme}://{location-name}".
 	//
-	// - The [blob://] scheme represents a filesystem that is managed by Conquest. This is the scheme used in "conquest.live"
-	//   All urls take the form 'blob:/${configured-container}/path/to/file.txt'
+	// The default location, known as the "System Document Directory" is
 	//
-	// - The [conquest://] scheme provides a way to encode links to Conquest Objects and Views. See the documentation to learn
-	//   how to construct a conquest link. (TODO documentation link, conquest://? is an alias for "https://link.conquest.live/?")
+	// - "file://conquest_documents/" for site installations
 	//
-	// - The [https://] scheme can be used to link websites, "http" is not supported.
+	// - "blob://default/" for cloud installations (the location name may differ).
 	//
-	// - The [file://] scheme is not available in "conquest.live", it is the default for in-house installations.
+	// When choosing an address, prefix it with a known location, followed by a relative path. For example:
 	//
-	// - When a [file://] scheme is used to *submit* a document, it refers to a location available on the API Server filesystem. Only configured locations will be accepted.
-	//   A configured location takes the form: 'file://${configured-location}/path/to/file.txt'
+	//      "blob://default/Assets/1/receipt.txt"
 	//
-	// - When *submitting* and *serving*, "conquest_documents", is a configured location for the [file://] scheme:
-	//     - "conquest_documents" points to the Conquest Document directory
-	//       For example:
-	//         "file://conquest_documents/relative/path/file.txt" will point to
-	//         "${ConquestDocumentDirectory}/relative/path/file.txt
+	// After a successful upload, reference this document using both the ObjectKey and the returned Document.DocumentID when using the download endpoint. For example:
 	//
-	// [Special handling]: For local filesystem paths are as follows. Consumers of the API / End-User apps cannot use local filesystem paths.
+	//      "/download/document?object_type=...&object_id=...&document_id=..."
 	//
-	// - The [file://] scheme is used to *serve* a file, it refers to a location available on the API Server filesystem.
+	// This endpoint may redirect you to a download (by providing an address in the Location header).
 	//
-	//      - If a [file://] scheme uses the prefix "file://MACHINE/", this path path aligns with the underlying filesystem.
-	//        For example: "file://MACHINE/shared/folder/file.txt" translates to the UNC path "\\MACHINE\shared\folder\test.txt"
+	// TRIM:
 	//
-	//      - "file://MACHINE/" locations cannot be submitted via. the API.
+	// The server identifies that it is TRIM file upload by looking at the Address starting with "trim://"
 	//
-	// Address is a protected property. It is not exposed to the end-user in subsequent requests. To reference this document
-	// use the returned Document.DocumentID
+	// - For new TRIM file, Address - "trim://new-file"
+	//
+	//      While uploading a new TRIM file, the AddDocumentCommand returns with a TRIM blob url location to upload the selected file.
+	//
+	// - For existing TRIM file, Address - trim://{RecordNumber}
+	//
+	//      The existing TRIM file is same as a document link in the database
 	Address string `json:"Address,omitempty"`
 
 	// content length
@@ -72,10 +75,15 @@ type ConquestAPIAddDocumentCommand struct {
 	// A list of calculated hashes / checksum of the file to be uploaded.
 	Hashes []string `json:"Hashes"`
 
-	// link existing document
+	// When you wish to reference a document that will not be uploaded, set LinkExistingDocument to true and provide an Address
 	LinkExistingDocument bool `json:"LinkExistingDocument,omitempty"`
 
-	// object key
+	// Locations are pre-defined and are identified by prefixes, which are of the form "{scheme}://{location-name}".
+	//
+	// Prefixes are chosen by the client in a picker
+	LocationPrefix string `json:"LocationPrefix,omitempty"`
+
+	// ObjectKey (please reference the ObjectKey documentation).
 	ObjectKey *ConquestAPIObjectKey `json:"ObjectKey,omitempty"`
 }
 
@@ -98,7 +106,6 @@ func (m *ConquestAPIAddDocumentCommand) Validate(formats strfmt.Registry) error 
 }
 
 func (m *ConquestAPIAddDocumentCommand) validateCreateTime(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CreateTime) { // not required
 		return nil
 	}
@@ -111,7 +118,6 @@ func (m *ConquestAPIAddDocumentCommand) validateCreateTime(formats strfmt.Regist
 }
 
 func (m *ConquestAPIAddDocumentCommand) validateObjectKey(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ObjectKey) { // not required
 		return nil
 	}
@@ -120,6 +126,38 @@ func (m *ConquestAPIAddDocumentCommand) validateObjectKey(formats strfmt.Registr
 		if err := m.ObjectKey.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("ObjectKey")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ObjectKey")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api add document command based on the context it is used
+func (m *ConquestAPIAddDocumentCommand) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateObjectKey(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPIAddDocumentCommand) contextValidateObjectKey(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ObjectKey != nil {
+		if err := m.ObjectKey.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ObjectKey")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ObjectKey")
 			}
 			return err
 		}

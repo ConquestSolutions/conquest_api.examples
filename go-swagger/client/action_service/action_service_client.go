@@ -6,8 +6,6 @@ package action_service
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"fmt"
-
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 )
@@ -25,342 +23,372 @@ type Client struct {
 	formats   strfmt.Registry
 }
 
+// ClientOption is the option for Client methods
+type ClientOption func(*runtime.ClientOperation)
+
 // ClientService is the interface for Client methods
 type ClientService interface {
-	ApplyStandardAction(params *ApplyStandardActionParams, authInfo runtime.ClientAuthInfoWriter) (*ApplyStandardActionOK, error)
+	ActionServiceApplyStandardAction(params *ActionServiceApplyStandardActionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ActionServiceApplyStandardActionOK, error)
 
-	CompleteAction(params *CompleteActionParams, authInfo runtime.ClientAuthInfoWriter) (*CompleteActionOK, error)
+	ActionServiceCompleteAction(params *ActionServiceCompleteActionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ActionServiceCompleteActionOK, error)
 
-	CreateSucceedingAction(params *CreateSucceedingActionParams, authInfo runtime.ClientAuthInfoWriter) (*CreateSucceedingActionOK, error)
+	ActionServiceCreateSucceedingAction(params *ActionServiceCreateSucceedingActionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ActionServiceCreateSucceedingActionOK, error)
 
-	DeleteAction(params *DeleteActionParams, authInfo runtime.ClientAuthInfoWriter) (*DeleteActionOK, error)
+	ActionServiceDeleteAction(params *ActionServiceDeleteActionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ActionServiceDeleteActionOK, error)
 
-	GetAction(params *GetActionParams, authInfo runtime.ClientAuthInfoWriter) (*GetActionOK, error)
+	ActionServiceGetAction(params *ActionServiceGetActionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ActionServiceGetActionOK, error)
 
-	GetActionCompletionDetails(params *GetActionCompletionDetailsParams, authInfo runtime.ClientAuthInfoWriter) (*GetActionCompletionDetailsOK, error)
+	ActionServiceGetActionCompletionDetails(params *ActionServiceGetActionCompletionDetailsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ActionServiceGetActionCompletionDetailsOK, error)
 
-	MoveAction(params *MoveActionParams, authInfo runtime.ClientAuthInfoWriter) (*MoveActionOK, error)
+	ActionServiceMoveAction(params *ActionServiceMoveActionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ActionServiceMoveActionOK, error)
 
-	ReverseActionCompletion(params *ReverseActionCompletionParams, authInfo runtime.ClientAuthInfoWriter) (*ReverseActionCompletionOK, error)
+	ActionServiceReverseActionCompletion(params *ActionServiceReverseActionCompletionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ActionServiceReverseActionCompletionOK, error)
 
-	UpdateAction(params *UpdateActionParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateActionOK, error)
+	ActionServiceUpdateAction(params *ActionServiceUpdateActionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ActionServiceUpdateActionOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
 
 /*
-  ApplyStandardAction apply standard action API
+  ActionServiceApplyStandardAction action service apply standard action API
 */
-func (a *Client) ApplyStandardAction(params *ApplyStandardActionParams, authInfo runtime.ClientAuthInfoWriter) (*ApplyStandardActionOK, error) {
+func (a *Client) ActionServiceApplyStandardAction(params *ActionServiceApplyStandardActionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ActionServiceApplyStandardActionOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewApplyStandardActionParams()
+		params = NewActionServiceApplyStandardActionParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "ApplyStandardAction",
+	op := &runtime.ClientOperation{
+		ID:                 "ActionService_ApplyStandardAction",
 		Method:             "POST",
 		PathPattern:        "/api/actions/apply_standard_action",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &ApplyStandardActionReader{formats: a.formats},
+		Reader:             &ActionServiceApplyStandardActionReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*ApplyStandardActionOK)
+	success, ok := result.(*ActionServiceApplyStandardActionOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for ApplyStandardAction: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*ActionServiceApplyStandardActionDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
-  CompleteAction complete action API
+  ActionServiceCompleteAction action service complete action API
 */
-func (a *Client) CompleteAction(params *CompleteActionParams, authInfo runtime.ClientAuthInfoWriter) (*CompleteActionOK, error) {
+func (a *Client) ActionServiceCompleteAction(params *ActionServiceCompleteActionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ActionServiceCompleteActionOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewCompleteActionParams()
+		params = NewActionServiceCompleteActionParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "CompleteAction",
+	op := &runtime.ClientOperation{
+		ID:                 "ActionService_CompleteAction",
 		Method:             "POST",
 		PathPattern:        "/api/actions/complete_action",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &CompleteActionReader{formats: a.formats},
+		Reader:             &ActionServiceCompleteActionReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*CompleteActionOK)
+	success, ok := result.(*ActionServiceCompleteActionOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for CompleteAction: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*ActionServiceCompleteActionDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
-  CreateSucceedingAction create succeeding action API
+  ActionServiceCreateSucceedingAction action service create succeeding action API
 */
-func (a *Client) CreateSucceedingAction(params *CreateSucceedingActionParams, authInfo runtime.ClientAuthInfoWriter) (*CreateSucceedingActionOK, error) {
+func (a *Client) ActionServiceCreateSucceedingAction(params *ActionServiceCreateSucceedingActionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ActionServiceCreateSucceedingActionOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewCreateSucceedingActionParams()
+		params = NewActionServiceCreateSucceedingActionParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "CreateSucceedingAction",
+	op := &runtime.ClientOperation{
+		ID:                 "ActionService_CreateSucceedingAction",
 		Method:             "POST",
 		PathPattern:        "/api/actions/create_succeeding_action",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &CreateSucceedingActionReader{formats: a.formats},
+		Reader:             &ActionServiceCreateSucceedingActionReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*CreateSucceedingActionOK)
+	success, ok := result.(*ActionServiceCreateSucceedingActionOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for CreateSucceedingAction: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*ActionServiceCreateSucceedingActionDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
-  DeleteAction delete action API
+  ActionServiceDeleteAction action service delete action API
 */
-func (a *Client) DeleteAction(params *DeleteActionParams, authInfo runtime.ClientAuthInfoWriter) (*DeleteActionOK, error) {
+func (a *Client) ActionServiceDeleteAction(params *ActionServiceDeleteActionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ActionServiceDeleteActionOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewDeleteActionParams()
+		params = NewActionServiceDeleteActionParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "DeleteAction",
+	op := &runtime.ClientOperation{
+		ID:                 "ActionService_DeleteAction",
 		Method:             "POST",
 		PathPattern:        "/api/actions/delete_action",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &DeleteActionReader{formats: a.formats},
+		Reader:             &ActionServiceDeleteActionReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*DeleteActionOK)
+	success, ok := result.(*ActionServiceDeleteActionOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for DeleteAction: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*ActionServiceDeleteActionDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
-  GetAction get action API
+  ActionServiceGetAction action service get action API
 */
-func (a *Client) GetAction(params *GetActionParams, authInfo runtime.ClientAuthInfoWriter) (*GetActionOK, error) {
+func (a *Client) ActionServiceGetAction(params *ActionServiceGetActionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ActionServiceGetActionOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewGetActionParams()
+		params = NewActionServiceGetActionParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "GetAction",
+	op := &runtime.ClientOperation{
+		ID:                 "ActionService_GetAction",
 		Method:             "GET",
 		PathPattern:        "/api/actions/{value}",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &GetActionReader{formats: a.formats},
+		Reader:             &ActionServiceGetActionReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*GetActionOK)
+	success, ok := result.(*ActionServiceGetActionOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for GetAction: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*ActionServiceGetActionDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
-  GetActionCompletionDetails get action completion details API
+  ActionServiceGetActionCompletionDetails action service get action completion details API
 */
-func (a *Client) GetActionCompletionDetails(params *GetActionCompletionDetailsParams, authInfo runtime.ClientAuthInfoWriter) (*GetActionCompletionDetailsOK, error) {
+func (a *Client) ActionServiceGetActionCompletionDetails(params *ActionServiceGetActionCompletionDetailsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ActionServiceGetActionCompletionDetailsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewGetActionCompletionDetailsParams()
+		params = NewActionServiceGetActionCompletionDetailsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "GetActionCompletionDetails",
+	op := &runtime.ClientOperation{
+		ID:                 "ActionService_GetActionCompletionDetails",
 		Method:             "POST",
 		PathPattern:        "/api/actions/completion_details",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &GetActionCompletionDetailsReader{formats: a.formats},
+		Reader:             &ActionServiceGetActionCompletionDetailsReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*GetActionCompletionDetailsOK)
+	success, ok := result.(*ActionServiceGetActionCompletionDetailsOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for GetActionCompletionDetails: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*ActionServiceGetActionCompletionDetailsDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
-  MoveAction move action API
+  ActionServiceMoveAction action service move action API
 */
-func (a *Client) MoveAction(params *MoveActionParams, authInfo runtime.ClientAuthInfoWriter) (*MoveActionOK, error) {
+func (a *Client) ActionServiceMoveAction(params *ActionServiceMoveActionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ActionServiceMoveActionOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewMoveActionParams()
+		params = NewActionServiceMoveActionParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "MoveAction",
+	op := &runtime.ClientOperation{
+		ID:                 "ActionService_MoveAction",
 		Method:             "POST",
 		PathPattern:        "/api/actions/move_action",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &MoveActionReader{formats: a.formats},
+		Reader:             &ActionServiceMoveActionReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*MoveActionOK)
+	success, ok := result.(*ActionServiceMoveActionOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for MoveAction: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*ActionServiceMoveActionDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
-  ReverseActionCompletion reverse action completion API
+  ActionServiceReverseActionCompletion action service reverse action completion API
 */
-func (a *Client) ReverseActionCompletion(params *ReverseActionCompletionParams, authInfo runtime.ClientAuthInfoWriter) (*ReverseActionCompletionOK, error) {
+func (a *Client) ActionServiceReverseActionCompletion(params *ActionServiceReverseActionCompletionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ActionServiceReverseActionCompletionOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewReverseActionCompletionParams()
+		params = NewActionServiceReverseActionCompletionParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "ReverseActionCompletion",
+	op := &runtime.ClientOperation{
+		ID:                 "ActionService_ReverseActionCompletion",
 		Method:             "POST",
 		PathPattern:        "/api/actions/reverse_action_completion",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &ReverseActionCompletionReader{formats: a.formats},
+		Reader:             &ActionServiceReverseActionCompletionReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*ReverseActionCompletionOK)
+	success, ok := result.(*ActionServiceReverseActionCompletionOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for ReverseActionCompletion: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*ActionServiceReverseActionCompletionDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
-  UpdateAction update action API
+  ActionServiceUpdateAction action service update action API
 */
-func (a *Client) UpdateAction(params *UpdateActionParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateActionOK, error) {
+func (a *Client) ActionServiceUpdateAction(params *ActionServiceUpdateActionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ActionServiceUpdateActionOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewUpdateActionParams()
+		params = NewActionServiceUpdateActionParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "UpdateAction",
+	op := &runtime.ClientOperation{
+		ID:                 "ActionService_UpdateAction",
 		Method:             "POST",
 		PathPattern:        "/api/actions/update_action",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &UpdateActionReader{formats: a.formats},
+		Reader:             &ActionServiceUpdateActionReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*UpdateActionOK)
+	success, ok := result.(*ActionServiceUpdateActionOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for UpdateAction: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*ActionServiceUpdateActionDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 // SetTransport changes the transport on the client

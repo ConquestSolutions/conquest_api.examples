@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -35,7 +37,6 @@ func (m *ConquestAPICompleteActionResult) Validate(formats strfmt.Registry) erro
 }
 
 func (m *ConquestAPICompleteActionResult) validateJobKey(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.JobKey) { // not required
 		return nil
 	}
@@ -44,6 +45,38 @@ func (m *ConquestAPICompleteActionResult) validateJobKey(formats strfmt.Registry
 		if err := m.JobKey.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("job_key")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("job_key")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api complete action result based on the context it is used
+func (m *ConquestAPICompleteActionResult) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateJobKey(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPICompleteActionResult) contextValidateJobKey(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.JobKey != nil {
+		if err := m.JobKey.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("job_key")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("job_key")
 			}
 			return err
 		}

@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/go-openapi/errors"
@@ -17,6 +18,15 @@ import (
 //
 // swagger:model conquest_apiEnumerationType
 type ConquestAPIEnumerationType string
+
+func NewConquestAPIEnumerationType(value ConquestAPIEnumerationType) *ConquestAPIEnumerationType {
+	return &value
+}
+
+// Pointer returns a pointer to a freshly-allocated ConquestAPIEnumerationType.
+func (m ConquestAPIEnumerationType) Pointer() *ConquestAPIEnumerationType {
+	return &m
+}
 
 const (
 
@@ -71,7 +81,7 @@ func init() {
 }
 
 func (m ConquestAPIEnumerationType) validateConquestAPIEnumerationTypeEnum(path, location string, value ConquestAPIEnumerationType) error {
-	if err := validate.Enum(path, location, value, conquestApiEnumerationTypeEnum); err != nil {
+	if err := validate.EnumCase(path, location, value, conquestApiEnumerationTypeEnum, true); err != nil {
 		return err
 	}
 	return nil
@@ -89,5 +99,10 @@ func (m ConquestAPIEnumerationType) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// ContextValidate validates this conquest api enumeration type based on context it is used
+func (m ConquestAPIEnumerationType) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }

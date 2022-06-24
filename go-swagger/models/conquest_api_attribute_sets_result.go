@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -37,7 +38,6 @@ func (m *ConquestAPIAttributeSetsResult) Validate(formats strfmt.Registry) error
 }
 
 func (m *ConquestAPIAttributeSetsResult) validateAttributeSets(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.AttributeSets) { // not required
 		return nil
 	}
@@ -51,6 +51,42 @@ func (m *ConquestAPIAttributeSetsResult) validateAttributeSets(formats strfmt.Re
 			if err := m.AttributeSets[i].Validate(formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("AttributeSets" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("AttributeSets" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api attribute sets result based on the context it is used
+func (m *ConquestAPIAttributeSetsResult) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateAttributeSets(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPIAttributeSetsResult) contextValidateAttributeSets(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.AttributeSets); i++ {
+
+		if m.AttributeSets[i] != nil {
+			if err := m.AttributeSets[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("AttributeSets" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("AttributeSets" + "." + strconv.Itoa(i))
 				}
 				return err
 			}

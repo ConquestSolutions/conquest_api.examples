@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -17,7 +19,7 @@ import (
 type ConquestAPIFieldCriterion struct {
 
 	// compare operator
-	CompareOperator ConquestAPICompareOperator `json:"CompareOperator,omitempty"`
+	CompareOperator *ConquestAPICompareOperator `json:"CompareOperator,omitempty"`
 
 	// view+column as defined by a Context for which this criterion is for
 	FieldName string `json:"FieldName,omitempty"`
@@ -48,23 +50,25 @@ func (m *ConquestAPIFieldCriterion) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ConquestAPIFieldCriterion) validateCompareOperator(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CompareOperator) { // not required
 		return nil
 	}
 
-	if err := m.CompareOperator.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("CompareOperator")
+	if m.CompareOperator != nil {
+		if err := m.CompareOperator.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("CompareOperator")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("CompareOperator")
+			}
+			return err
 		}
-		return err
 	}
 
 	return nil
 }
 
 func (m *ConquestAPIFieldCriterion) validateValue(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Value) { // not required
 		return nil
 	}
@@ -73,6 +77,58 @@ func (m *ConquestAPIFieldCriterion) validateValue(formats strfmt.Registry) error
 		if err := m.Value.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("Value")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("Value")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api field criterion based on the context it is used
+func (m *ConquestAPIFieldCriterion) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCompareOperator(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateValue(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPIFieldCriterion) contextValidateCompareOperator(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CompareOperator != nil {
+		if err := m.CompareOperator.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("CompareOperator")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("CompareOperator")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIFieldCriterion) contextValidateValue(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Value != nil {
+		if err := m.Value.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("Value")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("Value")
 			}
 			return err
 		}

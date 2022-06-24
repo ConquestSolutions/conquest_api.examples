@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -57,7 +59,6 @@ func (m *ConquestAPIJobState) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ConquestAPIJobState) validateCreationDetails(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CreationDetails) { // not required
 		return nil
 	}
@@ -66,6 +67,8 @@ func (m *ConquestAPIJobState) validateCreationDetails(formats strfmt.Registry) e
 		if err := m.CreationDetails.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("creation_details")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("creation_details")
 			}
 			return err
 		}
@@ -75,7 +78,6 @@ func (m *ConquestAPIJobState) validateCreationDetails(formats strfmt.Registry) e
 }
 
 func (m *ConquestAPIJobState) validateJobKey(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.JobKey) { // not required
 		return nil
 	}
@@ -84,6 +86,8 @@ func (m *ConquestAPIJobState) validateJobKey(formats strfmt.Registry) error {
 		if err := m.JobKey.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("job_key")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("job_key")
 			}
 			return err
 		}
@@ -93,7 +97,6 @@ func (m *ConquestAPIJobState) validateJobKey(formats strfmt.Registry) error {
 }
 
 func (m *ConquestAPIJobState) validateProgress(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Progress) { // not required
 		return nil
 	}
@@ -102,6 +105,8 @@ func (m *ConquestAPIJobState) validateProgress(formats strfmt.Registry) error {
 		if err := m.Progress.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("progress")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("progress")
 			}
 			return err
 		}
@@ -111,7 +116,6 @@ func (m *ConquestAPIJobState) validateProgress(formats strfmt.Registry) error {
 }
 
 func (m *ConquestAPIJobState) validateResult(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Result) { // not required
 		return nil
 	}
@@ -120,6 +124,98 @@ func (m *ConquestAPIJobState) validateResult(formats strfmt.Registry) error {
 		if err := m.Result.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("result")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("result")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api job state based on the context it is used
+func (m *ConquestAPIJobState) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCreationDetails(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateJobKey(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateProgress(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPIJobState) contextValidateCreationDetails(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CreationDetails != nil {
+		if err := m.CreationDetails.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("creation_details")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("creation_details")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIJobState) contextValidateJobKey(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.JobKey != nil {
+		if err := m.JobKey.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("job_key")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("job_key")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIJobState) contextValidateProgress(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Progress != nil {
+		if err := m.Progress.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("progress")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("progress")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIJobState) contextValidateResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Result != nil {
+		if err := m.Result.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("result")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("result")
 			}
 			return err
 		}

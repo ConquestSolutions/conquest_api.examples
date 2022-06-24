@@ -6,8 +6,6 @@ package jobs_service
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"fmt"
-
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 )
@@ -25,46 +23,52 @@ type Client struct {
 	formats   strfmt.Registry
 }
 
+// ClientOption is the option for Client methods
+type ClientOption func(*runtime.ClientOperation)
+
 // ClientService is the interface for Client methods
 type ClientService interface {
-	GetJobState(params *GetJobStateParams, authInfo runtime.ClientAuthInfoWriter) (*GetJobStateOK, error)
+	JobsServiceGetJobState(params *JobsServiceGetJobStateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*JobsServiceGetJobStateOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
 
 /*
-  GetJobState get job state API
+  JobsServiceGetJobState jobs service get job state API
 */
-func (a *Client) GetJobState(params *GetJobStateParams, authInfo runtime.ClientAuthInfoWriter) (*GetJobStateOK, error) {
+func (a *Client) JobsServiceGetJobState(params *JobsServiceGetJobStateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*JobsServiceGetJobStateOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewGetJobStateParams()
+		params = NewJobsServiceGetJobStateParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "GetJobState",
+	op := &runtime.ClientOperation{
+		ID:                 "JobsService_GetJobState",
 		Method:             "POST",
 		PathPattern:        "/api/jobs/current_state",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &GetJobStateReader{formats: a.formats},
+		Reader:             &JobsServiceGetJobStateReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*GetJobStateOK)
+	success, ok := result.(*JobsServiceGetJobStateOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for GetJobState: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*JobsServiceGetJobStateDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 // SetTransport changes the transport on the client

@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -17,7 +19,7 @@ import (
 type ConquestAPIConfigBlobStore struct {
 
 	// blob store mode
-	BlobStoreMode ConquestAPIConfigBlobStoreMode `json:"blob_store_mode,omitempty"`
+	BlobStoreMode *ConquestAPIConfigBlobStoreMode `json:"blob_store_mode,omitempty"`
 
 	// description
 	Description string `json:"description,omitempty"`
@@ -55,16 +57,49 @@ func (m *ConquestAPIConfigBlobStore) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ConquestAPIConfigBlobStore) validateBlobStoreMode(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.BlobStoreMode) { // not required
 		return nil
 	}
 
-	if err := m.BlobStoreMode.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("blob_store_mode")
+	if m.BlobStoreMode != nil {
+		if err := m.BlobStoreMode.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("blob_store_mode")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("blob_store_mode")
+			}
+			return err
 		}
-		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api config blob store based on the context it is used
+func (m *ConquestAPIConfigBlobStore) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateBlobStoreMode(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPIConfigBlobStore) contextValidateBlobStoreMode(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.BlobStoreMode != nil {
+		if err := m.BlobStoreMode.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("blob_store_mode")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("blob_store_mode")
+			}
+			return err
+		}
 	}
 
 	return nil

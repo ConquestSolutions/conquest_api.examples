@@ -2,10 +2,10 @@ package main
 
 import (
 	"fmt"
-	"github.com/ConquestSolutions/apiv2.examples/conquest_api"
-	"github.com/ConquestSolutions/apiv2.examples/go-swagger/client/asset_service"
-	"github.com/ConquestSolutions/apiv2.examples/go-swagger/client/document_service"
-	"github.com/ConquestSolutions/apiv2.examples/go-swagger/models"
+	"github.com/ConquestSolutions/conquest_api.examples/conquest_api"
+	"github.com/ConquestSolutions/conquest_api.examples/go-swagger/client/asset_service"
+	"github.com/ConquestSolutions/conquest_api.examples/go-swagger/client/document_service"
+	"github.com/ConquestSolutions/conquest_api.examples/go-swagger/models"
 	"github.com/stretchr/testify/require"
 	"io/ioutil"
 	"strings"

@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -20,7 +22,7 @@ type ConquestAPIJobKey struct {
 	JobID string `json:"job_id,omitempty"`
 
 	// job type
-	JobType ConquestAPIJobType `json:"job_type,omitempty"`
+	JobType *ConquestAPIJobType `json:"job_type,omitempty"`
 }
 
 // Validate validates this conquest api job key
@@ -38,16 +40,49 @@ func (m *ConquestAPIJobKey) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ConquestAPIJobKey) validateJobType(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.JobType) { // not required
 		return nil
 	}
 
-	if err := m.JobType.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("job_type")
+	if m.JobType != nil {
+		if err := m.JobType.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("job_type")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("job_type")
+			}
+			return err
 		}
-		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api job key based on the context it is used
+func (m *ConquestAPIJobKey) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateJobType(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPIJobKey) contextValidateJobType(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.JobType != nil {
+		if err := m.JobType.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("job_type")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("job_type")
+			}
+			return err
+		}
 	}
 
 	return nil

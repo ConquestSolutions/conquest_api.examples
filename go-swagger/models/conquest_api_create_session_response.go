@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -42,7 +44,6 @@ func (m *ConquestAPICreateSessionResponse) Validate(formats strfmt.Registry) err
 }
 
 func (m *ConquestAPICreateSessionResponse) validateError(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Error) { // not required
 		return nil
 	}
@@ -51,6 +52,8 @@ func (m *ConquestAPICreateSessionResponse) validateError(formats strfmt.Registry
 		if err := m.Error.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("Error")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("Error")
 			}
 			return err
 		}
@@ -60,7 +63,6 @@ func (m *ConquestAPICreateSessionResponse) validateError(formats strfmt.Registry
 }
 
 func (m *ConquestAPICreateSessionResponse) validateTokenResponse(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.TokenResponse) { // not required
 		return nil
 	}
@@ -69,6 +71,58 @@ func (m *ConquestAPICreateSessionResponse) validateTokenResponse(formats strfmt.
 		if err := m.TokenResponse.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("TokenResponse")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("TokenResponse")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api create session response based on the context it is used
+func (m *ConquestAPICreateSessionResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateError(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTokenResponse(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPICreateSessionResponse) contextValidateError(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Error != nil {
+		if err := m.Error.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("Error")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("Error")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPICreateSessionResponse) contextValidateTokenResponse(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.TokenResponse != nil {
+		if err := m.TokenResponse.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("TokenResponse")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("TokenResponse")
 			}
 			return err
 		}

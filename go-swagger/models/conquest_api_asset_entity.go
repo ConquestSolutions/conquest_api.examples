@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -18,7 +20,7 @@ import (
 type ConquestAPIAssetEntity struct {
 
 	// action permission
-	ActionPermission ConquestAPIPermission `json:"ActionPermission,omitempty"`
+	ActionPermission *ConquestAPIPermission `json:"ActionPermission,omitempty"`
 
 	// adding date
 	// Format: date-time
@@ -34,7 +36,10 @@ type ConquestAPIAssetEntity struct {
 	AttributeID int32 `json:"AttributeID,omitempty"`
 
 	// defect permission
-	DefectPermission ConquestAPIPermission `json:"DefectPermission,omitempty"`
+	DefectPermission *ConquestAPIPermission `json:"DefectPermission,omitempty"`
+
+	// document location
+	DocumentLocation string `json:"DocumentLocation,omitempty"`
 
 	// edit date
 	// Format: date-time
@@ -43,17 +48,23 @@ type ConquestAPIAssetEntity struct {
 	// editor
 	Editor string `json:"Editor,omitempty"`
 
+	// hyperlinks
+	Hyperlinks *ConquestAPICustomHyperlinkList `json:"Hyperlinks,omitempty"`
+
+	// inspection
+	Inspection *ConquestAPIInspectionRecord `json:"Inspection,omitempty"`
+
 	// inspection ID
 	InspectionID int32 `json:"InspectionID,omitempty"`
 
-	// inspection notes
-	InspectionNotes string `json:"InspectionNotes,omitempty"`
+	// map style
+	MapStyle *ConquestAPIStyle `json:"MapStyle,omitempty"`
 
 	// ParentID is 0 if this is a Facility
 	ParentID int32 `json:"ParentID,omitempty"`
 
 	// string FamilyCode = 49;
-	Permission ConquestAPIPermission `json:"Permission,omitempty"`
+	Permission *ConquestAPIPermission `json:"Permission,omitempty"`
 
 	// record
 	Record *ConquestAPIAssetRecord `json:"Record,omitempty"`
@@ -100,6 +111,18 @@ func (m *ConquestAPIAssetEntity) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateHyperlinks(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateInspection(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateMapStyle(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validatePermission(formats); err != nil {
 		res = append(res, err)
 	}
@@ -123,23 +146,25 @@ func (m *ConquestAPIAssetEntity) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ConquestAPIAssetEntity) validateActionPermission(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ActionPermission) { // not required
 		return nil
 	}
 
-	if err := m.ActionPermission.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("ActionPermission")
+	if m.ActionPermission != nil {
+		if err := m.ActionPermission.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ActionPermission")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ActionPermission")
+			}
+			return err
 		}
-		return err
 	}
 
 	return nil
 }
 
 func (m *ConquestAPIAssetEntity) validateAddingDate(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.AddingDate) { // not required
 		return nil
 	}
@@ -152,23 +177,25 @@ func (m *ConquestAPIAssetEntity) validateAddingDate(formats strfmt.Registry) err
 }
 
 func (m *ConquestAPIAssetEntity) validateDefectPermission(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.DefectPermission) { // not required
 		return nil
 	}
 
-	if err := m.DefectPermission.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("DefectPermission")
+	if m.DefectPermission != nil {
+		if err := m.DefectPermission.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("DefectPermission")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("DefectPermission")
+			}
+			return err
 		}
-		return err
 	}
 
 	return nil
 }
 
 func (m *ConquestAPIAssetEntity) validateEditDate(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.EditDate) { // not required
 		return nil
 	}
@@ -180,24 +207,83 @@ func (m *ConquestAPIAssetEntity) validateEditDate(formats strfmt.Registry) error
 	return nil
 }
 
-func (m *ConquestAPIAssetEntity) validatePermission(formats strfmt.Registry) error {
+func (m *ConquestAPIAssetEntity) validateHyperlinks(formats strfmt.Registry) error {
+	if swag.IsZero(m.Hyperlinks) { // not required
+		return nil
+	}
 
+	if m.Hyperlinks != nil {
+		if err := m.Hyperlinks.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("Hyperlinks")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("Hyperlinks")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIAssetEntity) validateInspection(formats strfmt.Registry) error {
+	if swag.IsZero(m.Inspection) { // not required
+		return nil
+	}
+
+	if m.Inspection != nil {
+		if err := m.Inspection.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("Inspection")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("Inspection")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIAssetEntity) validateMapStyle(formats strfmt.Registry) error {
+	if swag.IsZero(m.MapStyle) { // not required
+		return nil
+	}
+
+	if m.MapStyle != nil {
+		if err := m.MapStyle.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("MapStyle")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("MapStyle")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIAssetEntity) validatePermission(formats strfmt.Registry) error {
 	if swag.IsZero(m.Permission) { // not required
 		return nil
 	}
 
-	if err := m.Permission.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("Permission")
+	if m.Permission != nil {
+		if err := m.Permission.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("Permission")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("Permission")
+			}
+			return err
 		}
-		return err
 	}
 
 	return nil
 }
 
 func (m *ConquestAPIAssetEntity) validateRecord(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Record) { // not required
 		return nil
 	}
@@ -206,6 +292,8 @@ func (m *ConquestAPIAssetEntity) validateRecord(formats strfmt.Registry) error {
 		if err := m.Record.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("Record")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("Record")
 			}
 			return err
 		}
@@ -215,7 +303,6 @@ func (m *ConquestAPIAssetEntity) validateRecord(formats strfmt.Registry) error {
 }
 
 func (m *ConquestAPIAssetEntity) validateRetirementDate(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.RetirementDate) { // not required
 		return nil
 	}
@@ -224,6 +311,8 @@ func (m *ConquestAPIAssetEntity) validateRetirementDate(formats strfmt.Registry)
 		if err := m.RetirementDate.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("RetirementDate")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("RetirementDate")
 			}
 			return err
 		}
@@ -233,7 +322,6 @@ func (m *ConquestAPIAssetEntity) validateRetirementDate(formats strfmt.Registry)
 }
 
 func (m *ConquestAPIAssetEntity) validateLock(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Lock) { // not required
 		return nil
 	}
@@ -242,6 +330,198 @@ func (m *ConquestAPIAssetEntity) validateLock(formats strfmt.Registry) error {
 		if err := m.Lock.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("lock")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("lock")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api asset entity based on the context it is used
+func (m *ConquestAPIAssetEntity) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateActionPermission(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDefectPermission(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateHyperlinks(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateInspection(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateMapStyle(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidatePermission(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRecord(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRetirementDate(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLock(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPIAssetEntity) contextValidateActionPermission(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ActionPermission != nil {
+		if err := m.ActionPermission.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ActionPermission")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ActionPermission")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIAssetEntity) contextValidateDefectPermission(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.DefectPermission != nil {
+		if err := m.DefectPermission.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("DefectPermission")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("DefectPermission")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIAssetEntity) contextValidateHyperlinks(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Hyperlinks != nil {
+		if err := m.Hyperlinks.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("Hyperlinks")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("Hyperlinks")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIAssetEntity) contextValidateInspection(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Inspection != nil {
+		if err := m.Inspection.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("Inspection")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("Inspection")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIAssetEntity) contextValidateMapStyle(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.MapStyle != nil {
+		if err := m.MapStyle.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("MapStyle")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("MapStyle")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIAssetEntity) contextValidatePermission(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Permission != nil {
+		if err := m.Permission.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("Permission")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("Permission")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIAssetEntity) contextValidateRecord(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Record != nil {
+		if err := m.Record.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("Record")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("Record")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIAssetEntity) contextValidateRetirementDate(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.RetirementDate != nil {
+		if err := m.RetirementDate.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("RetirementDate")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("RetirementDate")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIAssetEntity) contextValidateLock(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Lock != nil {
+		if err := m.Lock.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("lock")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("lock")
 			}
 			return err
 		}

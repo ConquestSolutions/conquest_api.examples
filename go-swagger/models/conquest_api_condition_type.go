@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/go-openapi/errors"
@@ -18,6 +19,15 @@ import (
 //
 // swagger:model conquest_apiConditionType
 type ConquestAPIConditionType string
+
+func NewConquestAPIConditionType(value ConquestAPIConditionType) *ConquestAPIConditionType {
+	return &value
+}
+
+// Pointer returns a pointer to a freshly-allocated ConquestAPIConditionType.
+func (m ConquestAPIConditionType) Pointer() *ConquestAPIConditionType {
+	return &m
+}
 
 const (
 
@@ -42,7 +52,7 @@ func init() {
 }
 
 func (m ConquestAPIConditionType) validateConquestAPIConditionTypeEnum(path, location string, value ConquestAPIConditionType) error {
-	if err := validate.Enum(path, location, value, conquestApiConditionTypeEnum); err != nil {
+	if err := validate.EnumCase(path, location, value, conquestApiConditionTypeEnum, true); err != nil {
 		return err
 	}
 	return nil
@@ -60,5 +70,10 @@ func (m ConquestAPIConditionType) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// ContextValidate validates this conquest api condition type based on context it is used
+func (m ConquestAPIConditionType) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }

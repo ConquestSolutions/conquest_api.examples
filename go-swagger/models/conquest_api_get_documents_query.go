@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -30,7 +31,7 @@ type ConquestAPIGetDocumentsQuery struct {
 
 	// If unset, all statuses will be shown.
 	// When rendering this list, only those with the Completed status are downloadable.
-	WithUploadStatus []ConquestAPIUploadStatus `json:"WithUploadStatus"`
+	WithUploadStatus []*ConquestAPIUploadStatus `json:"WithUploadStatus"`
 }
 
 // Validate validates this conquest api get documents query
@@ -56,7 +57,6 @@ func (m *ConquestAPIGetDocumentsQuery) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ConquestAPIGetDocumentsQuery) validateObjectKey(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ObjectKey) { // not required
 		return nil
 	}
@@ -65,6 +65,8 @@ func (m *ConquestAPIGetDocumentsQuery) validateObjectKey(formats strfmt.Registry
 		if err := m.ObjectKey.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("ObjectKey")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ObjectKey")
 			}
 			return err
 		}
@@ -74,7 +76,6 @@ func (m *ConquestAPIGetDocumentsQuery) validateObjectKey(formats strfmt.Registry
 }
 
 func (m *ConquestAPIGetDocumentsQuery) validateWithCreateTimes(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.WithCreateTimes) { // not required
 		return nil
 	}
@@ -91,18 +92,78 @@ func (m *ConquestAPIGetDocumentsQuery) validateWithCreateTimes(formats strfmt.Re
 }
 
 func (m *ConquestAPIGetDocumentsQuery) validateWithUploadStatus(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.WithUploadStatus) { // not required
 		return nil
 	}
 
 	for i := 0; i < len(m.WithUploadStatus); i++ {
+		if swag.IsZero(m.WithUploadStatus[i]) { // not required
+			continue
+		}
 
-		if err := m.WithUploadStatus[i].Validate(formats); err != nil {
+		if m.WithUploadStatus[i] != nil {
+			if err := m.WithUploadStatus[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("WithUploadStatus" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("WithUploadStatus" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api get documents query based on the context it is used
+func (m *ConquestAPIGetDocumentsQuery) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateObjectKey(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateWithUploadStatus(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPIGetDocumentsQuery) contextValidateObjectKey(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ObjectKey != nil {
+		if err := m.ObjectKey.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("WithUploadStatus" + "." + strconv.Itoa(i))
+				return ve.ValidateName("ObjectKey")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ObjectKey")
 			}
 			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIGetDocumentsQuery) contextValidateWithUploadStatus(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.WithUploadStatus); i++ {
+
+		if m.WithUploadStatus[i] != nil {
+			if err := m.WithUploadStatus[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("WithUploadStatus" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("WithUploadStatus" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
 		}
 
 	}

@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -37,7 +39,6 @@ func (m *ConquestAPISimpleActionCompletionProcess) Validate(formats strfmt.Regis
 }
 
 func (m *ConquestAPISimpleActionCompletionProcess) validateNextRepeatableDate(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.NextRepeatableDate) { // not required
 		return nil
 	}
@@ -46,6 +47,11 @@ func (m *ConquestAPISimpleActionCompletionProcess) validateNextRepeatableDate(fo
 		return err
 	}
 
+	return nil
+}
+
+// ContextValidate validates this conquest api simple action completion process based on context it is used
+func (m *ConquestAPISimpleActionCompletionProcess) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

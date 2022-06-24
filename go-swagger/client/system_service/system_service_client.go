@@ -6,8 +6,6 @@ package system_service
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"fmt"
-
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 )
@@ -25,46 +23,52 @@ type Client struct {
 	formats   strfmt.Registry
 }
 
+// ClientOption is the option for Client methods
+type ClientOption func(*runtime.ClientOperation)
+
 // ClientService is the interface for Client methods
 type ClientService interface {
-	ApplicationVersion(params *ApplicationVersionParams, authInfo runtime.ClientAuthInfoWriter) (*ApplicationVersionOK, error)
+	SystemServiceApplicationVersion(params *SystemServiceApplicationVersionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*SystemServiceApplicationVersionOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
 
 /*
-  ApplicationVersion application version API
+  SystemServiceApplicationVersion system service application version API
 */
-func (a *Client) ApplicationVersion(params *ApplicationVersionParams, authInfo runtime.ClientAuthInfoWriter) (*ApplicationVersionOK, error) {
+func (a *Client) SystemServiceApplicationVersion(params *SystemServiceApplicationVersionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*SystemServiceApplicationVersionOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewApplicationVersionParams()
+		params = NewSystemServiceApplicationVersionParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "ApplicationVersion",
+	op := &runtime.ClientOperation{
+		ID:                 "SystemService_ApplicationVersion",
 		Method:             "GET",
 		PathPattern:        "/api/system/version",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &ApplicationVersionReader{formats: a.formats},
+		Reader:             &SystemServiceApplicationVersionReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*ApplicationVersionOK)
+	success, ok := result.(*SystemServiceApplicationVersionOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for ApplicationVersion: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*SystemServiceApplicationVersionDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 // SetTransport changes the transport on the client

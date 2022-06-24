@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -20,7 +22,7 @@ type ConquestAPINewConditionInspectionCommand struct {
 	AssetID int32 `json:"AssetID,omitempty"`
 
 	// inspection
-	Inspection *ConquestAPIInspection `json:"Inspection,omitempty"`
+	Inspection *ConquestAPIInspectionRecord `json:"Inspection,omitempty"`
 }
 
 // Validate validates this conquest api new condition inspection command
@@ -38,7 +40,6 @@ func (m *ConquestAPINewConditionInspectionCommand) Validate(formats strfmt.Regis
 }
 
 func (m *ConquestAPINewConditionInspectionCommand) validateInspection(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Inspection) { // not required
 		return nil
 	}
@@ -47,6 +48,38 @@ func (m *ConquestAPINewConditionInspectionCommand) validateInspection(formats st
 		if err := m.Inspection.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("Inspection")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("Inspection")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api new condition inspection command based on the context it is used
+func (m *ConquestAPINewConditionInspectionCommand) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateInspection(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPINewConditionInspectionCommand) contextValidateInspection(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Inspection != nil {
+		if err := m.Inspection.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("Inspection")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("Inspection")
 			}
 			return err
 		}

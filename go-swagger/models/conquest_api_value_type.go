@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/go-openapi/errors"
@@ -44,10 +45,21 @@ import (
 //  - ValueType_Hierarchy: Hierarchy (ObjectKey) is an item in a hierarchy such as an Asset tree, the Asset Priority hierarchy lists and Action Categories.
 //  - ValueType_ObjectKey: ObjectKey is an item with an ID and a type such as an Asset, AssetType, View, Document and DocumentContainer (eg. folder). See ObjectTypes.
 //  - ValueType_Enumeration: Enumeration (int32) is fixed size ordered list of values. Enumerations have specific business rules attached.
-//  - ValueType_GeographyCoordinate: ValueType_StringList = 14;
+//  - ValueType_GeographyData: ValueType_StringList = 14;
+//  - ValueType_GeometryData: ValueType_Uri = 16;
+//    ValueType_Uuid = 17;
 //
 // swagger:model conquest_apiValueType
 type ConquestAPIValueType string
+
+func NewConquestAPIValueType(value ConquestAPIValueType) *ConquestAPIValueType {
+	return &value
+}
+
+// Pointer returns a pointer to a freshly-allocated ConquestAPIValueType.
+func (m ConquestAPIValueType) Pointer() *ConquestAPIValueType {
+	return &m
+}
 
 const (
 
@@ -93,8 +105,14 @@ const (
 	// ConquestAPIValueTypeValueTypeEnumeration captures enum value "ValueType_Enumeration"
 	ConquestAPIValueTypeValueTypeEnumeration ConquestAPIValueType = "ValueType_Enumeration"
 
-	// ConquestAPIValueTypeValueTypeGeographyCoordinate captures enum value "ValueType_GeographyCoordinate"
-	ConquestAPIValueTypeValueTypeGeographyCoordinate ConquestAPIValueType = "ValueType_GeographyCoordinate"
+	// ConquestAPIValueTypeValueTypeGeographyData captures enum value "ValueType_GeographyData"
+	ConquestAPIValueTypeValueTypeGeographyData ConquestAPIValueType = "ValueType_GeographyData"
+
+	// ConquestAPIValueTypeValueTypeGeometryData captures enum value "ValueType_GeometryData"
+	ConquestAPIValueTypeValueTypeGeometryData ConquestAPIValueType = "ValueType_GeometryData"
+
+	// ConquestAPIValueTypeValueTypeStyle captures enum value "ValueType_Style"
+	ConquestAPIValueTypeValueTypeStyle ConquestAPIValueType = "ValueType_Style"
 )
 
 // for schema
@@ -102,7 +120,7 @@ var conquestApiValueTypeEnum []interface{}
 
 func init() {
 	var res []ConquestAPIValueType
-	if err := json.Unmarshal([]byte(`["ValueType_Unknown","ValueType_String","ValueType_Boolean","ValueType_Number","ValueType_Int32","ValueType_Int64","ValueType_Decimal","ValueType_Date","ValueType_DateTime","ValueType_Duration","ValueType_Code","ValueType_Hierarchy","ValueType_ObjectKey","ValueType_Enumeration","ValueType_GeographyCoordinate"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["ValueType_Unknown","ValueType_String","ValueType_Boolean","ValueType_Number","ValueType_Int32","ValueType_Int64","ValueType_Decimal","ValueType_Date","ValueType_DateTime","ValueType_Duration","ValueType_Code","ValueType_Hierarchy","ValueType_ObjectKey","ValueType_Enumeration","ValueType_GeographyData","ValueType_GeometryData","ValueType_Style"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
@@ -111,7 +129,7 @@ func init() {
 }
 
 func (m ConquestAPIValueType) validateConquestAPIValueTypeEnum(path, location string, value ConquestAPIValueType) error {
-	if err := validate.Enum(path, location, value, conquestApiValueTypeEnum); err != nil {
+	if err := validate.EnumCase(path, location, value, conquestApiValueTypeEnum, true); err != nil {
 		return err
 	}
 	return nil
@@ -129,5 +147,10 @@ func (m ConquestAPIValueType) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// ContextValidate validates this conquest api value type based on context it is used
+func (m ConquestAPIValueType) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }

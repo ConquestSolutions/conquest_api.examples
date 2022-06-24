@@ -6,8 +6,6 @@ package document_service
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"fmt"
-
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 )
@@ -25,157 +23,292 @@ type Client struct {
 	formats   strfmt.Registry
 }
 
+// ClientOption is the option for Client methods
+type ClientOption func(*runtime.ClientOperation)
+
 // ClientService is the interface for Client methods
 type ClientService interface {
-	AddDocument(params *AddDocumentParams, authInfo runtime.ClientAuthInfoWriter) (*AddDocumentOK, error)
+	DocumentServiceAddDocument(params *DocumentServiceAddDocumentParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DocumentServiceAddDocumentOK, error)
 
-	GenerateDocumentLink(params *GenerateDocumentLinkParams, authInfo runtime.ClientAuthInfoWriter) (*GenerateDocumentLinkOK, error)
+	DocumentServiceChangeDocumentContent(params *DocumentServiceChangeDocumentContentParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DocumentServiceChangeDocumentContentOK, error)
 
-	GetDocuments(params *GetDocumentsParams, authInfo runtime.ClientAuthInfoWriter) (*GetDocumentsOK, error)
+	DocumentServiceChangeDocumentDescription(params *DocumentServiceChangeDocumentDescriptionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DocumentServiceChangeDocumentDescriptionOK, error)
 
-	RemoveDocument(params *RemoveDocumentParams, authInfo runtime.ClientAuthInfoWriter) (*RemoveDocumentOK, error)
+	DocumentServiceGenerateDocumentLink(params *DocumentServiceGenerateDocumentLinkParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DocumentServiceGenerateDocumentLinkOK, error)
+
+	DocumentServiceGetDocuments(params *DocumentServiceGetDocumentsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DocumentServiceGetDocumentsOK, error)
+
+	DocumentServiceListDocumentLocations(params *DocumentServiceListDocumentLocationsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DocumentServiceListDocumentLocationsOK, error)
+
+	DocumentServiceRemoveDocument(params *DocumentServiceRemoveDocumentParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DocumentServiceRemoveDocumentOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
 
 /*
-  AddDocument add document API
+  DocumentServiceAddDocument document service add document API
 */
-func (a *Client) AddDocument(params *AddDocumentParams, authInfo runtime.ClientAuthInfoWriter) (*AddDocumentOK, error) {
+func (a *Client) DocumentServiceAddDocument(params *DocumentServiceAddDocumentParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DocumentServiceAddDocumentOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewAddDocumentParams()
+		params = NewDocumentServiceAddDocumentParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "AddDocument",
+	op := &runtime.ClientOperation{
+		ID:                 "DocumentService_AddDocument",
 		Method:             "POST",
 		PathPattern:        "/api/documents/add_document",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &AddDocumentReader{formats: a.formats},
+		Reader:             &DocumentServiceAddDocumentReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*AddDocumentOK)
+	success, ok := result.(*DocumentServiceAddDocumentOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for AddDocument: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*DocumentServiceAddDocumentDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
-  GenerateDocumentLink generate document link API
+  DocumentServiceChangeDocumentContent document service change document content API
 */
-func (a *Client) GenerateDocumentLink(params *GenerateDocumentLinkParams, authInfo runtime.ClientAuthInfoWriter) (*GenerateDocumentLinkOK, error) {
+func (a *Client) DocumentServiceChangeDocumentContent(params *DocumentServiceChangeDocumentContentParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DocumentServiceChangeDocumentContentOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewGenerateDocumentLinkParams()
+		params = NewDocumentServiceChangeDocumentContentParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "DocumentService_ChangeDocumentContent",
+		Method:             "POST",
+		PathPattern:        "/api/documents/change_document_content",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &DocumentServiceChangeDocumentContentReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
 	}
 
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "GenerateDocumentLink",
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DocumentServiceChangeDocumentContentOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*DocumentServiceChangeDocumentContentDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+  DocumentServiceChangeDocumentDescription document service change document description API
+*/
+func (a *Client) DocumentServiceChangeDocumentDescription(params *DocumentServiceChangeDocumentDescriptionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DocumentServiceChangeDocumentDescriptionOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDocumentServiceChangeDocumentDescriptionParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "DocumentService_ChangeDocumentDescription",
+		Method:             "POST",
+		PathPattern:        "/api/documents/change_document_description",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &DocumentServiceChangeDocumentDescriptionReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DocumentServiceChangeDocumentDescriptionOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*DocumentServiceChangeDocumentDescriptionDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+  DocumentServiceGenerateDocumentLink document service generate document link API
+*/
+func (a *Client) DocumentServiceGenerateDocumentLink(params *DocumentServiceGenerateDocumentLinkParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DocumentServiceGenerateDocumentLinkOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDocumentServiceGenerateDocumentLinkParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "DocumentService_GenerateDocumentLink",
 		Method:             "POST",
 		PathPattern:        "/api/documents/generate_document_link",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &GenerateDocumentLinkReader{formats: a.formats},
+		Reader:             &DocumentServiceGenerateDocumentLinkReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*GenerateDocumentLinkOK)
+	success, ok := result.(*DocumentServiceGenerateDocumentLinkOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for GenerateDocumentLink: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*DocumentServiceGenerateDocumentLinkDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
-  GetDocuments get documents API
+  DocumentServiceGetDocuments document service get documents API
 */
-func (a *Client) GetDocuments(params *GetDocumentsParams, authInfo runtime.ClientAuthInfoWriter) (*GetDocumentsOK, error) {
+func (a *Client) DocumentServiceGetDocuments(params *DocumentServiceGetDocumentsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DocumentServiceGetDocumentsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewGetDocumentsParams()
+		params = NewDocumentServiceGetDocumentsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "GetDocuments",
+	op := &runtime.ClientOperation{
+		ID:                 "DocumentService_GetDocuments",
 		Method:             "POST",
 		PathPattern:        "/api/documents/list",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &GetDocumentsReader{formats: a.formats},
+		Reader:             &DocumentServiceGetDocumentsReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*GetDocumentsOK)
+	success, ok := result.(*DocumentServiceGetDocumentsOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for GetDocuments: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*DocumentServiceGetDocumentsDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
-  RemoveDocument remove document API
+  DocumentServiceListDocumentLocations document service list document locations API
 */
-func (a *Client) RemoveDocument(params *RemoveDocumentParams, authInfo runtime.ClientAuthInfoWriter) (*RemoveDocumentOK, error) {
+func (a *Client) DocumentServiceListDocumentLocations(params *DocumentServiceListDocumentLocationsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DocumentServiceListDocumentLocationsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewRemoveDocumentParams()
+		params = NewDocumentServiceListDocumentLocationsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "DocumentService_ListDocumentLocations",
+		Method:             "POST",
+		PathPattern:        "/api/documents/list_locations",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &DocumentServiceListDocumentLocationsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
 	}
 
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "RemoveDocument",
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DocumentServiceListDocumentLocationsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*DocumentServiceListDocumentLocationsDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+  DocumentServiceRemoveDocument document service remove document API
+*/
+func (a *Client) DocumentServiceRemoveDocument(params *DocumentServiceRemoveDocumentParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DocumentServiceRemoveDocumentOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDocumentServiceRemoveDocumentParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "DocumentService_RemoveDocument",
 		Method:             "POST",
 		PathPattern:        "/api/documents/remove_document",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &RemoveDocumentReader{formats: a.formats},
+		Reader:             &DocumentServiceRemoveDocumentReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*RemoveDocumentOK)
+	success, ok := result.(*DocumentServiceRemoveDocumentOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for RemoveDocument: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*DocumentServiceRemoveDocumentDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 // SetTransport changes the transport on the client

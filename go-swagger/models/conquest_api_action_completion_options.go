@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -40,7 +42,7 @@ type ConquestAPIActionCompletionOptions struct {
 	Cost *ConquestAPIDecimalValue `json:"Cost,omitempty"`
 
 	// cost type
-	CostType ConquestAPICostType `json:"CostType,omitempty"`
+	CostType *ConquestAPICostType `json:"CostType,omitempty"`
 
 	// cyclic process
 	CyclicProcess *ConquestAPICyclicActionCompletionProcess `json:"CyclicProcess,omitempty"`
@@ -115,7 +117,6 @@ func (m *ConquestAPIActionCompletionOptions) Validate(formats strfmt.Registry) e
 }
 
 func (m *ConquestAPIActionCompletionOptions) validateCompletionDate(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CompletionDate) { // not required
 		return nil
 	}
@@ -128,7 +129,6 @@ func (m *ConquestAPIActionCompletionOptions) validateCompletionDate(formats strf
 }
 
 func (m *ConquestAPIActionCompletionOptions) validateCost(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Cost) { // not required
 		return nil
 	}
@@ -137,6 +137,8 @@ func (m *ConquestAPIActionCompletionOptions) validateCost(formats strfmt.Registr
 		if err := m.Cost.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("Cost")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("Cost")
 			}
 			return err
 		}
@@ -146,23 +148,25 @@ func (m *ConquestAPIActionCompletionOptions) validateCost(formats strfmt.Registr
 }
 
 func (m *ConquestAPIActionCompletionOptions) validateCostType(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CostType) { // not required
 		return nil
 	}
 
-	if err := m.CostType.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("CostType")
+	if m.CostType != nil {
+		if err := m.CostType.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("CostType")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("CostType")
+			}
+			return err
 		}
-		return err
 	}
 
 	return nil
 }
 
 func (m *ConquestAPIActionCompletionOptions) validateCyclicProcess(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CyclicProcess) { // not required
 		return nil
 	}
@@ -171,6 +175,8 @@ func (m *ConquestAPIActionCompletionOptions) validateCyclicProcess(formats strfm
 		if err := m.CyclicProcess.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("CyclicProcess")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("CyclicProcess")
 			}
 			return err
 		}
@@ -180,7 +186,6 @@ func (m *ConquestAPIActionCompletionOptions) validateCyclicProcess(formats strfm
 }
 
 func (m *ConquestAPIActionCompletionOptions) validateDisposalProcess(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.DisposalProcess) { // not required
 		return nil
 	}
@@ -189,6 +194,8 @@ func (m *ConquestAPIActionCompletionOptions) validateDisposalProcess(formats str
 		if err := m.DisposalProcess.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("DisposalProcess")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("DisposalProcess")
 			}
 			return err
 		}
@@ -198,7 +205,6 @@ func (m *ConquestAPIActionCompletionOptions) validateDisposalProcess(formats str
 }
 
 func (m *ConquestAPIActionCompletionOptions) validateLogBookProcess(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.LogBookProcess) { // not required
 		return nil
 	}
@@ -207,6 +213,8 @@ func (m *ConquestAPIActionCompletionOptions) validateLogBookProcess(formats strf
 		if err := m.LogBookProcess.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("LogBookProcess")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("LogBookProcess")
 			}
 			return err
 		}
@@ -216,7 +224,6 @@ func (m *ConquestAPIActionCompletionOptions) validateLogBookProcess(formats strf
 }
 
 func (m *ConquestAPIActionCompletionOptions) validateMasterProcess(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.MasterProcess) { // not required
 		return nil
 	}
@@ -225,6 +232,8 @@ func (m *ConquestAPIActionCompletionOptions) validateMasterProcess(formats strfm
 		if err := m.MasterProcess.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("MasterProcess")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("MasterProcess")
 			}
 			return err
 		}
@@ -234,7 +243,6 @@ func (m *ConquestAPIActionCompletionOptions) validateMasterProcess(formats strfm
 }
 
 func (m *ConquestAPIActionCompletionOptions) validateResponseDate(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ResponseDate) { // not required
 		return nil
 	}
@@ -247,7 +255,6 @@ func (m *ConquestAPIActionCompletionOptions) validateResponseDate(formats strfmt
 }
 
 func (m *ConquestAPIActionCompletionOptions) validateSimpleProcess(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.SimpleProcess) { // not required
 		return nil
 	}
@@ -256,6 +263,158 @@ func (m *ConquestAPIActionCompletionOptions) validateSimpleProcess(formats strfm
 		if err := m.SimpleProcess.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("SimpleProcess")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("SimpleProcess")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api action completion options based on the context it is used
+func (m *ConquestAPIActionCompletionOptions) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCost(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCostType(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCyclicProcess(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDisposalProcess(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLogBookProcess(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateMasterProcess(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSimpleProcess(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPIActionCompletionOptions) contextValidateCost(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Cost != nil {
+		if err := m.Cost.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("Cost")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("Cost")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIActionCompletionOptions) contextValidateCostType(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CostType != nil {
+		if err := m.CostType.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("CostType")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("CostType")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIActionCompletionOptions) contextValidateCyclicProcess(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CyclicProcess != nil {
+		if err := m.CyclicProcess.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("CyclicProcess")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("CyclicProcess")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIActionCompletionOptions) contextValidateDisposalProcess(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.DisposalProcess != nil {
+		if err := m.DisposalProcess.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("DisposalProcess")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("DisposalProcess")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIActionCompletionOptions) contextValidateLogBookProcess(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.LogBookProcess != nil {
+		if err := m.LogBookProcess.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("LogBookProcess")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("LogBookProcess")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIActionCompletionOptions) contextValidateMasterProcess(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.MasterProcess != nil {
+		if err := m.MasterProcess.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("MasterProcess")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("MasterProcess")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIActionCompletionOptions) contextValidateSimpleProcess(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.SimpleProcess != nil {
+		if err := m.SimpleProcess.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("SimpleProcess")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("SimpleProcess")
 			}
 			return err
 		}

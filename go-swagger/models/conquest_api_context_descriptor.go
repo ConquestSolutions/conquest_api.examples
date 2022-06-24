@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -22,7 +23,11 @@ type ConquestAPIContextDescriptor struct {
 	Context string `json:"Context,omitempty"`
 
 	// ParameterObjectType is the ObjectType of the parameter that the result is related to
-	ParameterObjectType ConquestAPIObjectType `json:"ParameterObjectType,omitempty"`
+	ParameterObjectType *ConquestAPIObjectType `json:"ParameterObjectType,omitempty"`
+
+	// ParameterObjectType2 is the ObjectType of the parameter that the result is related to
+	// If ParameterObjectType2 = None, it will be ignored.
+	ParameterObjectType2 *ConquestAPIObjectType `json:"ParameterObjectType2,omitempty"`
 
 	// A Context can have some pre-defined criteria that the user can enable or disable when parameterising a Find query.
 	//
@@ -30,7 +35,7 @@ type ConquestAPIContextDescriptor struct {
 	PredefinedContextCriteria []*ConquestAPIPredefinedContextCriteria `json:"PredefinedContextCriteria"`
 
 	// ResultObjectType is the ObjectType of the returned result
-	ResultObjectType ConquestAPIObjectType `json:"ResultObjectType,omitempty"`
+	ResultObjectType *ConquestAPIObjectType `json:"ResultObjectType,omitempty"`
 
 	// This context is pre-defined by the system
 	System bool `json:"System,omitempty"`
@@ -41,6 +46,10 @@ func (m *ConquestAPIContextDescriptor) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateParameterObjectType(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateParameterObjectType2(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -59,23 +68,44 @@ func (m *ConquestAPIContextDescriptor) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ConquestAPIContextDescriptor) validateParameterObjectType(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ParameterObjectType) { // not required
 		return nil
 	}
 
-	if err := m.ParameterObjectType.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("ParameterObjectType")
+	if m.ParameterObjectType != nil {
+		if err := m.ParameterObjectType.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ParameterObjectType")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ParameterObjectType")
+			}
+			return err
 		}
-		return err
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIContextDescriptor) validateParameterObjectType2(formats strfmt.Registry) error {
+	if swag.IsZero(m.ParameterObjectType2) { // not required
+		return nil
+	}
+
+	if m.ParameterObjectType2 != nil {
+		if err := m.ParameterObjectType2.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ParameterObjectType2")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ParameterObjectType2")
+			}
+			return err
+		}
 	}
 
 	return nil
 }
 
 func (m *ConquestAPIContextDescriptor) validatePredefinedContextCriteria(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.PredefinedContextCriteria) { // not required
 		return nil
 	}
@@ -89,6 +119,8 @@ func (m *ConquestAPIContextDescriptor) validatePredefinedContextCriteria(formats
 			if err := m.PredefinedContextCriteria[i].Validate(formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("PredefinedContextCriteria" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("PredefinedContextCriteria" + "." + strconv.Itoa(i))
 				}
 				return err
 			}
@@ -100,16 +132,113 @@ func (m *ConquestAPIContextDescriptor) validatePredefinedContextCriteria(formats
 }
 
 func (m *ConquestAPIContextDescriptor) validateResultObjectType(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ResultObjectType) { // not required
 		return nil
 	}
 
-	if err := m.ResultObjectType.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("ResultObjectType")
+	if m.ResultObjectType != nil {
+		if err := m.ResultObjectType.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ResultObjectType")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ResultObjectType")
+			}
+			return err
 		}
-		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api context descriptor based on the context it is used
+func (m *ConquestAPIContextDescriptor) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateParameterObjectType(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateParameterObjectType2(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidatePredefinedContextCriteria(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateResultObjectType(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPIContextDescriptor) contextValidateParameterObjectType(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ParameterObjectType != nil {
+		if err := m.ParameterObjectType.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ParameterObjectType")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ParameterObjectType")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIContextDescriptor) contextValidateParameterObjectType2(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ParameterObjectType2 != nil {
+		if err := m.ParameterObjectType2.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ParameterObjectType2")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ParameterObjectType2")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIContextDescriptor) contextValidatePredefinedContextCriteria(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.PredefinedContextCriteria); i++ {
+
+		if m.PredefinedContextCriteria[i] != nil {
+			if err := m.PredefinedContextCriteria[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("PredefinedContextCriteria" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("PredefinedContextCriteria" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIContextDescriptor) contextValidateResultObjectType(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ResultObjectType != nil {
+		if err := m.ResultObjectType.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ResultObjectType")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ResultObjectType")
+			}
+			return err
+		}
 	}
 
 	return nil

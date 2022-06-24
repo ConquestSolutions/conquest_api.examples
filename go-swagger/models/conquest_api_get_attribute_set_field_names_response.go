@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -37,7 +38,6 @@ func (m *ConquestAPIGetAttributeSetFieldNamesResponse) Validate(formats strfmt.R
 }
 
 func (m *ConquestAPIGetAttributeSetFieldNamesResponse) validateFieldNames(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.FieldNames) { // not required
 		return nil
 	}
@@ -51,6 +51,42 @@ func (m *ConquestAPIGetAttributeSetFieldNamesResponse) validateFieldNames(format
 			if err := m.FieldNames[i].Validate(formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("FieldNames" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("FieldNames" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api get attribute set field names response based on the context it is used
+func (m *ConquestAPIGetAttributeSetFieldNamesResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateFieldNames(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPIGetAttributeSetFieldNamesResponse) contextValidateFieldNames(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.FieldNames); i++ {
+
+		if m.FieldNames[i] != nil {
+			if err := m.FieldNames[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("FieldNames" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("FieldNames" + "." + strconv.Itoa(i))
 				}
 				return err
 			}

@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -37,7 +38,6 @@ func (m *ConquestAPIGetUserPreferencesResult) Validate(formats strfmt.Registry) 
 }
 
 func (m *ConquestAPIGetUserPreferencesResult) validatePreferences(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Preferences) { // not required
 		return nil
 	}
@@ -51,6 +51,42 @@ func (m *ConquestAPIGetUserPreferencesResult) validatePreferences(formats strfmt
 			if err := m.Preferences[i].Validate(formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("Preferences" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("Preferences" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api get user preferences result based on the context it is used
+func (m *ConquestAPIGetUserPreferencesResult) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidatePreferences(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPIGetUserPreferencesResult) contextValidatePreferences(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Preferences); i++ {
+
+		if m.Preferences[i] != nil {
+			if err := m.Preferences[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("Preferences" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("Preferences" + "." + strconv.Itoa(i))
 				}
 				return err
 			}

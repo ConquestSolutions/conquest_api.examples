@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
@@ -24,6 +26,11 @@ type ConquestAPICalculateDefectResponseDateParameters struct {
 
 // Validate validates this conquest api calculate defect response date parameters
 func (m *ConquestAPICalculateDefectResponseDateParameters) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validates this conquest api calculate defect response date parameters based on context it is used
+func (m *ConquestAPICalculateDefectResponseDateParameters) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

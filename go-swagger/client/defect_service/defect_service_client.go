@@ -6,8 +6,6 @@ package defect_service
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"fmt"
-
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 )
@@ -25,194 +23,252 @@ type Client struct {
 	formats   strfmt.Registry
 }
 
+// ClientOption is the option for Client methods
+type ClientOption func(*runtime.ClientOperation)
+
 // ClientService is the interface for Client methods
 type ClientService interface {
-	CalculateDefectResponseDate(params *CalculateDefectResponseDateParams, authInfo runtime.ClientAuthInfoWriter) (*CalculateDefectResponseDateOK, error)
+	DefectServiceCalculateDefectResponseDate(params *DefectServiceCalculateDefectResponseDateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DefectServiceCalculateDefectResponseDateOK, error)
 
-	CreateActionForDefect(params *CreateActionForDefectParams, authInfo runtime.ClientAuthInfoWriter) (*CreateActionForDefectOK, error)
+	DefectServiceCompleteDefect(params *DefectServiceCompleteDefectParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DefectServiceCompleteDefectOK, error)
 
-	DeleteDefect(params *DeleteDefectParams, authInfo runtime.ClientAuthInfoWriter) (*DeleteDefectOK, error)
+	DefectServiceCreateActionForDefect(params *DefectServiceCreateActionForDefectParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DefectServiceCreateActionForDefectOK, error)
 
-	GetDefect(params *GetDefectParams, authInfo runtime.ClientAuthInfoWriter) (*GetDefectOK, error)
+	DefectServiceDeleteDefect(params *DefectServiceDeleteDefectParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DefectServiceDeleteDefectOK, error)
 
-	UpdateDefect(params *UpdateDefectParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateDefectOK, error)
+	DefectServiceGetDefect(params *DefectServiceGetDefectParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DefectServiceGetDefectOK, error)
+
+	DefectServiceUpdateDefect(params *DefectServiceUpdateDefectParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DefectServiceUpdateDefectOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
 
 /*
-  CalculateDefectResponseDate calculate defect response date API
+  DefectServiceCalculateDefectResponseDate defect service calculate defect response date API
 */
-func (a *Client) CalculateDefectResponseDate(params *CalculateDefectResponseDateParams, authInfo runtime.ClientAuthInfoWriter) (*CalculateDefectResponseDateOK, error) {
+func (a *Client) DefectServiceCalculateDefectResponseDate(params *DefectServiceCalculateDefectResponseDateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DefectServiceCalculateDefectResponseDateOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewCalculateDefectResponseDateParams()
+		params = NewDefectServiceCalculateDefectResponseDateParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "CalculateDefectResponseDate",
+	op := &runtime.ClientOperation{
+		ID:                 "DefectService_CalculateDefectResponseDate",
 		Method:             "POST",
 		PathPattern:        "/api/defects/calculate_defect_response_date",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &CalculateDefectResponseDateReader{formats: a.formats},
+		Reader:             &DefectServiceCalculateDefectResponseDateReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*CalculateDefectResponseDateOK)
+	success, ok := result.(*DefectServiceCalculateDefectResponseDateOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for CalculateDefectResponseDate: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*DefectServiceCalculateDefectResponseDateDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
-  CreateActionForDefect create action for defect API
+  DefectServiceCompleteDefect defect service complete defect API
 */
-func (a *Client) CreateActionForDefect(params *CreateActionForDefectParams, authInfo runtime.ClientAuthInfoWriter) (*CreateActionForDefectOK, error) {
+func (a *Client) DefectServiceCompleteDefect(params *DefectServiceCompleteDefectParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DefectServiceCompleteDefectOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewCreateActionForDefectParams()
+		params = NewDefectServiceCompleteDefectParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "DefectService_CompleteDefect",
+		Method:             "POST",
+		PathPattern:        "/api/defects/complete_defect",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &DefectServiceCompleteDefectReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
 	}
 
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "CreateActionForDefect",
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DefectServiceCompleteDefectOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*DefectServiceCompleteDefectDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+  DefectServiceCreateActionForDefect defect service create action for defect API
+*/
+func (a *Client) DefectServiceCreateActionForDefect(params *DefectServiceCreateActionForDefectParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DefectServiceCreateActionForDefectOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDefectServiceCreateActionForDefectParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "DefectService_CreateActionForDefect",
 		Method:             "POST",
 		PathPattern:        "/api/defects/create_action",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &CreateActionForDefectReader{formats: a.formats},
+		Reader:             &DefectServiceCreateActionForDefectReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*CreateActionForDefectOK)
+	success, ok := result.(*DefectServiceCreateActionForDefectOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for CreateActionForDefect: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*DefectServiceCreateActionForDefectDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
-  DeleteDefect delete defect API
+  DefectServiceDeleteDefect defect service delete defect API
 */
-func (a *Client) DeleteDefect(params *DeleteDefectParams, authInfo runtime.ClientAuthInfoWriter) (*DeleteDefectOK, error) {
+func (a *Client) DefectServiceDeleteDefect(params *DefectServiceDeleteDefectParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DefectServiceDeleteDefectOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewDeleteDefectParams()
+		params = NewDefectServiceDeleteDefectParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "DeleteDefect",
+	op := &runtime.ClientOperation{
+		ID:                 "DefectService_DeleteDefect",
 		Method:             "POST",
 		PathPattern:        "/api/defects/delete_defect",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &DeleteDefectReader{formats: a.formats},
+		Reader:             &DefectServiceDeleteDefectReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*DeleteDefectOK)
+	success, ok := result.(*DefectServiceDeleteDefectOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for DeleteDefect: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*DefectServiceDeleteDefectDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
-  GetDefect get defect API
+  DefectServiceGetDefect defect service get defect API
 */
-func (a *Client) GetDefect(params *GetDefectParams, authInfo runtime.ClientAuthInfoWriter) (*GetDefectOK, error) {
+func (a *Client) DefectServiceGetDefect(params *DefectServiceGetDefectParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DefectServiceGetDefectOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewGetDefectParams()
+		params = NewDefectServiceGetDefectParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "GetDefect",
+	op := &runtime.ClientOperation{
+		ID:                 "DefectService_GetDefect",
 		Method:             "GET",
 		PathPattern:        "/api/defects/{value}",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &GetDefectReader{formats: a.formats},
+		Reader:             &DefectServiceGetDefectReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*GetDefectOK)
+	success, ok := result.(*DefectServiceGetDefectOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for GetDefect: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*DefectServiceGetDefectDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
-  UpdateDefect update defect API
+  DefectServiceUpdateDefect defect service update defect API
 */
-func (a *Client) UpdateDefect(params *UpdateDefectParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateDefectOK, error) {
+func (a *Client) DefectServiceUpdateDefect(params *DefectServiceUpdateDefectParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DefectServiceUpdateDefectOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewUpdateDefectParams()
+		params = NewDefectServiceUpdateDefectParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "UpdateDefect",
+	op := &runtime.ClientOperation{
+		ID:                 "DefectService_UpdateDefect",
 		Method:             "POST",
 		PathPattern:        "/api/defects/update_defect",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &UpdateDefectReader{formats: a.formats},
+		Reader:             &DefectServiceUpdateDefectReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*UpdateDefectOK)
+	success, ok := result.(*DefectServiceUpdateDefectOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for UpdateDefect: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*DefectServiceUpdateDefectDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 // SetTransport changes the transport on the client

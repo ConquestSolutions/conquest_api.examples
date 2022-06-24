@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -23,7 +25,7 @@ type ConquestAPIDocument struct {
 	// ContentLength in bytes
 	ContentLength string `json:"ContentLength,omitempty"`
 
-	// content type
+	// The content type is not set if the document is an https link
 	ContentType string `json:"ContentType,omitempty"`
 
 	// create time
@@ -46,11 +48,17 @@ type ConquestAPIDocument struct {
 	// - Has the file been uploaded successfully (UploadStatus_Completed)?
 	FileShouldBeAccessible bool `json:"FileShouldBeAccessible,omitempty"`
 
-	// Link is the location from which a document can be accessed. It is calculated from the document Address.
+	// job key
+	JobKey *ConquestAPIJobKey `json:"JobKey,omitempty"`
+
+	// Links point to documents that we do not manage. They are just a pointer to a record in another system.
 	//
-	// Link is empty when a location requires accessing a document with a security token.
+	// - A link can point to a web page
+	// - A link can point to record in a document system
 	//
-	// All uploaded documents will have an empty Link field.
+	// Links are pointers which don't contain an authentication material.
+	//
+	// A Link may be used to reference a document that we could request and serve using the GenerateDocumentLinkCommand
 	//
 	// You can obtain an appropriate link which encodes a security token using the GenerateDocumentLinkCommand
 	// OR use the "/download/document?object_type=...&object_id=...&document_id=..." endpoint which will either serve
@@ -64,7 +72,7 @@ type ConquestAPIDocument struct {
 	Order int32 `json:"Order,omitempty"`
 
 	// upload status
-	UploadStatus ConquestAPIUploadStatus `json:"UploadStatus,omitempty"`
+	UploadStatus *ConquestAPIUploadStatus `json:"UploadStatus,omitempty"`
 }
 
 // Validate validates this conquest api document
@@ -72,6 +80,10 @@ func (m *ConquestAPIDocument) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateCreateTime(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateJobKey(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -90,7 +102,6 @@ func (m *ConquestAPIDocument) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ConquestAPIDocument) validateCreateTime(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CreateTime) { // not required
 		return nil
 	}
@@ -102,8 +113,26 @@ func (m *ConquestAPIDocument) validateCreateTime(formats strfmt.Registry) error 
 	return nil
 }
 
-func (m *ConquestAPIDocument) validateObjectKey(formats strfmt.Registry) error {
+func (m *ConquestAPIDocument) validateJobKey(formats strfmt.Registry) error {
+	if swag.IsZero(m.JobKey) { // not required
+		return nil
+	}
 
+	if m.JobKey != nil {
+		if err := m.JobKey.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("JobKey")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("JobKey")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIDocument) validateObjectKey(formats strfmt.Registry) error {
 	if swag.IsZero(m.ObjectKey) { // not required
 		return nil
 	}
@@ -112,6 +141,8 @@ func (m *ConquestAPIDocument) validateObjectKey(formats strfmt.Registry) error {
 		if err := m.ObjectKey.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("ObjectKey")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ObjectKey")
 			}
 			return err
 		}
@@ -121,16 +152,89 @@ func (m *ConquestAPIDocument) validateObjectKey(formats strfmt.Registry) error {
 }
 
 func (m *ConquestAPIDocument) validateUploadStatus(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UploadStatus) { // not required
 		return nil
 	}
 
-	if err := m.UploadStatus.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("UploadStatus")
+	if m.UploadStatus != nil {
+		if err := m.UploadStatus.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("UploadStatus")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UploadStatus")
+			}
+			return err
 		}
-		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api document based on the context it is used
+func (m *ConquestAPIDocument) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateJobKey(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateObjectKey(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUploadStatus(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPIDocument) contextValidateJobKey(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.JobKey != nil {
+		if err := m.JobKey.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("JobKey")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("JobKey")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIDocument) contextValidateObjectKey(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ObjectKey != nil {
+		if err := m.ObjectKey.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ObjectKey")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ObjectKey")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIDocument) contextValidateUploadStatus(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UploadStatus != nil {
+		if err := m.UploadStatus.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("UploadStatus")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UploadStatus")
+			}
+			return err
+		}
 	}
 
 	return nil

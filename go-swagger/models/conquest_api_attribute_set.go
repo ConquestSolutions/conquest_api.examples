@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -28,10 +29,13 @@ type ConquestAPIAttributeSet struct {
 	AttributeNotes string `json:"AttributeNotes,omitempty"`
 
 	// ObjectType is one of the following: AssetType, ActionCategory, StandardAction, StandardDefect, StandardInspection
-	AttributeType ConquestAPIObjectType `json:"AttributeType,omitempty"`
+	AttributeType *ConquestAPIObjectType `json:"AttributeType,omitempty"`
 
 	// condition type
-	ConditionType ConquestAPIConditionType `json:"ConditionType,omitempty"`
+	ConditionType *ConquestAPIConditionType `json:"ConditionType,omitempty"`
+
+	// excluded groups
+	ExcludedGroups []string `json:"ExcludedGroups"`
 
 	// fields
 	Fields []*ConquestAPIAttributeSetField `json:"Fields"`
@@ -60,39 +64,44 @@ func (m *ConquestAPIAttributeSet) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ConquestAPIAttributeSet) validateAttributeType(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.AttributeType) { // not required
 		return nil
 	}
 
-	if err := m.AttributeType.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("AttributeType")
+	if m.AttributeType != nil {
+		if err := m.AttributeType.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("AttributeType")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("AttributeType")
+			}
+			return err
 		}
-		return err
 	}
 
 	return nil
 }
 
 func (m *ConquestAPIAttributeSet) validateConditionType(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ConditionType) { // not required
 		return nil
 	}
 
-	if err := m.ConditionType.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("ConditionType")
+	if m.ConditionType != nil {
+		if err := m.ConditionType.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ConditionType")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ConditionType")
+			}
+			return err
 		}
-		return err
 	}
 
 	return nil
 }
 
 func (m *ConquestAPIAttributeSet) validateFields(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Fields) { // not required
 		return nil
 	}
@@ -106,6 +115,82 @@ func (m *ConquestAPIAttributeSet) validateFields(formats strfmt.Registry) error 
 			if err := m.Fields[i].Validate(formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("Fields" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("Fields" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api attribute set based on the context it is used
+func (m *ConquestAPIAttributeSet) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateAttributeType(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateConditionType(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateFields(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPIAttributeSet) contextValidateAttributeType(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.AttributeType != nil {
+		if err := m.AttributeType.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("AttributeType")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("AttributeType")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIAttributeSet) contextValidateConditionType(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ConditionType != nil {
+		if err := m.ConditionType.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ConditionType")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ConditionType")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIAttributeSet) contextValidateFields(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Fields); i++ {
+
+		if m.Fields[i] != nil {
+			if err := m.Fields[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("Fields" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("Fields" + "." + strconv.Itoa(i))
 				}
 				return err
 			}

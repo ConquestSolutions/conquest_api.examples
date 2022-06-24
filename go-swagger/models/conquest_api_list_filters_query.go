@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -19,8 +21,14 @@ type ConquestAPIListFiltersQuery struct {
 	// context
 	Context string `json:"Context,omitempty"`
 
+	// filter i ds
+	FilterIDs []int32 `json:"FilterIDs"`
+
 	// filter type
-	FilterType ConquestAPIFilterType `json:"FilterType,omitempty"`
+	FilterType *ConquestAPIFilterType `json:"FilterType,omitempty"`
+
+	// for mobile
+	ForMobile bool `json:"ForMobile,omitempty"`
 }
 
 // Validate validates this conquest api list filters query
@@ -38,16 +46,49 @@ func (m *ConquestAPIListFiltersQuery) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ConquestAPIListFiltersQuery) validateFilterType(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.FilterType) { // not required
 		return nil
 	}
 
-	if err := m.FilterType.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("FilterType")
+	if m.FilterType != nil {
+		if err := m.FilterType.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("FilterType")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("FilterType")
+			}
+			return err
 		}
-		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api list filters query based on the context it is used
+func (m *ConquestAPIListFiltersQuery) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateFilterType(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPIListFiltersQuery) contextValidateFilterType(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.FilterType != nil {
+		if err := m.FilterType.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("FilterType")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("FilterType")
+			}
+			return err
+		}
 	}
 
 	return nil

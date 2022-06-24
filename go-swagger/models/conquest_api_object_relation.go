@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -48,7 +50,6 @@ func (m *ConquestAPIObjectRelation) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ConquestAPIObjectRelation) validateA(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.A) { // not required
 		return nil
 	}
@@ -57,6 +58,8 @@ func (m *ConquestAPIObjectRelation) validateA(formats strfmt.Registry) error {
 		if err := m.A.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("a")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("a")
 			}
 			return err
 		}
@@ -66,7 +69,6 @@ func (m *ConquestAPIObjectRelation) validateA(formats strfmt.Registry) error {
 }
 
 func (m *ConquestAPIObjectRelation) validateB(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.B) { // not required
 		return nil
 	}
@@ -75,6 +77,58 @@ func (m *ConquestAPIObjectRelation) validateB(formats strfmt.Registry) error {
 		if err := m.B.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("b")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("b")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api object relation based on the context it is used
+func (m *ConquestAPIObjectRelation) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateA(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateB(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPIObjectRelation) contextValidateA(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.A != nil {
+		if err := m.A.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("a")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("a")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIObjectRelation) contextValidateB(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.B != nil {
+		if err := m.B.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("b")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("b")
 			}
 			return err
 		}

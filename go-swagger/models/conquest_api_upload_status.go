@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/go-openapi/errors"
@@ -17,6 +18,15 @@ import (
 //
 // swagger:model conquest_apiUploadStatus
 type ConquestAPIUploadStatus string
+
+func NewConquestAPIUploadStatus(value ConquestAPIUploadStatus) *ConquestAPIUploadStatus {
+	return &value
+}
+
+// Pointer returns a pointer to a freshly-allocated ConquestAPIUploadStatus.
+func (m ConquestAPIUploadStatus) Pointer() *ConquestAPIUploadStatus {
+	return &m
+}
 
 const (
 
@@ -50,7 +60,7 @@ func init() {
 }
 
 func (m ConquestAPIUploadStatus) validateConquestAPIUploadStatusEnum(path, location string, value ConquestAPIUploadStatus) error {
-	if err := validate.Enum(path, location, value, conquestApiUploadStatusEnum); err != nil {
+	if err := validate.EnumCase(path, location, value, conquestApiUploadStatusEnum, true); err != nil {
 		return err
 	}
 	return nil
@@ -68,5 +78,10 @@ func (m ConquestAPIUploadStatus) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// ContextValidate validates this conquest api upload status based on context it is used
+func (m ConquestAPIUploadStatus) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }

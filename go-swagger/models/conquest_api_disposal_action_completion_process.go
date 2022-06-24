@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -35,7 +37,6 @@ func (m *ConquestAPIDisposalActionCompletionProcess) Validate(formats strfmt.Reg
 }
 
 func (m *ConquestAPIDisposalActionCompletionProcess) validateMeasurementAfterDisposal(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.MeasurementAfterDisposal) { // not required
 		return nil
 	}
@@ -44,6 +45,38 @@ func (m *ConquestAPIDisposalActionCompletionProcess) validateMeasurementAfterDis
 		if err := m.MeasurementAfterDisposal.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("MeasurementAfterDisposal")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("MeasurementAfterDisposal")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api disposal action completion process based on the context it is used
+func (m *ConquestAPIDisposalActionCompletionProcess) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateMeasurementAfterDisposal(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPIDisposalActionCompletionProcess) contextValidateMeasurementAfterDisposal(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.MeasurementAfterDisposal != nil {
+		if err := m.MeasurementAfterDisposal.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("MeasurementAfterDisposal")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("MeasurementAfterDisposal")
 			}
 			return err
 		}

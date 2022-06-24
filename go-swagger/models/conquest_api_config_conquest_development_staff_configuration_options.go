@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
@@ -15,11 +17,24 @@ import (
 // swagger:model conquest_api_configConquestDevelopmentStaffConfigurationOptions
 type ConquestAPIConfigConquestDevelopmentStaffConfigurationOptions struct {
 
+	// extension_hub_address: (default = https://exthub.conquestsoftware.com.au)
+	ExtensionHubAddress string `json:"extension_hub_address,omitempty"`
+
+	// login_server_address: (default = https://auth.conquestsoftware.com.au)
+	//   You can override this for testing usually we point it to "https://localhost:5001/" on a developer machine
+	LoginServerAddress string `json:"login_server_address,omitempty"`
+
 	// rulesEngineAddress: (default = localhost:9090)
 	//   The address of the Conquest API Rules Engine. The Gateway forwards requests to this port.
 	//
 	//  !!IMPORTANT!! DO NOT EXPOSE THIS PORT TO THE INTERNET IT IS PRIVATE TO THE MACHINE
 	RulesEngineAddress string `json:"rules_engine_address,omitempty"`
+
+	// rulesEngineAddressForDataConnector: (default = localhost:9091)
+	//   The address of the Conquest API Rules Engine for DataConnector Service. The Gateway forwards requests to this port.
+	//
+	//  !!IMPORTANT!! DO NOT EXPOSE THIS PORT TO THE INTERNET IT IS PRIVATE TO THE MACHINE
+	RulesEngineAddressForDataConnector string `json:"rules_engine_address_for_data_connector,omitempty"`
 
 	// services_address: (default = https://services.conquest-solutions.com.au)
 	//   You can override this for testing usually we point it to "https://localhost:44302/" on a developer machine
@@ -28,6 +43,11 @@ type ConquestAPIConfigConquestDevelopmentStaffConfigurationOptions struct {
 
 // Validate validates this conquest api config conquest development staff configuration options
 func (m *ConquestAPIConfigConquestDevelopmentStaffConfigurationOptions) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validates this conquest api config conquest development staff configuration options based on context it is used
+func (m *ConquestAPIConfigConquestDevelopmentStaffConfigurationOptions) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

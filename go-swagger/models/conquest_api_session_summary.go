@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
@@ -29,11 +31,17 @@ type ConquestAPISessionSummary struct {
 	// - For a cloud installatino, this will be the same as your Conquest Services login
 	ApplicationUsername string `json:"ApplicationUsername,omitempty"`
 
+	// is admin
+	IsAdmin bool `json:"IsAdmin,omitempty"`
+
 	// is production application
 	IsProductionApplication bool `json:"IsProductionApplication,omitempty"`
 
 	// is production database
 	IsProductionDatabase bool `json:"IsProductionDatabase,omitempty"`
+
+	// licence type
+	LicenceType string `json:"LicenceType,omitempty"`
 
 	// Your login from Conquest Services
 	Username string `json:"Username,omitempty"`
@@ -41,6 +49,11 @@ type ConquestAPISessionSummary struct {
 
 // Validate validates this conquest api session summary
 func (m *ConquestAPISessionSummary) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validates this conquest api session summary based on context it is used
+func (m *ConquestAPISessionSummary) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

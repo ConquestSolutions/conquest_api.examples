@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -42,7 +44,6 @@ func (m *ConquestAPICalculateDefectResponseDateResult) Validate(formats strfmt.R
 }
 
 func (m *ConquestAPICalculateDefectResponseDateResult) validateParameters(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Parameters) { // not required
 		return nil
 	}
@@ -51,6 +52,8 @@ func (m *ConquestAPICalculateDefectResponseDateResult) validateParameters(format
 		if err := m.Parameters.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("Parameters")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("Parameters")
 			}
 			return err
 		}
@@ -60,7 +63,6 @@ func (m *ConquestAPICalculateDefectResponseDateResult) validateParameters(format
 }
 
 func (m *ConquestAPICalculateDefectResponseDateResult) validateResponseDate(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ResponseDate) { // not required
 		return nil
 	}
@@ -69,6 +71,58 @@ func (m *ConquestAPICalculateDefectResponseDateResult) validateResponseDate(form
 		if err := m.ResponseDate.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("ResponseDate")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ResponseDate")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api calculate defect response date result based on the context it is used
+func (m *ConquestAPICalculateDefectResponseDateResult) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateParameters(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateResponseDate(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPICalculateDefectResponseDateResult) contextValidateParameters(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Parameters != nil {
+		if err := m.Parameters.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("Parameters")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("Parameters")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPICalculateDefectResponseDateResult) contextValidateResponseDate(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ResponseDate != nil {
+		if err := m.ResponseDate.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ResponseDate")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ResponseDate")
 			}
 			return err
 		}

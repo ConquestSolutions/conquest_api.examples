@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -57,7 +59,6 @@ func (m *ConquestAPIDefectRecordChangeSet) Validate(formats strfmt.Registry) err
 }
 
 func (m *ConquestAPIDefectRecordChangeSet) validateLastEdit(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.LastEdit) { // not required
 		return nil
 	}
@@ -70,7 +71,6 @@ func (m *ConquestAPIDefectRecordChangeSet) validateLastEdit(formats strfmt.Regis
 }
 
 func (m *ConquestAPIDefectRecordChangeSet) validateOriginal(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Original) { // not required
 		return nil
 	}
@@ -79,6 +79,8 @@ func (m *ConquestAPIDefectRecordChangeSet) validateOriginal(formats strfmt.Regis
 		if err := m.Original.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("Original")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("Original")
 			}
 			return err
 		}
@@ -88,7 +90,6 @@ func (m *ConquestAPIDefectRecordChangeSet) validateOriginal(formats strfmt.Regis
 }
 
 func (m *ConquestAPIDefectRecordChangeSet) validateUpdated(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Updated) { // not required
 		return nil
 	}
@@ -97,6 +98,58 @@ func (m *ConquestAPIDefectRecordChangeSet) validateUpdated(formats strfmt.Regist
 		if err := m.Updated.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("Updated")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("Updated")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api defect record change set based on the context it is used
+func (m *ConquestAPIDefectRecordChangeSet) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateOriginal(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUpdated(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPIDefectRecordChangeSet) contextValidateOriginal(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Original != nil {
+		if err := m.Original.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("Original")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("Original")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIDefectRecordChangeSet) contextValidateUpdated(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Updated != nil {
+		if err := m.Updated.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("Updated")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("Updated")
 			}
 			return err
 		}

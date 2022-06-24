@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
@@ -35,10 +37,21 @@ type ConquestAPIConfigDatabaseConnection struct {
 
 	// properties
 	Properties map[string]string `json:"properties,omitempty"`
+
+	// sql service objective
+	SQLServiceObjective string `json:"sql_service_objective,omitempty"`
+
+	// sqlserver or cosmos
+	Type string `json:"type,omitempty"`
 }
 
 // Validate validates this conquest api config database connection
 func (m *ConquestAPIConfigDatabaseConnection) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validates this conquest api config database connection based on context it is used
+func (m *ConquestAPIConfigDatabaseConnection) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

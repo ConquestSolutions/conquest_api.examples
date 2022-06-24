@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -26,7 +27,7 @@ type ConquestAPIListAttributeSetsQuery struct {
 	IncludeUnsetFields bool `json:"IncludeUnsetFields,omitempty"`
 
 	// object type
-	ObjectType ConquestAPIObjectType `json:"ObjectType,omitempty"`
+	ObjectType *ConquestAPIObjectType `json:"ObjectType,omitempty"`
 }
 
 // Validate validates this conquest api list attribute sets query
@@ -48,7 +49,6 @@ func (m *ConquestAPIListAttributeSetsQuery) Validate(formats strfmt.Registry) er
 }
 
 func (m *ConquestAPIListAttributeSetsQuery) validateAttributeSetKeys(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.AttributeSetKeys) { // not required
 		return nil
 	}
@@ -62,6 +62,8 @@ func (m *ConquestAPIListAttributeSetsQuery) validateAttributeSetKeys(formats str
 			if err := m.AttributeSetKeys[i].Validate(formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("AttributeSetKeys" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("AttributeSetKeys" + "." + strconv.Itoa(i))
 				}
 				return err
 			}
@@ -73,16 +75,73 @@ func (m *ConquestAPIListAttributeSetsQuery) validateAttributeSetKeys(formats str
 }
 
 func (m *ConquestAPIListAttributeSetsQuery) validateObjectType(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ObjectType) { // not required
 		return nil
 	}
 
-	if err := m.ObjectType.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("ObjectType")
+	if m.ObjectType != nil {
+		if err := m.ObjectType.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ObjectType")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ObjectType")
+			}
+			return err
 		}
-		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api list attribute sets query based on the context it is used
+func (m *ConquestAPIListAttributeSetsQuery) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateAttributeSetKeys(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateObjectType(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPIListAttributeSetsQuery) contextValidateAttributeSetKeys(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.AttributeSetKeys); i++ {
+
+		if m.AttributeSetKeys[i] != nil {
+			if err := m.AttributeSetKeys[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("AttributeSetKeys" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("AttributeSetKeys" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIListAttributeSetsQuery) contextValidateObjectType(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ObjectType != nil {
+		if err := m.ObjectType.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ObjectType")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ObjectType")
+			}
+			return err
+		}
 	}
 
 	return nil

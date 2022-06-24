@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -44,7 +46,6 @@ func (m *ConquestAPIApplyStandardActionCommand) Validate(formats strfmt.Registry
 }
 
 func (m *ConquestAPIApplyStandardActionCommand) validateOverwriteOptions(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.OverwriteOptions) { // not required
 		return nil
 	}
@@ -53,6 +54,38 @@ func (m *ConquestAPIApplyStandardActionCommand) validateOverwriteOptions(formats
 		if err := m.OverwriteOptions.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("OverwriteOptions")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("OverwriteOptions")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api apply standard action command based on the context it is used
+func (m *ConquestAPIApplyStandardActionCommand) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateOverwriteOptions(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPIApplyStandardActionCommand) contextValidateOverwriteOptions(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.OverwriteOptions != nil {
+		if err := m.OverwriteOptions.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("OverwriteOptions")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("OverwriteOptions")
 			}
 			return err
 		}

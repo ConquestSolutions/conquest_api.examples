@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -32,8 +34,14 @@ type ConquestAPIDefectRecord struct {
 	// defect notes
 	DefectNotes string `json:"DefectNotes,omitempty"`
 
-	// LocationCoordinates is a pin/point that defaults to the centroid on the Asset's geography object
-	LocationCoordinates *ConquestAPIGeographyCoordinatesValue `json:"LocationCoordinates,omitempty"`
+	// geometry data
+	GeometryData *ConquestAPIGeometryDataValue `json:"GeometryData,omitempty"`
+
+	// inspection
+	Inspection *ConquestAPIInspectionRecord `json:"Inspection,omitempty"`
+
+	// LocationCoordinates is a pin/point that defaults to the centroid on the Defect's geography object
+	LocationCoordinates *ConquestAPIGeographyDataValue `json:"LocationCoordinates,omitempty"`
 
 	// material quantity
 	MaterialQuantity float64 `json:"MaterialQuantity,omitempty"`
@@ -512,6 +520,14 @@ func (m *ConquestAPIDefectRecord) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateGeometryData(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateInspection(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateLocationCoordinates(formats); err != nil {
 		res = append(res, err)
 	}
@@ -643,7 +659,6 @@ func (m *ConquestAPIDefectRecord) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ConquestAPIDefectRecord) validateCostEstimate(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CostEstimate) { // not required
 		return nil
 	}
@@ -652,6 +667,46 @@ func (m *ConquestAPIDefectRecord) validateCostEstimate(formats strfmt.Registry) 
 		if err := m.CostEstimate.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("CostEstimate")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("CostEstimate")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIDefectRecord) validateGeometryData(formats strfmt.Registry) error {
+	if swag.IsZero(m.GeometryData) { // not required
+		return nil
+	}
+
+	if m.GeometryData != nil {
+		if err := m.GeometryData.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("GeometryData")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("GeometryData")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIDefectRecord) validateInspection(formats strfmt.Registry) error {
+	if swag.IsZero(m.Inspection) { // not required
+		return nil
+	}
+
+	if m.Inspection != nil {
+		if err := m.Inspection.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("Inspection")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("Inspection")
 			}
 			return err
 		}
@@ -661,7 +716,6 @@ func (m *ConquestAPIDefectRecord) validateCostEstimate(formats strfmt.Registry) 
 }
 
 func (m *ConquestAPIDefectRecord) validateLocationCoordinates(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.LocationCoordinates) { // not required
 		return nil
 	}
@@ -670,6 +724,8 @@ func (m *ConquestAPIDefectRecord) validateLocationCoordinates(formats strfmt.Reg
 		if err := m.LocationCoordinates.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("LocationCoordinates")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("LocationCoordinates")
 			}
 			return err
 		}
@@ -679,7 +735,6 @@ func (m *ConquestAPIDefectRecord) validateLocationCoordinates(formats strfmt.Reg
 }
 
 func (m *ConquestAPIDefectRecord) validateUserDate1(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UserDate1) { // not required
 		return nil
 	}
@@ -688,6 +743,8 @@ func (m *ConquestAPIDefectRecord) validateUserDate1(formats strfmt.Registry) err
 		if err := m.UserDate1.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("UserDate1")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate1")
 			}
 			return err
 		}
@@ -697,7 +754,6 @@ func (m *ConquestAPIDefectRecord) validateUserDate1(formats strfmt.Registry) err
 }
 
 func (m *ConquestAPIDefectRecord) validateUserDate10(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UserDate10) { // not required
 		return nil
 	}
@@ -706,6 +762,8 @@ func (m *ConquestAPIDefectRecord) validateUserDate10(formats strfmt.Registry) er
 		if err := m.UserDate10.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("UserDate10")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate10")
 			}
 			return err
 		}
@@ -715,7 +773,6 @@ func (m *ConquestAPIDefectRecord) validateUserDate10(formats strfmt.Registry) er
 }
 
 func (m *ConquestAPIDefectRecord) validateUserDate11(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UserDate11) { // not required
 		return nil
 	}
@@ -724,6 +781,8 @@ func (m *ConquestAPIDefectRecord) validateUserDate11(formats strfmt.Registry) er
 		if err := m.UserDate11.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("UserDate11")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate11")
 			}
 			return err
 		}
@@ -733,7 +792,6 @@ func (m *ConquestAPIDefectRecord) validateUserDate11(formats strfmt.Registry) er
 }
 
 func (m *ConquestAPIDefectRecord) validateUserDate12(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UserDate12) { // not required
 		return nil
 	}
@@ -742,6 +800,8 @@ func (m *ConquestAPIDefectRecord) validateUserDate12(formats strfmt.Registry) er
 		if err := m.UserDate12.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("UserDate12")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate12")
 			}
 			return err
 		}
@@ -751,7 +811,6 @@ func (m *ConquestAPIDefectRecord) validateUserDate12(formats strfmt.Registry) er
 }
 
 func (m *ConquestAPIDefectRecord) validateUserDate13(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UserDate13) { // not required
 		return nil
 	}
@@ -760,6 +819,8 @@ func (m *ConquestAPIDefectRecord) validateUserDate13(formats strfmt.Registry) er
 		if err := m.UserDate13.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("UserDate13")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate13")
 			}
 			return err
 		}
@@ -769,7 +830,6 @@ func (m *ConquestAPIDefectRecord) validateUserDate13(formats strfmt.Registry) er
 }
 
 func (m *ConquestAPIDefectRecord) validateUserDate14(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UserDate14) { // not required
 		return nil
 	}
@@ -778,6 +838,8 @@ func (m *ConquestAPIDefectRecord) validateUserDate14(formats strfmt.Registry) er
 		if err := m.UserDate14.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("UserDate14")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate14")
 			}
 			return err
 		}
@@ -787,7 +849,6 @@ func (m *ConquestAPIDefectRecord) validateUserDate14(formats strfmt.Registry) er
 }
 
 func (m *ConquestAPIDefectRecord) validateUserDate15(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UserDate15) { // not required
 		return nil
 	}
@@ -796,6 +857,8 @@ func (m *ConquestAPIDefectRecord) validateUserDate15(formats strfmt.Registry) er
 		if err := m.UserDate15.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("UserDate15")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate15")
 			}
 			return err
 		}
@@ -805,7 +868,6 @@ func (m *ConquestAPIDefectRecord) validateUserDate15(formats strfmt.Registry) er
 }
 
 func (m *ConquestAPIDefectRecord) validateUserDate16(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UserDate16) { // not required
 		return nil
 	}
@@ -814,6 +876,8 @@ func (m *ConquestAPIDefectRecord) validateUserDate16(formats strfmt.Registry) er
 		if err := m.UserDate16.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("UserDate16")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate16")
 			}
 			return err
 		}
@@ -823,7 +887,6 @@ func (m *ConquestAPIDefectRecord) validateUserDate16(formats strfmt.Registry) er
 }
 
 func (m *ConquestAPIDefectRecord) validateUserDate17(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UserDate17) { // not required
 		return nil
 	}
@@ -832,6 +895,8 @@ func (m *ConquestAPIDefectRecord) validateUserDate17(formats strfmt.Registry) er
 		if err := m.UserDate17.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("UserDate17")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate17")
 			}
 			return err
 		}
@@ -841,7 +906,6 @@ func (m *ConquestAPIDefectRecord) validateUserDate17(formats strfmt.Registry) er
 }
 
 func (m *ConquestAPIDefectRecord) validateUserDate18(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UserDate18) { // not required
 		return nil
 	}
@@ -850,6 +914,8 @@ func (m *ConquestAPIDefectRecord) validateUserDate18(formats strfmt.Registry) er
 		if err := m.UserDate18.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("UserDate18")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate18")
 			}
 			return err
 		}
@@ -859,7 +925,6 @@ func (m *ConquestAPIDefectRecord) validateUserDate18(formats strfmt.Registry) er
 }
 
 func (m *ConquestAPIDefectRecord) validateUserDate19(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UserDate19) { // not required
 		return nil
 	}
@@ -868,6 +933,8 @@ func (m *ConquestAPIDefectRecord) validateUserDate19(formats strfmt.Registry) er
 		if err := m.UserDate19.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("UserDate19")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate19")
 			}
 			return err
 		}
@@ -877,7 +944,6 @@ func (m *ConquestAPIDefectRecord) validateUserDate19(formats strfmt.Registry) er
 }
 
 func (m *ConquestAPIDefectRecord) validateUserDate2(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UserDate2) { // not required
 		return nil
 	}
@@ -886,6 +952,8 @@ func (m *ConquestAPIDefectRecord) validateUserDate2(formats strfmt.Registry) err
 		if err := m.UserDate2.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("UserDate2")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate2")
 			}
 			return err
 		}
@@ -895,7 +963,6 @@ func (m *ConquestAPIDefectRecord) validateUserDate2(formats strfmt.Registry) err
 }
 
 func (m *ConquestAPIDefectRecord) validateUserDate20(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UserDate20) { // not required
 		return nil
 	}
@@ -904,6 +971,8 @@ func (m *ConquestAPIDefectRecord) validateUserDate20(formats strfmt.Registry) er
 		if err := m.UserDate20.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("UserDate20")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate20")
 			}
 			return err
 		}
@@ -913,7 +982,6 @@ func (m *ConquestAPIDefectRecord) validateUserDate20(formats strfmt.Registry) er
 }
 
 func (m *ConquestAPIDefectRecord) validateUserDate21(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UserDate21) { // not required
 		return nil
 	}
@@ -922,6 +990,8 @@ func (m *ConquestAPIDefectRecord) validateUserDate21(formats strfmt.Registry) er
 		if err := m.UserDate21.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("UserDate21")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate21")
 			}
 			return err
 		}
@@ -931,7 +1001,6 @@ func (m *ConquestAPIDefectRecord) validateUserDate21(formats strfmt.Registry) er
 }
 
 func (m *ConquestAPIDefectRecord) validateUserDate22(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UserDate22) { // not required
 		return nil
 	}
@@ -940,6 +1009,8 @@ func (m *ConquestAPIDefectRecord) validateUserDate22(formats strfmt.Registry) er
 		if err := m.UserDate22.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("UserDate22")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate22")
 			}
 			return err
 		}
@@ -949,7 +1020,6 @@ func (m *ConquestAPIDefectRecord) validateUserDate22(formats strfmt.Registry) er
 }
 
 func (m *ConquestAPIDefectRecord) validateUserDate23(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UserDate23) { // not required
 		return nil
 	}
@@ -958,6 +1028,8 @@ func (m *ConquestAPIDefectRecord) validateUserDate23(formats strfmt.Registry) er
 		if err := m.UserDate23.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("UserDate23")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate23")
 			}
 			return err
 		}
@@ -967,7 +1039,6 @@ func (m *ConquestAPIDefectRecord) validateUserDate23(formats strfmt.Registry) er
 }
 
 func (m *ConquestAPIDefectRecord) validateUserDate24(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UserDate24) { // not required
 		return nil
 	}
@@ -976,6 +1047,8 @@ func (m *ConquestAPIDefectRecord) validateUserDate24(formats strfmt.Registry) er
 		if err := m.UserDate24.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("UserDate24")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate24")
 			}
 			return err
 		}
@@ -985,7 +1058,6 @@ func (m *ConquestAPIDefectRecord) validateUserDate24(formats strfmt.Registry) er
 }
 
 func (m *ConquestAPIDefectRecord) validateUserDate25(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UserDate25) { // not required
 		return nil
 	}
@@ -994,6 +1066,8 @@ func (m *ConquestAPIDefectRecord) validateUserDate25(formats strfmt.Registry) er
 		if err := m.UserDate25.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("UserDate25")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate25")
 			}
 			return err
 		}
@@ -1003,7 +1077,6 @@ func (m *ConquestAPIDefectRecord) validateUserDate25(formats strfmt.Registry) er
 }
 
 func (m *ConquestAPIDefectRecord) validateUserDate26(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UserDate26) { // not required
 		return nil
 	}
@@ -1012,6 +1085,8 @@ func (m *ConquestAPIDefectRecord) validateUserDate26(formats strfmt.Registry) er
 		if err := m.UserDate26.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("UserDate26")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate26")
 			}
 			return err
 		}
@@ -1021,7 +1096,6 @@ func (m *ConquestAPIDefectRecord) validateUserDate26(formats strfmt.Registry) er
 }
 
 func (m *ConquestAPIDefectRecord) validateUserDate27(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UserDate27) { // not required
 		return nil
 	}
@@ -1030,6 +1104,8 @@ func (m *ConquestAPIDefectRecord) validateUserDate27(formats strfmt.Registry) er
 		if err := m.UserDate27.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("UserDate27")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate27")
 			}
 			return err
 		}
@@ -1039,7 +1115,6 @@ func (m *ConquestAPIDefectRecord) validateUserDate27(formats strfmt.Registry) er
 }
 
 func (m *ConquestAPIDefectRecord) validateUserDate28(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UserDate28) { // not required
 		return nil
 	}
@@ -1048,6 +1123,8 @@ func (m *ConquestAPIDefectRecord) validateUserDate28(formats strfmt.Registry) er
 		if err := m.UserDate28.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("UserDate28")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate28")
 			}
 			return err
 		}
@@ -1057,7 +1134,6 @@ func (m *ConquestAPIDefectRecord) validateUserDate28(formats strfmt.Registry) er
 }
 
 func (m *ConquestAPIDefectRecord) validateUserDate29(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UserDate29) { // not required
 		return nil
 	}
@@ -1066,6 +1142,8 @@ func (m *ConquestAPIDefectRecord) validateUserDate29(formats strfmt.Registry) er
 		if err := m.UserDate29.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("UserDate29")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate29")
 			}
 			return err
 		}
@@ -1075,7 +1153,6 @@ func (m *ConquestAPIDefectRecord) validateUserDate29(formats strfmt.Registry) er
 }
 
 func (m *ConquestAPIDefectRecord) validateUserDate3(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UserDate3) { // not required
 		return nil
 	}
@@ -1084,6 +1161,8 @@ func (m *ConquestAPIDefectRecord) validateUserDate3(formats strfmt.Registry) err
 		if err := m.UserDate3.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("UserDate3")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate3")
 			}
 			return err
 		}
@@ -1093,7 +1172,6 @@ func (m *ConquestAPIDefectRecord) validateUserDate3(formats strfmt.Registry) err
 }
 
 func (m *ConquestAPIDefectRecord) validateUserDate30(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UserDate30) { // not required
 		return nil
 	}
@@ -1102,6 +1180,8 @@ func (m *ConquestAPIDefectRecord) validateUserDate30(formats strfmt.Registry) er
 		if err := m.UserDate30.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("UserDate30")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate30")
 			}
 			return err
 		}
@@ -1111,7 +1191,6 @@ func (m *ConquestAPIDefectRecord) validateUserDate30(formats strfmt.Registry) er
 }
 
 func (m *ConquestAPIDefectRecord) validateUserDate4(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UserDate4) { // not required
 		return nil
 	}
@@ -1120,6 +1199,8 @@ func (m *ConquestAPIDefectRecord) validateUserDate4(formats strfmt.Registry) err
 		if err := m.UserDate4.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("UserDate4")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate4")
 			}
 			return err
 		}
@@ -1129,7 +1210,6 @@ func (m *ConquestAPIDefectRecord) validateUserDate4(formats strfmt.Registry) err
 }
 
 func (m *ConquestAPIDefectRecord) validateUserDate5(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UserDate5) { // not required
 		return nil
 	}
@@ -1138,6 +1218,8 @@ func (m *ConquestAPIDefectRecord) validateUserDate5(formats strfmt.Registry) err
 		if err := m.UserDate5.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("UserDate5")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate5")
 			}
 			return err
 		}
@@ -1147,7 +1229,6 @@ func (m *ConquestAPIDefectRecord) validateUserDate5(formats strfmt.Registry) err
 }
 
 func (m *ConquestAPIDefectRecord) validateUserDate6(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UserDate6) { // not required
 		return nil
 	}
@@ -1156,6 +1237,8 @@ func (m *ConquestAPIDefectRecord) validateUserDate6(formats strfmt.Registry) err
 		if err := m.UserDate6.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("UserDate6")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate6")
 			}
 			return err
 		}
@@ -1165,7 +1248,6 @@ func (m *ConquestAPIDefectRecord) validateUserDate6(formats strfmt.Registry) err
 }
 
 func (m *ConquestAPIDefectRecord) validateUserDate7(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UserDate7) { // not required
 		return nil
 	}
@@ -1174,6 +1256,8 @@ func (m *ConquestAPIDefectRecord) validateUserDate7(formats strfmt.Registry) err
 		if err := m.UserDate7.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("UserDate7")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate7")
 			}
 			return err
 		}
@@ -1183,7 +1267,6 @@ func (m *ConquestAPIDefectRecord) validateUserDate7(formats strfmt.Registry) err
 }
 
 func (m *ConquestAPIDefectRecord) validateUserDate8(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UserDate8) { // not required
 		return nil
 	}
@@ -1192,6 +1275,8 @@ func (m *ConquestAPIDefectRecord) validateUserDate8(formats strfmt.Registry) err
 		if err := m.UserDate8.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("UserDate8")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate8")
 			}
 			return err
 		}
@@ -1201,7 +1286,6 @@ func (m *ConquestAPIDefectRecord) validateUserDate8(formats strfmt.Registry) err
 }
 
 func (m *ConquestAPIDefectRecord) validateUserDate9(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UserDate9) { // not required
 		return nil
 	}
@@ -1210,6 +1294,698 @@ func (m *ConquestAPIDefectRecord) validateUserDate9(formats strfmt.Registry) err
 		if err := m.UserDate9.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("UserDate9")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate9")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api defect record based on the context it is used
+func (m *ConquestAPIDefectRecord) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCostEstimate(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateGeometryData(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateInspection(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLocationCoordinates(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUserDate1(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUserDate10(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUserDate11(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUserDate12(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUserDate13(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUserDate14(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUserDate15(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUserDate16(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUserDate17(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUserDate18(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUserDate19(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUserDate2(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUserDate20(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUserDate21(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUserDate22(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUserDate23(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUserDate24(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUserDate25(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUserDate26(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUserDate27(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUserDate28(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUserDate29(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUserDate3(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUserDate30(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUserDate4(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUserDate5(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUserDate6(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUserDate7(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUserDate8(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUserDate9(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPIDefectRecord) contextValidateCostEstimate(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CostEstimate != nil {
+		if err := m.CostEstimate.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("CostEstimate")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("CostEstimate")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIDefectRecord) contextValidateGeometryData(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.GeometryData != nil {
+		if err := m.GeometryData.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("GeometryData")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("GeometryData")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIDefectRecord) contextValidateInspection(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Inspection != nil {
+		if err := m.Inspection.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("Inspection")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("Inspection")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIDefectRecord) contextValidateLocationCoordinates(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.LocationCoordinates != nil {
+		if err := m.LocationCoordinates.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("LocationCoordinates")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("LocationCoordinates")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIDefectRecord) contextValidateUserDate1(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UserDate1 != nil {
+		if err := m.UserDate1.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("UserDate1")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate1")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIDefectRecord) contextValidateUserDate10(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UserDate10 != nil {
+		if err := m.UserDate10.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("UserDate10")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate10")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIDefectRecord) contextValidateUserDate11(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UserDate11 != nil {
+		if err := m.UserDate11.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("UserDate11")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate11")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIDefectRecord) contextValidateUserDate12(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UserDate12 != nil {
+		if err := m.UserDate12.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("UserDate12")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate12")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIDefectRecord) contextValidateUserDate13(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UserDate13 != nil {
+		if err := m.UserDate13.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("UserDate13")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate13")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIDefectRecord) contextValidateUserDate14(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UserDate14 != nil {
+		if err := m.UserDate14.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("UserDate14")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate14")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIDefectRecord) contextValidateUserDate15(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UserDate15 != nil {
+		if err := m.UserDate15.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("UserDate15")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate15")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIDefectRecord) contextValidateUserDate16(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UserDate16 != nil {
+		if err := m.UserDate16.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("UserDate16")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate16")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIDefectRecord) contextValidateUserDate17(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UserDate17 != nil {
+		if err := m.UserDate17.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("UserDate17")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate17")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIDefectRecord) contextValidateUserDate18(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UserDate18 != nil {
+		if err := m.UserDate18.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("UserDate18")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate18")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIDefectRecord) contextValidateUserDate19(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UserDate19 != nil {
+		if err := m.UserDate19.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("UserDate19")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate19")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIDefectRecord) contextValidateUserDate2(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UserDate2 != nil {
+		if err := m.UserDate2.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("UserDate2")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate2")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIDefectRecord) contextValidateUserDate20(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UserDate20 != nil {
+		if err := m.UserDate20.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("UserDate20")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate20")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIDefectRecord) contextValidateUserDate21(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UserDate21 != nil {
+		if err := m.UserDate21.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("UserDate21")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate21")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIDefectRecord) contextValidateUserDate22(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UserDate22 != nil {
+		if err := m.UserDate22.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("UserDate22")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate22")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIDefectRecord) contextValidateUserDate23(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UserDate23 != nil {
+		if err := m.UserDate23.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("UserDate23")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate23")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIDefectRecord) contextValidateUserDate24(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UserDate24 != nil {
+		if err := m.UserDate24.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("UserDate24")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate24")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIDefectRecord) contextValidateUserDate25(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UserDate25 != nil {
+		if err := m.UserDate25.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("UserDate25")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate25")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIDefectRecord) contextValidateUserDate26(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UserDate26 != nil {
+		if err := m.UserDate26.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("UserDate26")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate26")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIDefectRecord) contextValidateUserDate27(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UserDate27 != nil {
+		if err := m.UserDate27.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("UserDate27")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate27")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIDefectRecord) contextValidateUserDate28(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UserDate28 != nil {
+		if err := m.UserDate28.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("UserDate28")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate28")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIDefectRecord) contextValidateUserDate29(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UserDate29 != nil {
+		if err := m.UserDate29.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("UserDate29")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate29")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIDefectRecord) contextValidateUserDate3(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UserDate3 != nil {
+		if err := m.UserDate3.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("UserDate3")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate3")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIDefectRecord) contextValidateUserDate30(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UserDate30 != nil {
+		if err := m.UserDate30.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("UserDate30")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate30")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIDefectRecord) contextValidateUserDate4(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UserDate4 != nil {
+		if err := m.UserDate4.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("UserDate4")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate4")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIDefectRecord) contextValidateUserDate5(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UserDate5 != nil {
+		if err := m.UserDate5.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("UserDate5")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate5")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIDefectRecord) contextValidateUserDate6(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UserDate6 != nil {
+		if err := m.UserDate6.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("UserDate6")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate6")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIDefectRecord) contextValidateUserDate7(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UserDate7 != nil {
+		if err := m.UserDate7.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("UserDate7")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate7")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIDefectRecord) contextValidateUserDate8(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UserDate8 != nil {
+		if err := m.UserDate8.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("UserDate8")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate8")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIDefectRecord) contextValidateUserDate9(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UserDate9 != nil {
+		if err := m.UserDate9.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("UserDate9")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UserDate9")
 			}
 			return err
 		}

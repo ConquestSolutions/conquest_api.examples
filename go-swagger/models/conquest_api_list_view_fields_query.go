@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
@@ -22,6 +24,11 @@ type ConquestAPIListViewFieldsQuery struct {
 
 // Validate validates this conquest api list view fields query
 func (m *ConquestAPIListViewFieldsQuery) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validates this conquest api list view fields query based on context it is used
+func (m *ConquestAPIListViewFieldsQuery) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -74,7 +76,6 @@ func (m *ConquestAPIAttributeSetField) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ConquestAPIAttributeSetField) validateDimensionValue(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.DimensionValue) { // not required
 		return nil
 	}
@@ -83,6 +84,8 @@ func (m *ConquestAPIAttributeSetField) validateDimensionValue(formats strfmt.Reg
 		if err := m.DimensionValue.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("DimensionValue")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("DimensionValue")
 			}
 			return err
 		}
@@ -92,7 +95,6 @@ func (m *ConquestAPIAttributeSetField) validateDimensionValue(formats strfmt.Reg
 }
 
 func (m *ConquestAPIAttributeSetField) validateHierarchyValue(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.HierarchyValue) { // not required
 		return nil
 	}
@@ -101,6 +103,8 @@ func (m *ConquestAPIAttributeSetField) validateHierarchyValue(formats strfmt.Reg
 		if err := m.HierarchyValue.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("HierarchyValue")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("HierarchyValue")
 			}
 			return err
 		}
@@ -110,7 +114,6 @@ func (m *ConquestAPIAttributeSetField) validateHierarchyValue(formats strfmt.Reg
 }
 
 func (m *ConquestAPIAttributeSetField) validateListValue(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ListValue) { // not required
 		return nil
 	}
@@ -119,6 +122,8 @@ func (m *ConquestAPIAttributeSetField) validateListValue(formats strfmt.Registry
 		if err := m.ListValue.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("ListValue")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ListValue")
 			}
 			return err
 		}
@@ -128,7 +133,6 @@ func (m *ConquestAPIAttributeSetField) validateListValue(formats strfmt.Registry
 }
 
 func (m *ConquestAPIAttributeSetField) validateWeightedValue(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.WeightedValue) { // not required
 		return nil
 	}
@@ -137,6 +141,98 @@ func (m *ConquestAPIAttributeSetField) validateWeightedValue(formats strfmt.Regi
 		if err := m.WeightedValue.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("WeightedValue")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("WeightedValue")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api attribute set field based on the context it is used
+func (m *ConquestAPIAttributeSetField) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateDimensionValue(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateHierarchyValue(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateListValue(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateWeightedValue(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPIAttributeSetField) contextValidateDimensionValue(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.DimensionValue != nil {
+		if err := m.DimensionValue.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("DimensionValue")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("DimensionValue")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIAttributeSetField) contextValidateHierarchyValue(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.HierarchyValue != nil {
+		if err := m.HierarchyValue.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("HierarchyValue")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("HierarchyValue")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIAttributeSetField) contextValidateListValue(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ListValue != nil {
+		if err := m.ListValue.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ListValue")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ListValue")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIAttributeSetField) contextValidateWeightedValue(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.WeightedValue != nil {
+		if err := m.WeightedValue.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("WeightedValue")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("WeightedValue")
 			}
 			return err
 		}

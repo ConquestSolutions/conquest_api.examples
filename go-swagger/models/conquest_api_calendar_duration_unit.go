@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/go-openapi/errors"
@@ -17,6 +18,15 @@ import (
 //
 // swagger:model conquest_apiCalendarDurationUnit
 type ConquestAPICalendarDurationUnit string
+
+func NewConquestAPICalendarDurationUnit(value ConquestAPICalendarDurationUnit) *ConquestAPICalendarDurationUnit {
+	return &value
+}
+
+// Pointer returns a pointer to a freshly-allocated ConquestAPICalendarDurationUnit.
+func (m ConquestAPICalendarDurationUnit) Pointer() *ConquestAPICalendarDurationUnit {
+	return &m
+}
 
 const (
 
@@ -71,7 +81,7 @@ func init() {
 }
 
 func (m ConquestAPICalendarDurationUnit) validateConquestAPICalendarDurationUnitEnum(path, location string, value ConquestAPICalendarDurationUnit) error {
-	if err := validate.Enum(path, location, value, conquestApiCalendarDurationUnitEnum); err != nil {
+	if err := validate.EnumCase(path, location, value, conquestApiCalendarDurationUnitEnum, true); err != nil {
 		return err
 	}
 	return nil
@@ -89,5 +99,10 @@ func (m ConquestAPICalendarDurationUnit) Validate(formats strfmt.Registry) error
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// ContextValidate validates this conquest api calendar duration unit based on context it is used
+func (m ConquestAPICalendarDurationUnit) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }

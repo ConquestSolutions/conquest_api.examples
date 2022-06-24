@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/go-openapi/errors"
@@ -17,6 +18,15 @@ import (
 //
 // swagger:model conquest_apiCostType
 type ConquestAPICostType string
+
+func NewConquestAPICostType(value ConquestAPICostType) *ConquestAPICostType {
+	return &value
+}
+
+// Pointer returns a pointer to a freshly-allocated ConquestAPICostType.
+func (m ConquestAPICostType) Pointer() *ConquestAPICostType {
+	return &m
+}
 
 const (
 
@@ -44,7 +54,7 @@ func init() {
 }
 
 func (m ConquestAPICostType) validateConquestAPICostTypeEnum(path, location string, value ConquestAPICostType) error {
-	if err := validate.Enum(path, location, value, conquestApiCostTypeEnum); err != nil {
+	if err := validate.EnumCase(path, location, value, conquestApiCostTypeEnum, true); err != nil {
 		return err
 	}
 	return nil
@@ -62,5 +72,10 @@ func (m ConquestAPICostType) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// ContextValidate validates this conquest api cost type based on context it is used
+func (m ConquestAPICostType) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }

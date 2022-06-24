@@ -6,29 +6,54 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 )
 
-// ConquestAPIObjectKey conquest api object key
+// ConquestAPIObjectKey When using the ObjectKey, make sure that you only encode one of 'int32Value', 'stringValue' and 'timestampValue'.
+//
+// If not you will get "invalid argument" or "bad request" as a response.
+//
+// For example send:
+//
+//      {"objectType": "ObjectType_Asset", "int32Value": 123}
+//
+// Do not send:
+//
+//      {"objectType": "ObjectType_Asset", "int32Value": 123, "stringValue": "", "timestampValue": "0001-01-01.....Z"}
+// Example: {"int32Value":123,"objectType":"ObjectType_Request"}
 //
 // swagger:model conquest_apiObjectKey
 type ConquestAPIObjectKey struct {
 
-	// int32 value
+	// Choose one of 'int32Value', 'stringValue' and 'timestampValue'.
+	//
+	// Typically, an id is a unary key with the int type and only this needs to be provided.
 	Int32Value int32 `json:"int32Value,omitempty"`
 
 	// object type
-	ObjectType ConquestAPIObjectType `json:"objectType,omitempty"`
+	ObjectType *ConquestAPIObjectType `json:"objectType,omitempty"`
 
-	// string value
+	// Choose one of 'int32Value', 'stringValue' and 'timestampValue'.
+	//
+	// Not every id can be an integer, in the odd case, a 'stringValue' will be used instead.
+	//
+	// A guid, string like a uri, or an encoded composite key, eg "(DefectID,InspectionID)" when the ObjectType is DefectHistory
 	StringValue string `json:"stringValue,omitempty"`
 
-	// timestamp value
+	// Choose one of 'int32Value', 'stringValue' and 'timestampValue'.
+	//
+	// Timestamp as an id is typically used to reference a new object that does not yet have an id.
+	//
+	// NOTE: Although 'oneof' should mean JSON clients do not serialize this if it's not set.
+	//       Unfortunately, this is not always the case, so please make sure you JSON client
+	//       doesn't serialize this when not set.
 	// Format: date-time
-	TimestampValue *strfmt.DateTime `json:"timestampValue,omitempty"`
+	TimestampValue strfmt.DateTime `json:"timestampValue,omitempty"`
 }
 
 // Validate validates this conquest api object key
@@ -50,29 +75,61 @@ func (m *ConquestAPIObjectKey) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ConquestAPIObjectKey) validateObjectType(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ObjectType) { // not required
 		return nil
 	}
 
-	if err := m.ObjectType.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("objectType")
+	if m.ObjectType != nil {
+		if err := m.ObjectType.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("objectType")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("objectType")
+			}
+			return err
 		}
-		return err
 	}
 
 	return nil
 }
 
 func (m *ConquestAPIObjectKey) validateTimestampValue(formats strfmt.Registry) error {
-
-	if m.TimestampValue == nil || swag.IsZero(m.TimestampValue) { // not required
+	if swag.IsZero(m.TimestampValue) { // not required
 		return nil
 	}
 
 	if err := validate.FormatOf("timestampValue", "body", "date-time", m.TimestampValue.String(), formats); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api object key based on the context it is used
+func (m *ConquestAPIObjectKey) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateObjectType(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPIObjectKey) contextValidateObjectType(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ObjectType != nil {
+		if err := m.ObjectType.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("objectType")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("objectType")
+			}
+			return err
+		}
 	}
 
 	return nil

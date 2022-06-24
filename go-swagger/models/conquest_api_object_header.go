@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -21,11 +23,17 @@ type ConquestAPIObjectHeader struct {
 	// AttributeSetKey refers to the attribute set which describes this object's shape
 	AttributeSetKey *ConquestAPIObjectKey `json:"AttributeSetKey,omitempty"`
 
+	// Depth denotes the depth of the object in the hierarchy
+	Depth int32 `json:"Depth,omitempty"`
+
 	// ObjectKey of this object
 	ObjectKey *ConquestAPIObjectKey `json:"ObjectKey,omitempty"`
 
 	// object name
 	ObjectName string `json:"ObjectName,omitempty"`
+
+	// Order of a node in a list of siblings.
+	Order int32 `json:"Order,omitempty"`
 
 	// ParentKey refers to the parent that this object is for
 	ParentKey *ConquestAPIObjectKey `json:"ParentKey,omitempty"`
@@ -61,7 +69,6 @@ func (m *ConquestAPIObjectHeader) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ConquestAPIObjectHeader) validateAttributeSetKey(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.AttributeSetKey) { // not required
 		return nil
 	}
@@ -70,6 +77,8 @@ func (m *ConquestAPIObjectHeader) validateAttributeSetKey(formats strfmt.Registr
 		if err := m.AttributeSetKey.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("AttributeSetKey")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("AttributeSetKey")
 			}
 			return err
 		}
@@ -79,7 +88,6 @@ func (m *ConquestAPIObjectHeader) validateAttributeSetKey(formats strfmt.Registr
 }
 
 func (m *ConquestAPIObjectHeader) validateObjectKey(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ObjectKey) { // not required
 		return nil
 	}
@@ -88,6 +96,8 @@ func (m *ConquestAPIObjectHeader) validateObjectKey(formats strfmt.Registry) err
 		if err := m.ObjectKey.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("ObjectKey")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ObjectKey")
 			}
 			return err
 		}
@@ -97,7 +107,6 @@ func (m *ConquestAPIObjectHeader) validateObjectKey(formats strfmt.Registry) err
 }
 
 func (m *ConquestAPIObjectHeader) validateParentKey(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ParentKey) { // not required
 		return nil
 	}
@@ -106,6 +115,8 @@ func (m *ConquestAPIObjectHeader) validateParentKey(formats strfmt.Registry) err
 		if err := m.ParentKey.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("ParentKey")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ParentKey")
 			}
 			return err
 		}
@@ -115,7 +126,6 @@ func (m *ConquestAPIObjectHeader) validateParentKey(formats strfmt.Registry) err
 }
 
 func (m *ConquestAPIObjectHeader) validateTypeKey(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.TypeKey) { // not required
 		return nil
 	}
@@ -124,6 +134,98 @@ func (m *ConquestAPIObjectHeader) validateTypeKey(formats strfmt.Registry) error
 		if err := m.TypeKey.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("TypeKey")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("TypeKey")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api object header based on the context it is used
+func (m *ConquestAPIObjectHeader) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateAttributeSetKey(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateObjectKey(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateParentKey(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTypeKey(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPIObjectHeader) contextValidateAttributeSetKey(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.AttributeSetKey != nil {
+		if err := m.AttributeSetKey.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("AttributeSetKey")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("AttributeSetKey")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIObjectHeader) contextValidateObjectKey(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ObjectKey != nil {
+		if err := m.ObjectKey.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ObjectKey")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ObjectKey")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIObjectHeader) contextValidateParentKey(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ParentKey != nil {
+		if err := m.ParentKey.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ParentKey")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ParentKey")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIObjectHeader) contextValidateTypeKey(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.TypeKey != nil {
+		if err := m.TypeKey.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("TypeKey")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("TypeKey")
 			}
 			return err
 		}

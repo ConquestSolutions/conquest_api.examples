@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/go-openapi/errors"
@@ -18,6 +19,15 @@ import (
 //
 // swagger:model conquest_api_configBlobStoreMode
 type ConquestAPIConfigBlobStoreMode string
+
+func NewConquestAPIConfigBlobStoreMode(value ConquestAPIConfigBlobStoreMode) *ConquestAPIConfigBlobStoreMode {
+	return &value
+}
+
+// Pointer returns a pointer to a freshly-allocated ConquestAPIConfigBlobStoreMode.
+func (m ConquestAPIConfigBlobStoreMode) Pointer() *ConquestAPIConfigBlobStoreMode {
+	return &m
+}
 
 const (
 
@@ -42,7 +52,7 @@ func init() {
 }
 
 func (m ConquestAPIConfigBlobStoreMode) validateConquestAPIConfigBlobStoreModeEnum(path, location string, value ConquestAPIConfigBlobStoreMode) error {
-	if err := validate.Enum(path, location, value, conquestApiConfigBlobStoreModeEnum); err != nil {
+	if err := validate.EnumCase(path, location, value, conquestApiConfigBlobStoreModeEnum, true); err != nil {
 		return err
 	}
 	return nil
@@ -60,5 +70,10 @@ func (m ConquestAPIConfigBlobStoreMode) Validate(formats strfmt.Registry) error 
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// ContextValidate validates this conquest api config blob store mode based on context it is used
+func (m ConquestAPIConfigBlobStoreMode) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }

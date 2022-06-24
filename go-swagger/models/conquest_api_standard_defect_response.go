@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -20,7 +22,7 @@ type ConquestAPIStandardDefectResponse struct {
 	Duration int32 `json:"Duration,omitempty"`
 
 	// duration unit
-	DurationUnit ConquestAPICalendarDurationUnit `json:"DurationUnit,omitempty"`
+	DurationUnit *ConquestAPICalendarDurationUnit `json:"DurationUnit,omitempty"`
 
 	// hierarchy ID
 	HierarchyID int32 `json:"HierarchyID,omitempty"`
@@ -47,16 +49,49 @@ func (m *ConquestAPIStandardDefectResponse) Validate(formats strfmt.Registry) er
 }
 
 func (m *ConquestAPIStandardDefectResponse) validateDurationUnit(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.DurationUnit) { // not required
 		return nil
 	}
 
-	if err := m.DurationUnit.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("DurationUnit")
+	if m.DurationUnit != nil {
+		if err := m.DurationUnit.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("DurationUnit")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("DurationUnit")
+			}
+			return err
 		}
-		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api standard defect response based on the context it is used
+func (m *ConquestAPIStandardDefectResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateDurationUnit(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPIStandardDefectResponse) contextValidateDurationUnit(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.DurationUnit != nil {
+		if err := m.DurationUnit.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("DurationUnit")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("DurationUnit")
+			}
+			return err
+		}
 	}
 
 	return nil

@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -42,14 +44,17 @@ type ConquestAPIRequestRecord struct {
 	// fax
 	Fax string `json:"Fax,omitempty"`
 
+	// geometry data
+	GeometryData *ConquestAPIGeometryDataValue `json:"GeometryData,omitempty"`
+
 	// home phone
 	HomePhone string `json:"HomePhone,omitempty"`
 
 	// location
 	Location string `json:"Location,omitempty"`
 
-	// LocationCoordinates is a pin/point that defaults to the centroid on the Asset's geography object
-	LocationCoordinates *ConquestAPIGeographyCoordinatesValue `json:"LocationCoordinates,omitempty"`
+	// LocationCoordinates is a pin/point that defaults to the centroid on the Request's geography object
+	LocationCoordinates *ConquestAPIGeographyDataValue `json:"LocationCoordinates,omitempty"`
 
 	// mobile phone
 	MobilePhone string `json:"MobilePhone,omitempty"`
@@ -110,6 +115,10 @@ func (m *ConquestAPIRequestRecord) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateGeometryData(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateLocationCoordinates(formats); err != nil {
 		res = append(res, err)
 	}
@@ -121,7 +130,6 @@ func (m *ConquestAPIRequestRecord) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ConquestAPIRequestRecord) validateCompletionDate(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CompletionDate) { // not required
 		return nil
 	}
@@ -130,6 +138,8 @@ func (m *ConquestAPIRequestRecord) validateCompletionDate(formats strfmt.Registr
 		if err := m.CompletionDate.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("CompletionDate")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("CompletionDate")
 			}
 			return err
 		}
@@ -139,7 +149,6 @@ func (m *ConquestAPIRequestRecord) validateCompletionDate(formats strfmt.Registr
 }
 
 func (m *ConquestAPIRequestRecord) validateDateRequired(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.DateRequired) { // not required
 		return nil
 	}
@@ -148,6 +157,8 @@ func (m *ConquestAPIRequestRecord) validateDateRequired(formats strfmt.Registry)
 		if err := m.DateRequired.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("DateRequired")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("DateRequired")
 			}
 			return err
 		}
@@ -157,7 +168,6 @@ func (m *ConquestAPIRequestRecord) validateDateRequired(formats strfmt.Registry)
 }
 
 func (m *ConquestAPIRequestRecord) validateEntryDate(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.EntryDate) { // not required
 		return nil
 	}
@@ -169,8 +179,26 @@ func (m *ConquestAPIRequestRecord) validateEntryDate(formats strfmt.Registry) er
 	return nil
 }
 
-func (m *ConquestAPIRequestRecord) validateLocationCoordinates(formats strfmt.Registry) error {
+func (m *ConquestAPIRequestRecord) validateGeometryData(formats strfmt.Registry) error {
+	if swag.IsZero(m.GeometryData) { // not required
+		return nil
+	}
 
+	if m.GeometryData != nil {
+		if err := m.GeometryData.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("GeometryData")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("GeometryData")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIRequestRecord) validateLocationCoordinates(formats strfmt.Registry) error {
 	if swag.IsZero(m.LocationCoordinates) { // not required
 		return nil
 	}
@@ -179,6 +207,98 @@ func (m *ConquestAPIRequestRecord) validateLocationCoordinates(formats strfmt.Re
 		if err := m.LocationCoordinates.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("LocationCoordinates")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("LocationCoordinates")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api request record based on the context it is used
+func (m *ConquestAPIRequestRecord) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCompletionDate(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDateRequired(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateGeometryData(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLocationCoordinates(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPIRequestRecord) contextValidateCompletionDate(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CompletionDate != nil {
+		if err := m.CompletionDate.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("CompletionDate")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("CompletionDate")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIRequestRecord) contextValidateDateRequired(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.DateRequired != nil {
+		if err := m.DateRequired.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("DateRequired")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("DateRequired")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIRequestRecord) contextValidateGeometryData(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.GeometryData != nil {
+		if err := m.GeometryData.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("GeometryData")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("GeometryData")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIRequestRecord) contextValidateLocationCoordinates(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.LocationCoordinates != nil {
+		if err := m.LocationCoordinates.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("LocationCoordinates")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("LocationCoordinates")
 			}
 			return err
 		}

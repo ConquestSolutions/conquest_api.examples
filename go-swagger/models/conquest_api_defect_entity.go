@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -32,6 +34,9 @@ type ConquestAPIDefectEntity struct {
 	// defect ID
 	DefectID int32 `json:"DefectID,omitempty"`
 
+	// document location
+	DocumentLocation string `json:"DocumentLocation,omitempty"`
+
 	// edit date
 	// Format: date-time
 	EditDate strfmt.DateTime `json:"EditDate,omitempty"`
@@ -42,11 +47,11 @@ type ConquestAPIDefectEntity struct {
 	// inspection ID
 	InspectionID int32 `json:"InspectionID,omitempty"`
 
-	// inspection notes
-	InspectionNotes string `json:"InspectionNotes,omitempty"`
+	// map style
+	MapStyle *ConquestAPIStyle `json:"MapStyle,omitempty"`
 
 	// permission
-	Permission ConquestAPIPermission `json:"Permission,omitempty"`
+	Permission *ConquestAPIPermission `json:"Permission,omitempty"`
 
 	// record
 	Record *ConquestAPIDefectRecord `json:"Record,omitempty"`
@@ -76,6 +81,10 @@ func (m *ConquestAPIDefectEntity) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateMapStyle(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validatePermission(formats); err != nil {
 		res = append(res, err)
 	}
@@ -99,7 +108,6 @@ func (m *ConquestAPIDefectEntity) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ConquestAPIDefectEntity) validateCompletionDate(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CompletionDate) { // not required
 		return nil
 	}
@@ -108,6 +116,8 @@ func (m *ConquestAPIDefectEntity) validateCompletionDate(formats strfmt.Registry
 		if err := m.CompletionDate.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("CompletionDate")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("CompletionDate")
 			}
 			return err
 		}
@@ -117,7 +127,6 @@ func (m *ConquestAPIDefectEntity) validateCompletionDate(formats strfmt.Registry
 }
 
 func (m *ConquestAPIDefectEntity) validateEditDate(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.EditDate) { // not required
 		return nil
 	}
@@ -129,24 +138,45 @@ func (m *ConquestAPIDefectEntity) validateEditDate(formats strfmt.Registry) erro
 	return nil
 }
 
-func (m *ConquestAPIDefectEntity) validatePermission(formats strfmt.Registry) error {
+func (m *ConquestAPIDefectEntity) validateMapStyle(formats strfmt.Registry) error {
+	if swag.IsZero(m.MapStyle) { // not required
+		return nil
+	}
 
+	if m.MapStyle != nil {
+		if err := m.MapStyle.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("MapStyle")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("MapStyle")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIDefectEntity) validatePermission(formats strfmt.Registry) error {
 	if swag.IsZero(m.Permission) { // not required
 		return nil
 	}
 
-	if err := m.Permission.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("Permission")
+	if m.Permission != nil {
+		if err := m.Permission.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("Permission")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("Permission")
+			}
+			return err
 		}
-		return err
 	}
 
 	return nil
 }
 
 func (m *ConquestAPIDefectEntity) validateRecord(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Record) { // not required
 		return nil
 	}
@@ -155,6 +185,8 @@ func (m *ConquestAPIDefectEntity) validateRecord(formats strfmt.Registry) error 
 		if err := m.Record.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("Record")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("Record")
 			}
 			return err
 		}
@@ -164,7 +196,6 @@ func (m *ConquestAPIDefectEntity) validateRecord(formats strfmt.Registry) error 
 }
 
 func (m *ConquestAPIDefectEntity) validateResponseDate(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ResponseDate) { // not required
 		return nil
 	}
@@ -173,6 +204,8 @@ func (m *ConquestAPIDefectEntity) validateResponseDate(formats strfmt.Registry) 
 		if err := m.ResponseDate.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("ResponseDate")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ResponseDate")
 			}
 			return err
 		}
@@ -182,7 +215,6 @@ func (m *ConquestAPIDefectEntity) validateResponseDate(formats strfmt.Registry) 
 }
 
 func (m *ConquestAPIDefectEntity) validateLock(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Lock) { // not required
 		return nil
 	}
@@ -191,6 +223,138 @@ func (m *ConquestAPIDefectEntity) validateLock(formats strfmt.Registry) error {
 		if err := m.Lock.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("lock")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("lock")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api defect entity based on the context it is used
+func (m *ConquestAPIDefectEntity) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCompletionDate(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateMapStyle(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidatePermission(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRecord(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateResponseDate(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLock(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPIDefectEntity) contextValidateCompletionDate(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CompletionDate != nil {
+		if err := m.CompletionDate.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("CompletionDate")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("CompletionDate")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIDefectEntity) contextValidateMapStyle(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.MapStyle != nil {
+		if err := m.MapStyle.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("MapStyle")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("MapStyle")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIDefectEntity) contextValidatePermission(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Permission != nil {
+		if err := m.Permission.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("Permission")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("Permission")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIDefectEntity) contextValidateRecord(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Record != nil {
+		if err := m.Record.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("Record")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("Record")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIDefectEntity) contextValidateResponseDate(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ResponseDate != nil {
+		if err := m.ResponseDate.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ResponseDate")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ResponseDate")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIDefectEntity) contextValidateLock(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Lock != nil {
+		if err := m.Lock.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("lock")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("lock")
 			}
 			return err
 		}

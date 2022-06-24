@@ -4,13 +4,14 @@ import (
 	"crypto/tls"
 	"encoding/json"
 	"fmt"
-	"github.com/ConquestSolutions/apiv2.examples/go-swagger/client"
-	"github.com/go-openapi/runtime"
-	httptransport "github.com/go-openapi/runtime/client"
-	"github.com/go-openapi/strfmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
+
+	"github.com/ConquestSolutions/conquest_api.examples/go-swagger/client"
+	"github.com/go-openapi/runtime"
+	httptransport "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 )
 
 type Config struct {

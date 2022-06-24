@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -28,22 +30,22 @@ type ConquestAPIObjectAttribute struct {
 	ForeignObjectPath string `json:"ForeignObjectPath,omitempty"`
 
 	// foreign object type
-	ForeignObjectType ConquestAPIObjectType `json:"ForeignObjectType,omitempty"`
+	ForeignObjectType *ConquestAPIObjectType `json:"ForeignObjectType,omitempty"`
 
 	// nullable
 	Nullable bool `json:"Nullable,omitempty"`
 
 	// object attribute kind
-	ObjectAttributeKind ConquestAPIObjectAttributeKind `json:"ObjectAttributeKind,omitempty"`
+	ObjectAttributeKind *ConquestAPIObjectAttributeKind `json:"ObjectAttributeKind,omitempty"`
 
 	// object type
-	ObjectType ConquestAPIObjectType `json:"ObjectType,omitempty"`
+	ObjectType *ConquestAPIObjectType `json:"ObjectType,omitempty"`
 
 	// The Parameter string that conforms to the ParameterType
 	Parameter string `json:"Parameter,omitempty"`
 
 	// parameter type
-	ParameterType ConquestAPIObjectAttributeParameterType `json:"ParameterType,omitempty"`
+	ParameterType *ConquestAPIObjectAttributeParameterType `json:"ParameterType,omitempty"`
 
 	// column
 	Path string `json:"Path,omitempty"`
@@ -52,7 +54,7 @@ type ConquestAPIObjectAttribute struct {
 	PrimaryKey bool `json:"PrimaryKey,omitempty"`
 
 	// value type
-	ValueType ConquestAPIValueType `json:"ValueType,omitempty"`
+	ValueType *ConquestAPIValueType `json:"ValueType,omitempty"`
 }
 
 // Validate validates this conquest api object attribute
@@ -86,80 +88,205 @@ func (m *ConquestAPIObjectAttribute) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ConquestAPIObjectAttribute) validateForeignObjectType(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ForeignObjectType) { // not required
 		return nil
 	}
 
-	if err := m.ForeignObjectType.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("ForeignObjectType")
+	if m.ForeignObjectType != nil {
+		if err := m.ForeignObjectType.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ForeignObjectType")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ForeignObjectType")
+			}
+			return err
 		}
-		return err
 	}
 
 	return nil
 }
 
 func (m *ConquestAPIObjectAttribute) validateObjectAttributeKind(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ObjectAttributeKind) { // not required
 		return nil
 	}
 
-	if err := m.ObjectAttributeKind.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("ObjectAttributeKind")
+	if m.ObjectAttributeKind != nil {
+		if err := m.ObjectAttributeKind.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ObjectAttributeKind")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ObjectAttributeKind")
+			}
+			return err
 		}
-		return err
 	}
 
 	return nil
 }
 
 func (m *ConquestAPIObjectAttribute) validateObjectType(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ObjectType) { // not required
 		return nil
 	}
 
-	if err := m.ObjectType.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("ObjectType")
+	if m.ObjectType != nil {
+		if err := m.ObjectType.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ObjectType")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ObjectType")
+			}
+			return err
 		}
-		return err
 	}
 
 	return nil
 }
 
 func (m *ConquestAPIObjectAttribute) validateParameterType(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ParameterType) { // not required
 		return nil
 	}
 
-	if err := m.ParameterType.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("ParameterType")
+	if m.ParameterType != nil {
+		if err := m.ParameterType.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ParameterType")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ParameterType")
+			}
+			return err
 		}
-		return err
 	}
 
 	return nil
 }
 
 func (m *ConquestAPIObjectAttribute) validateValueType(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ValueType) { // not required
 		return nil
 	}
 
-	if err := m.ValueType.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("ValueType")
+	if m.ValueType != nil {
+		if err := m.ValueType.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ValueType")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ValueType")
+			}
+			return err
 		}
-		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api object attribute based on the context it is used
+func (m *ConquestAPIObjectAttribute) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateForeignObjectType(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateObjectAttributeKind(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateObjectType(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateParameterType(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateValueType(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPIObjectAttribute) contextValidateForeignObjectType(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ForeignObjectType != nil {
+		if err := m.ForeignObjectType.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ForeignObjectType")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ForeignObjectType")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIObjectAttribute) contextValidateObjectAttributeKind(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ObjectAttributeKind != nil {
+		if err := m.ObjectAttributeKind.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ObjectAttributeKind")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ObjectAttributeKind")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIObjectAttribute) contextValidateObjectType(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ObjectType != nil {
+		if err := m.ObjectType.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ObjectType")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ObjectType")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIObjectAttribute) contextValidateParameterType(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ParameterType != nil {
+		if err := m.ParameterType.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ParameterType")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ParameterType")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIObjectAttribute) contextValidateValueType(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ValueType != nil {
+		if err := m.ValueType.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ValueType")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ValueType")
+			}
+			return err
+		}
 	}
 
 	return nil

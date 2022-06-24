@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/go-openapi/errors"
@@ -17,6 +18,15 @@ import (
 //
 // swagger:model conquest_apiPermission
 type ConquestAPIPermission string
+
+func NewConquestAPIPermission(value ConquestAPIPermission) *ConquestAPIPermission {
+	return &value
+}
+
+// Pointer returns a pointer to a freshly-allocated ConquestAPIPermission.
+func (m ConquestAPIPermission) Pointer() *ConquestAPIPermission {
+	return &m
+}
 
 const (
 
@@ -47,7 +57,7 @@ func init() {
 }
 
 func (m ConquestAPIPermission) validateConquestAPIPermissionEnum(path, location string, value ConquestAPIPermission) error {
-	if err := validate.Enum(path, location, value, conquestApiPermissionEnum); err != nil {
+	if err := validate.EnumCase(path, location, value, conquestApiPermissionEnum, true); err != nil {
 		return err
 	}
 	return nil
@@ -65,5 +75,10 @@ func (m ConquestAPIPermission) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// ContextValidate validates this conquest api permission based on context it is used
+func (m ConquestAPIPermission) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }

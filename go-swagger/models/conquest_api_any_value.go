@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -36,14 +38,14 @@ type ConquestAPIAnyValue struct {
 	// decimal value
 	DecimalValue ConquestAPIDecimal `json:"decimalValue,omitempty"`
 
-	// duration value
-	DurationValue *ConquestAPIDuration `json:"durationValue,omitempty"`
-
 	// enumeration value
 	EnumerationValue int32 `json:"enumerationValue,omitempty"`
 
-	// geography coordinates value
-	GeographyCoordinatesValue *ConquestAPIGeographyCoordinates `json:"geographyCoordinatesValue,omitempty"`
+	// geography data value
+	GeographyDataValue *ConquestAPIGeographyData `json:"geographyDataValue,omitempty"`
+
+	// geometry data value
+	GeometryDataValue *ConquestAPIGeometryData `json:"geometryDataValue,omitempty"`
 
 	// hierarchy value
 	HierarchyValue *ConquestAPIObjectKey `json:"hierarchyValue,omitempty"`
@@ -55,7 +57,7 @@ type ConquestAPIAnyValue struct {
 	Int64Value string `json:"int64Value,omitempty"`
 
 	// n boolean value
-	NBooleanValue string `json:"nBooleanValue,omitempty"`
+	NBooleanValue bool `json:"nBooleanValue,omitempty"`
 
 	// n code value
 	NCodeValue int32 `json:"nCodeValue,omitempty"`
@@ -69,14 +71,14 @@ type ConquestAPIAnyValue struct {
 	// n decimal value
 	NDecimalValue *ConquestAPIDecimalValue `json:"nDecimalValue,omitempty"`
 
-	// n duration value
-	NDurationValue *ConquestAPIDurationValue `json:"nDurationValue,omitempty"`
-
 	// n enumeration value
 	NEnumerationValue int32 `json:"nEnumerationValue,omitempty"`
 
-	// n geography coordinates value
-	NGeographyCoordinatesValue *ConquestAPIGeographyCoordinatesValue `json:"nGeographyCoordinatesValue,omitempty"`
+	// n geography data value
+	NGeographyDataValue *ConquestAPIGeographyDataValue `json:"nGeographyDataValue,omitempty"`
+
+	// n geometry data value
+	NGeometryDataValue *ConquestAPIGeometryDataValue `json:"nGeometryDataValue,omitempty"`
 
 	// n hierarchy value
 	NHierarchyValue *ConquestAPIObjectKeyValue `json:"nHierarchyValue,omitempty"`
@@ -102,8 +104,14 @@ type ConquestAPIAnyValue struct {
 	// object key value
 	ObjectKeyValue *ConquestAPIObjectKey `json:"objectKeyValue,omitempty"`
 
+	// string list value
+	StringListValue *ConquestAPIStringListValue `json:"stringListValue,omitempty"`
+
 	// string value
 	StringValue string `json:"stringValue,omitempty"`
+
+	// style value
+	StyleValue *ConquestAPIStyle `json:"styleValue,omitempty"`
 
 	// unknown value
 	UnknownValue bool `json:"unknownValue,omitempty"`
@@ -125,11 +133,11 @@ func (m *ConquestAPIAnyValue) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
-	if err := m.validateDurationValue(formats); err != nil {
+	if err := m.validateGeographyDataValue(formats); err != nil {
 		res = append(res, err)
 	}
 
-	if err := m.validateGeographyCoordinatesValue(formats); err != nil {
+	if err := m.validateGeometryDataValue(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -149,11 +157,11 @@ func (m *ConquestAPIAnyValue) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
-	if err := m.validateNDurationValue(formats); err != nil {
+	if err := m.validateNGeographyDataValue(formats); err != nil {
 		res = append(res, err)
 	}
 
-	if err := m.validateNGeographyCoordinatesValue(formats); err != nil {
+	if err := m.validateNGeometryDataValue(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -169,6 +177,14 @@ func (m *ConquestAPIAnyValue) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateStringListValue(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateStyleValue(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
@@ -176,7 +192,6 @@ func (m *ConquestAPIAnyValue) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ConquestAPIAnyValue) validateDateTimeValue(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.DateTimeValue) { // not required
 		return nil
 	}
@@ -189,7 +204,6 @@ func (m *ConquestAPIAnyValue) validateDateTimeValue(formats strfmt.Registry) err
 }
 
 func (m *ConquestAPIAnyValue) validateDateValue(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.DateValue) { // not required
 		return nil
 	}
@@ -202,7 +216,6 @@ func (m *ConquestAPIAnyValue) validateDateValue(formats strfmt.Registry) error {
 }
 
 func (m *ConquestAPIAnyValue) validateDecimalValue(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.DecimalValue) { // not required
 		return nil
 	}
@@ -210,6 +223,8 @@ func (m *ConquestAPIAnyValue) validateDecimalValue(formats strfmt.Registry) erro
 	if err := m.DecimalValue.Validate(formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
 			return ve.ValidateName("decimalValue")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("decimalValue")
 		}
 		return err
 	}
@@ -217,16 +232,17 @@ func (m *ConquestAPIAnyValue) validateDecimalValue(formats strfmt.Registry) erro
 	return nil
 }
 
-func (m *ConquestAPIAnyValue) validateDurationValue(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.DurationValue) { // not required
+func (m *ConquestAPIAnyValue) validateGeographyDataValue(formats strfmt.Registry) error {
+	if swag.IsZero(m.GeographyDataValue) { // not required
 		return nil
 	}
 
-	if m.DurationValue != nil {
-		if err := m.DurationValue.Validate(formats); err != nil {
+	if m.GeographyDataValue != nil {
+		if err := m.GeographyDataValue.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("durationValue")
+				return ve.ValidateName("geographyDataValue")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("geographyDataValue")
 			}
 			return err
 		}
@@ -235,16 +251,17 @@ func (m *ConquestAPIAnyValue) validateDurationValue(formats strfmt.Registry) err
 	return nil
 }
 
-func (m *ConquestAPIAnyValue) validateGeographyCoordinatesValue(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.GeographyCoordinatesValue) { // not required
+func (m *ConquestAPIAnyValue) validateGeometryDataValue(formats strfmt.Registry) error {
+	if swag.IsZero(m.GeometryDataValue) { // not required
 		return nil
 	}
 
-	if m.GeographyCoordinatesValue != nil {
-		if err := m.GeographyCoordinatesValue.Validate(formats); err != nil {
+	if m.GeometryDataValue != nil {
+		if err := m.GeometryDataValue.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("geographyCoordinatesValue")
+				return ve.ValidateName("geometryDataValue")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("geometryDataValue")
 			}
 			return err
 		}
@@ -254,7 +271,6 @@ func (m *ConquestAPIAnyValue) validateGeographyCoordinatesValue(formats strfmt.R
 }
 
 func (m *ConquestAPIAnyValue) validateHierarchyValue(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.HierarchyValue) { // not required
 		return nil
 	}
@@ -263,6 +279,8 @@ func (m *ConquestAPIAnyValue) validateHierarchyValue(formats strfmt.Registry) er
 		if err := m.HierarchyValue.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("hierarchyValue")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("hierarchyValue")
 			}
 			return err
 		}
@@ -272,7 +290,6 @@ func (m *ConquestAPIAnyValue) validateHierarchyValue(formats strfmt.Registry) er
 }
 
 func (m *ConquestAPIAnyValue) validateNDateTimeValue(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.NDateTimeValue) { // not required
 		return nil
 	}
@@ -281,6 +298,8 @@ func (m *ConquestAPIAnyValue) validateNDateTimeValue(formats strfmt.Registry) er
 		if err := m.NDateTimeValue.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("nDateTimeValue")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("nDateTimeValue")
 			}
 			return err
 		}
@@ -290,7 +309,6 @@ func (m *ConquestAPIAnyValue) validateNDateTimeValue(formats strfmt.Registry) er
 }
 
 func (m *ConquestAPIAnyValue) validateNDateValue(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.NDateValue) { // not required
 		return nil
 	}
@@ -299,6 +317,8 @@ func (m *ConquestAPIAnyValue) validateNDateValue(formats strfmt.Registry) error 
 		if err := m.NDateValue.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("nDateValue")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("nDateValue")
 			}
 			return err
 		}
@@ -308,7 +328,6 @@ func (m *ConquestAPIAnyValue) validateNDateValue(formats strfmt.Registry) error 
 }
 
 func (m *ConquestAPIAnyValue) validateNDecimalValue(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.NDecimalValue) { // not required
 		return nil
 	}
@@ -317,6 +336,8 @@ func (m *ConquestAPIAnyValue) validateNDecimalValue(formats strfmt.Registry) err
 		if err := m.NDecimalValue.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("nDecimalValue")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("nDecimalValue")
 			}
 			return err
 		}
@@ -325,16 +346,17 @@ func (m *ConquestAPIAnyValue) validateNDecimalValue(formats strfmt.Registry) err
 	return nil
 }
 
-func (m *ConquestAPIAnyValue) validateNDurationValue(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.NDurationValue) { // not required
+func (m *ConquestAPIAnyValue) validateNGeographyDataValue(formats strfmt.Registry) error {
+	if swag.IsZero(m.NGeographyDataValue) { // not required
 		return nil
 	}
 
-	if m.NDurationValue != nil {
-		if err := m.NDurationValue.Validate(formats); err != nil {
+	if m.NGeographyDataValue != nil {
+		if err := m.NGeographyDataValue.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("nDurationValue")
+				return ve.ValidateName("nGeographyDataValue")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("nGeographyDataValue")
 			}
 			return err
 		}
@@ -343,16 +365,17 @@ func (m *ConquestAPIAnyValue) validateNDurationValue(formats strfmt.Registry) er
 	return nil
 }
 
-func (m *ConquestAPIAnyValue) validateNGeographyCoordinatesValue(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.NGeographyCoordinatesValue) { // not required
+func (m *ConquestAPIAnyValue) validateNGeometryDataValue(formats strfmt.Registry) error {
+	if swag.IsZero(m.NGeometryDataValue) { // not required
 		return nil
 	}
 
-	if m.NGeographyCoordinatesValue != nil {
-		if err := m.NGeographyCoordinatesValue.Validate(formats); err != nil {
+	if m.NGeometryDataValue != nil {
+		if err := m.NGeometryDataValue.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("nGeographyCoordinatesValue")
+				return ve.ValidateName("nGeometryDataValue")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("nGeometryDataValue")
 			}
 			return err
 		}
@@ -362,7 +385,6 @@ func (m *ConquestAPIAnyValue) validateNGeographyCoordinatesValue(formats strfmt.
 }
 
 func (m *ConquestAPIAnyValue) validateNHierarchyValue(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.NHierarchyValue) { // not required
 		return nil
 	}
@@ -371,6 +393,8 @@ func (m *ConquestAPIAnyValue) validateNHierarchyValue(formats strfmt.Registry) e
 		if err := m.NHierarchyValue.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("nHierarchyValue")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("nHierarchyValue")
 			}
 			return err
 		}
@@ -380,7 +404,6 @@ func (m *ConquestAPIAnyValue) validateNHierarchyValue(formats strfmt.Registry) e
 }
 
 func (m *ConquestAPIAnyValue) validateNObjectKeyValue(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.NObjectKeyValue) { // not required
 		return nil
 	}
@@ -389,6 +412,8 @@ func (m *ConquestAPIAnyValue) validateNObjectKeyValue(formats strfmt.Registry) e
 		if err := m.NObjectKeyValue.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("nObjectKeyValue")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("nObjectKeyValue")
 			}
 			return err
 		}
@@ -398,7 +423,6 @@ func (m *ConquestAPIAnyValue) validateNObjectKeyValue(formats strfmt.Registry) e
 }
 
 func (m *ConquestAPIAnyValue) validateObjectKeyValue(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ObjectKeyValue) { // not required
 		return nil
 	}
@@ -407,6 +431,334 @@ func (m *ConquestAPIAnyValue) validateObjectKeyValue(formats strfmt.Registry) er
 		if err := m.ObjectKeyValue.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("objectKeyValue")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("objectKeyValue")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIAnyValue) validateStringListValue(formats strfmt.Registry) error {
+	if swag.IsZero(m.StringListValue) { // not required
+		return nil
+	}
+
+	if m.StringListValue != nil {
+		if err := m.StringListValue.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("stringListValue")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("stringListValue")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIAnyValue) validateStyleValue(formats strfmt.Registry) error {
+	if swag.IsZero(m.StyleValue) { // not required
+		return nil
+	}
+
+	if m.StyleValue != nil {
+		if err := m.StyleValue.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("styleValue")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("styleValue")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api any value based on the context it is used
+func (m *ConquestAPIAnyValue) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateDecimalValue(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateGeographyDataValue(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateGeometryDataValue(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateHierarchyValue(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateNDateTimeValue(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateNDateValue(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateNDecimalValue(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateNGeographyDataValue(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateNGeometryDataValue(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateNHierarchyValue(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateNObjectKeyValue(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateObjectKeyValue(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateStringListValue(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateStyleValue(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPIAnyValue) contextValidateDecimalValue(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := m.DecimalValue.ContextValidate(ctx, formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("decimalValue")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("decimalValue")
+		}
+		return err
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIAnyValue) contextValidateGeographyDataValue(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.GeographyDataValue != nil {
+		if err := m.GeographyDataValue.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("geographyDataValue")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("geographyDataValue")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIAnyValue) contextValidateGeometryDataValue(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.GeometryDataValue != nil {
+		if err := m.GeometryDataValue.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("geometryDataValue")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("geometryDataValue")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIAnyValue) contextValidateHierarchyValue(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.HierarchyValue != nil {
+		if err := m.HierarchyValue.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("hierarchyValue")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("hierarchyValue")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIAnyValue) contextValidateNDateTimeValue(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.NDateTimeValue != nil {
+		if err := m.NDateTimeValue.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("nDateTimeValue")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("nDateTimeValue")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIAnyValue) contextValidateNDateValue(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.NDateValue != nil {
+		if err := m.NDateValue.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("nDateValue")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("nDateValue")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIAnyValue) contextValidateNDecimalValue(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.NDecimalValue != nil {
+		if err := m.NDecimalValue.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("nDecimalValue")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("nDecimalValue")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIAnyValue) contextValidateNGeographyDataValue(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.NGeographyDataValue != nil {
+		if err := m.NGeographyDataValue.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("nGeographyDataValue")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("nGeographyDataValue")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIAnyValue) contextValidateNGeometryDataValue(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.NGeometryDataValue != nil {
+		if err := m.NGeometryDataValue.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("nGeometryDataValue")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("nGeometryDataValue")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIAnyValue) contextValidateNHierarchyValue(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.NHierarchyValue != nil {
+		if err := m.NHierarchyValue.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("nHierarchyValue")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("nHierarchyValue")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIAnyValue) contextValidateNObjectKeyValue(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.NObjectKeyValue != nil {
+		if err := m.NObjectKeyValue.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("nObjectKeyValue")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("nObjectKeyValue")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIAnyValue) contextValidateObjectKeyValue(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ObjectKeyValue != nil {
+		if err := m.ObjectKeyValue.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("objectKeyValue")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("objectKeyValue")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIAnyValue) contextValidateStringListValue(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.StringListValue != nil {
+		if err := m.StringListValue.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("stringListValue")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("stringListValue")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIAnyValue) contextValidateStyleValue(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.StyleValue != nil {
+		if err := m.StyleValue.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("styleValue")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("styleValue")
 			}
 			return err
 		}

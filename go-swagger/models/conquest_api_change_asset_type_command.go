@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -51,7 +53,6 @@ func (m *ConquestAPIChangeAssetTypeCommand) Validate(formats strfmt.Registry) er
 }
 
 func (m *ConquestAPIChangeAssetTypeCommand) validateExpiryDate(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ExpiryDate) { // not required
 		return nil
 	}
@@ -60,6 +61,8 @@ func (m *ConquestAPIChangeAssetTypeCommand) validateExpiryDate(formats strfmt.Re
 		if err := m.ExpiryDate.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("ExpiryDate")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ExpiryDate")
 			}
 			return err
 		}
@@ -69,7 +72,6 @@ func (m *ConquestAPIChangeAssetTypeCommand) validateExpiryDate(formats strfmt.Re
 }
 
 func (m *ConquestAPIChangeAssetTypeCommand) validateTransactionDate(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.TransactionDate) { // not required
 		return nil
 	}
@@ -78,6 +80,58 @@ func (m *ConquestAPIChangeAssetTypeCommand) validateTransactionDate(formats strf
 		if err := m.TransactionDate.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("TransactionDate")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("TransactionDate")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api change asset type command based on the context it is used
+func (m *ConquestAPIChangeAssetTypeCommand) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateExpiryDate(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTransactionDate(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPIChangeAssetTypeCommand) contextValidateExpiryDate(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ExpiryDate != nil {
+		if err := m.ExpiryDate.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ExpiryDate")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ExpiryDate")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIChangeAssetTypeCommand) contextValidateTransactionDate(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.TransactionDate != nil {
+		if err := m.TransactionDate.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("TransactionDate")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("TransactionDate")
 			}
 			return err
 		}

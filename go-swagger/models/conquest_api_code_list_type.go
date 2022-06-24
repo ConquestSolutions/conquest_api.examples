@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/go-openapi/errors"
@@ -17,6 +18,15 @@ import (
 //
 // swagger:model conquest_apiCodeListType
 type ConquestAPICodeListType string
+
+func NewConquestAPICodeListType(value ConquestAPICodeListType) *ConquestAPICodeListType {
+	return &value
+}
+
+// Pointer returns a pointer to a freshly-allocated ConquestAPICodeListType.
+func (m ConquestAPICodeListType) Pointer() *ConquestAPICodeListType {
+	return &m
+}
 
 const (
 
@@ -59,7 +69,7 @@ func init() {
 }
 
 func (m ConquestAPICodeListType) validateConquestAPICodeListTypeEnum(path, location string, value ConquestAPICodeListType) error {
-	if err := validate.Enum(path, location, value, conquestApiCodeListTypeEnum); err != nil {
+	if err := validate.EnumCase(path, location, value, conquestApiCodeListTypeEnum, true); err != nil {
 		return err
 	}
 	return nil
@@ -77,5 +87,10 @@ func (m ConquestAPICodeListType) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// ContextValidate validates this conquest api code list type based on context it is used
+func (m ConquestAPICodeListType) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }

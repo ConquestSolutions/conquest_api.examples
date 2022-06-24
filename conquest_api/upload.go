@@ -5,13 +5,14 @@ import (
 	"crypto/tls"
 	"encoding/json"
 	"fmt"
-	"github.com/ConquestSolutions/apiv2.examples/go-swagger/models"
 	"io"
 	"mime/multipart"
 	"net/http"
 	"path/filepath"
 	"reflect"
 	"strings"
+
+	"github.com/ConquestSolutions/conquest_api.examples/go-swagger/models"
 )
 
 // Implements an upload strategy based on parameters provided by the API

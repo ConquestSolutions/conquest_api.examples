@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/ConquestSolutions/apiv2.examples/conquest_api"
 	"os"
+
+	"github.com/ConquestSolutions/conquest_api.examples/conquest_api"
 )
 
 func GetAPIVersion() (string, error) {

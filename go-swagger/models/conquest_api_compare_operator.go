@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/go-openapi/errors"
@@ -21,6 +22,15 @@ import (
 //
 // swagger:model conquest_apiCompareOperator
 type ConquestAPICompareOperator string
+
+func NewConquestAPICompareOperator(value ConquestAPICompareOperator) *ConquestAPICompareOperator {
+	return &value
+}
+
+// Pointer returns a pointer to a freshly-allocated ConquestAPICompareOperator.
+func (m ConquestAPICompareOperator) Pointer() *ConquestAPICompareOperator {
+	return &m
+}
 
 const (
 
@@ -65,6 +75,12 @@ const (
 
 	// ConquestAPICompareOperatorCompareOperatorAncestorOf captures enum value "CompareOperator_AncestorOf"
 	ConquestAPICompareOperatorCompareOperatorAncestorOf ConquestAPICompareOperator = "CompareOperator_AncestorOf"
+
+	// ConquestAPICompareOperatorCompareOperatorChildrenOf captures enum value "CompareOperator_ChildrenOf"
+	ConquestAPICompareOperatorCompareOperatorChildrenOf ConquestAPICompareOperator = "CompareOperator_ChildrenOf"
+
+	// ConquestAPICompareOperatorCompareOperatorContainsAnyOf captures enum value "CompareOperator_ContainsAnyOf"
+	ConquestAPICompareOperatorCompareOperatorContainsAnyOf ConquestAPICompareOperator = "CompareOperator_ContainsAnyOf"
 )
 
 // for schema
@@ -72,7 +88,7 @@ var conquestApiCompareOperatorEnum []interface{}
 
 func init() {
 	var res []ConquestAPICompareOperator
-	if err := json.Unmarshal([]byte(`["CompareOperator_None","CompareOperator_RangeInclusive","CompareOperator_GreaterThan","CompareOperator_GreaterThanOrEqualTo","CompareOperator_LessThan","CompareOperator_LessThanOrEqualTo","CompareOperator_Contains","CompareOperator_EqualTo","CompareOperator_NotSet","CompareOperator_StringStartsWith","CompareOperator_StringEndsWith","CompareOperator_StringContains","CompareOperator_DescendentOf","CompareOperator_AncestorOf"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["CompareOperator_None","CompareOperator_RangeInclusive","CompareOperator_GreaterThan","CompareOperator_GreaterThanOrEqualTo","CompareOperator_LessThan","CompareOperator_LessThanOrEqualTo","CompareOperator_Contains","CompareOperator_EqualTo","CompareOperator_NotSet","CompareOperator_StringStartsWith","CompareOperator_StringEndsWith","CompareOperator_StringContains","CompareOperator_DescendentOf","CompareOperator_AncestorOf","CompareOperator_ChildrenOf","CompareOperator_ContainsAnyOf"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
@@ -81,7 +97,7 @@ func init() {
 }
 
 func (m ConquestAPICompareOperator) validateConquestAPICompareOperatorEnum(path, location string, value ConquestAPICompareOperator) error {
-	if err := validate.Enum(path, location, value, conquestApiCompareOperatorEnum); err != nil {
+	if err := validate.EnumCase(path, location, value, conquestApiCompareOperatorEnum, true); err != nil {
 		return err
 	}
 	return nil
@@ -99,5 +115,10 @@ func (m ConquestAPICompareOperator) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// ContextValidate validates this conquest api compare operator based on context it is used
+func (m ConquestAPICompareOperator) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }

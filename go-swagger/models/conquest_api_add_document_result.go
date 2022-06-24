@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -77,7 +79,6 @@ func (m *ConquestAPIAddDocumentResult) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ConquestAPIAddDocumentResult) validateDocument(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Document) { // not required
 		return nil
 	}
@@ -86,6 +87,8 @@ func (m *ConquestAPIAddDocumentResult) validateDocument(formats strfmt.Registry)
 		if err := m.Document.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("Document")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("Document")
 			}
 			return err
 		}
@@ -95,13 +98,42 @@ func (m *ConquestAPIAddDocumentResult) validateDocument(formats strfmt.Registry)
 }
 
 func (m *ConquestAPIAddDocumentResult) validateUploadExpireTime(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UploadExpireTime) { // not required
 		return nil
 	}
 
 	if err := validate.FormatOf("UploadExpireTime", "body", "date-time", m.UploadExpireTime.String(), formats); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api add document result based on the context it is used
+func (m *ConquestAPIAddDocumentResult) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateDocument(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPIAddDocumentResult) contextValidateDocument(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Document != nil {
+		if err := m.Document.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("Document")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("Document")
+			}
+			return err
+		}
 	}
 
 	return nil

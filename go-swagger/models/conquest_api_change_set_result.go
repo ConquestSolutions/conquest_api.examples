@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -23,6 +25,9 @@ type ConquestAPIChangeSetResult struct {
 	// editor
 	Editor string `json:"Editor,omitempty"`
 
+	// job key
+	JobKey *ConquestAPIJobKey `json:"JobKey,omitempty"`
+
 	// last edit
 	// Format: date-time
 	LastEdit strfmt.DateTime `json:"LastEdit,omitempty"`
@@ -34,6 +39,10 @@ type ConquestAPIChangeSetResult struct {
 // Validate validates this conquest api change set result
 func (m *ConquestAPIChangeSetResult) Validate(formats strfmt.Registry) error {
 	var res []error
+
+	if err := m.validateJobKey(formats); err != nil {
+		res = append(res, err)
+	}
 
 	if err := m.validateLastEdit(formats); err != nil {
 		res = append(res, err)
@@ -49,8 +58,26 @@ func (m *ConquestAPIChangeSetResult) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *ConquestAPIChangeSetResult) validateLastEdit(formats strfmt.Registry) error {
+func (m *ConquestAPIChangeSetResult) validateJobKey(formats strfmt.Registry) error {
+	if swag.IsZero(m.JobKey) { // not required
+		return nil
+	}
 
+	if m.JobKey != nil {
+		if err := m.JobKey.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("JobKey")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("JobKey")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIChangeSetResult) validateLastEdit(formats strfmt.Registry) error {
 	if swag.IsZero(m.LastEdit) { // not required
 		return nil
 	}
@@ -63,7 +90,6 @@ func (m *ConquestAPIChangeSetResult) validateLastEdit(formats strfmt.Registry) e
 }
 
 func (m *ConquestAPIChangeSetResult) validateObjectKey(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ObjectKey) { // not required
 		return nil
 	}
@@ -72,6 +98,58 @@ func (m *ConquestAPIChangeSetResult) validateObjectKey(formats strfmt.Registry) 
 		if err := m.ObjectKey.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("ObjectKey")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ObjectKey")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api change set result based on the context it is used
+func (m *ConquestAPIChangeSetResult) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateJobKey(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateObjectKey(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPIChangeSetResult) contextValidateJobKey(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.JobKey != nil {
+		if err := m.JobKey.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("JobKey")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("JobKey")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIChangeSetResult) contextValidateObjectKey(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ObjectKey != nil {
+		if err := m.ObjectKey.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ObjectKey")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ObjectKey")
 			}
 			return err
 		}

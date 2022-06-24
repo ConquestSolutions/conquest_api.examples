@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -47,7 +49,6 @@ func (m *ConquestAPIUserHistoryItem) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ConquestAPIUserHistoryItem) validateLastUsed(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.LastUsed) { // not required
 		return nil
 	}
@@ -60,7 +61,6 @@ func (m *ConquestAPIUserHistoryItem) validateLastUsed(formats strfmt.Registry) e
 }
 
 func (m *ConquestAPIUserHistoryItem) validateLink(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Link) { // not required
 		return nil
 	}
@@ -69,6 +69,38 @@ func (m *ConquestAPIUserHistoryItem) validateLink(formats strfmt.Registry) error
 		if err := m.Link.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("Link")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("Link")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api user history item based on the context it is used
+func (m *ConquestAPIUserHistoryItem) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateLink(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPIUserHistoryItem) contextValidateLink(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Link != nil {
+		if err := m.Link.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("Link")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("Link")
 			}
 			return err
 		}

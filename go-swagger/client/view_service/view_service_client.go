@@ -6,8 +6,6 @@ package view_service
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"fmt"
-
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 )
@@ -25,120 +23,134 @@ type Client struct {
 	formats   strfmt.Registry
 }
 
+// ClientOption is the option for Client methods
+type ClientOption func(*runtime.ClientOperation)
+
 // ClientService is the interface for Client methods
 type ClientService interface {
-	Find(params *FindParams, authInfo runtime.ClientAuthInfoWriter) (*FindOK, error)
+	ViewServiceFind(params *ViewServiceFindParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ViewServiceFindOK, error)
 
-	ListFilters(params *ListFiltersParams, authInfo runtime.ClientAuthInfoWriter) (*ListFiltersOK, error)
+	ViewServiceListFilters(params *ViewServiceListFiltersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ViewServiceListFiltersOK, error)
 
-	ListHierarchyNodes(params *ListHierarchyNodesParams, authInfo runtime.ClientAuthInfoWriter) (*ListHierarchyNodesOK, error)
+	ViewServiceListHierarchyNodes(params *ViewServiceListHierarchyNodesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ViewServiceListHierarchyNodesOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
 
 /*
-  Find find API
+  ViewServiceFind finds will select all the provided field names for a given context
 */
-func (a *Client) Find(params *FindParams, authInfo runtime.ClientAuthInfoWriter) (*FindOK, error) {
+func (a *Client) ViewServiceFind(params *ViewServiceFindParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ViewServiceFindOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewFindParams()
+		params = NewViewServiceFindParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "Find",
+	op := &runtime.ClientOperation{
+		ID:                 "ViewService_Find",
 		Method:             "POST",
 		PathPattern:        "/api/find",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &FindReader{formats: a.formats},
+		Reader:             &ViewServiceFindReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*FindOK)
+	success, ok := result.(*ViewServiceFindOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for Find: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*ViewServiceFindDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
-  ListFilters list filters API
+  ViewServiceListFilters view service list filters API
 */
-func (a *Client) ListFilters(params *ListFiltersParams, authInfo runtime.ClientAuthInfoWriter) (*ListFiltersOK, error) {
+func (a *Client) ViewServiceListFilters(params *ViewServiceListFiltersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ViewServiceListFiltersOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewListFiltersParams()
+		params = NewViewServiceListFiltersParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "ListFilters",
+	op := &runtime.ClientOperation{
+		ID:                 "ViewService_ListFilters",
 		Method:             "POST",
 		PathPattern:        "/api/list_filters",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &ListFiltersReader{formats: a.formats},
+		Reader:             &ViewServiceListFiltersReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*ListFiltersOK)
+	success, ok := result.(*ViewServiceListFiltersOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for ListFilters: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*ViewServiceListFiltersDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
-  ListHierarchyNodes list hierarchy nodes API
+  ViewServiceListHierarchyNodes lists hierarchy nodes returns the target hierarchy node and a list of related hierarchy nodes as requested in the query
+
+  A hierarchy object is an object whose ObjectType and parents ObjectType are the same.
 */
-func (a *Client) ListHierarchyNodes(params *ListHierarchyNodesParams, authInfo runtime.ClientAuthInfoWriter) (*ListHierarchyNodesOK, error) {
+func (a *Client) ViewServiceListHierarchyNodes(params *ViewServiceListHierarchyNodesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ViewServiceListHierarchyNodesOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewListHierarchyNodesParams()
+		params = NewViewServiceListHierarchyNodesParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "ListHierarchyNodes",
+	op := &runtime.ClientOperation{
+		ID:                 "ViewService_ListHierarchyNodes",
 		Method:             "POST",
 		PathPattern:        "/api/list_hierarchy_nodes",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &ListHierarchyNodesReader{formats: a.formats},
+		Reader:             &ViewServiceListHierarchyNodesReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*ListHierarchyNodesOK)
+	success, ok := result.(*ViewServiceListHierarchyNodesOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for ListHierarchyNodes: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*ViewServiceListHierarchyNodesDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 // SetTransport changes the transport on the client

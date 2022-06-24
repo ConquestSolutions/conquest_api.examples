@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -19,7 +20,7 @@ import (
 type ConquestAPIInspectionsForAssetResponse struct {
 
 	// inspections
-	Inspections []*ConquestAPIInspection `json:"Inspections"`
+	Inspections []*ConquestAPIInspectionRecord `json:"Inspections"`
 }
 
 // Validate validates this conquest api inspections for asset response
@@ -37,7 +38,6 @@ func (m *ConquestAPIInspectionsForAssetResponse) Validate(formats strfmt.Registr
 }
 
 func (m *ConquestAPIInspectionsForAssetResponse) validateInspections(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Inspections) { // not required
 		return nil
 	}
@@ -51,6 +51,42 @@ func (m *ConquestAPIInspectionsForAssetResponse) validateInspections(formats str
 			if err := m.Inspections[i].Validate(formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("Inspections" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("Inspections" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api inspections for asset response based on the context it is used
+func (m *ConquestAPIInspectionsForAssetResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateInspections(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPIInspectionsForAssetResponse) contextValidateInspections(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Inspections); i++ {
+
+		if m.Inspections[i] != nil {
+			if err := m.Inspections[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("Inspections" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("Inspections" + "." + strconv.Itoa(i))
 				}
 				return err
 			}

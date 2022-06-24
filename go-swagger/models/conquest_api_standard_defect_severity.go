@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -17,6 +18,9 @@ import (
 //
 // swagger:model conquest_apiStandardDefectSeverity
 type ConquestAPIStandardDefectSeverity struct {
+
+	// ordr
+	Ordr int32 `json:"Ordr,omitempty"`
 
 	// responses
 	Responses []*ConquestAPIStandardDefectResponse `json:"Responses"`
@@ -46,7 +50,6 @@ func (m *ConquestAPIStandardDefectSeverity) Validate(formats strfmt.Registry) er
 }
 
 func (m *ConquestAPIStandardDefectSeverity) validateResponses(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Responses) { // not required
 		return nil
 	}
@@ -60,6 +63,42 @@ func (m *ConquestAPIStandardDefectSeverity) validateResponses(formats strfmt.Reg
 			if err := m.Responses[i].Validate(formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("Responses" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("Responses" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api standard defect severity based on the context it is used
+func (m *ConquestAPIStandardDefectSeverity) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateResponses(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPIStandardDefectSeverity) contextValidateResponses(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Responses); i++ {
+
+		if m.Responses[i] != nil {
+			if err := m.Responses[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("Responses" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("Responses" + "." + strconv.Itoa(i))
 				}
 				return err
 			}

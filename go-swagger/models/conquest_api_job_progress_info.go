@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -24,7 +26,7 @@ type ConquestAPIJobProgressInfo struct {
 	LastUpdated strfmt.DateTime `json:"last_updated,omitempty"`
 
 	// status
-	Status ConquestAPIJobStatus `json:"status,omitempty"`
+	Status *ConquestAPIJobStatus `json:"status,omitempty"`
 
 	// / A short user friendly description about what's currently happening
 	// / Defaults to the display name of JobStatus
@@ -61,7 +63,6 @@ func (m *ConquestAPIJobProgressInfo) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ConquestAPIJobProgressInfo) validateLastUpdated(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.LastUpdated) { // not required
 		return nil
 	}
@@ -74,16 +75,49 @@ func (m *ConquestAPIJobProgressInfo) validateLastUpdated(formats strfmt.Registry
 }
 
 func (m *ConquestAPIJobProgressInfo) validateStatus(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Status) { // not required
 		return nil
 	}
 
-	if err := m.Status.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("status")
+	if m.Status != nil {
+		if err := m.Status.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("status")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("status")
+			}
+			return err
 		}
-		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api job progress info based on the context it is used
+func (m *ConquestAPIJobProgressInfo) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateStatus(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPIJobProgressInfo) contextValidateStatus(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Status != nil {
+		if err := m.Status.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("status")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("status")
+			}
+			return err
+		}
 	}
 
 	return nil

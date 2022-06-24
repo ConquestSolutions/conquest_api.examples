@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -35,7 +37,6 @@ func (m *ConquestAPICreateRequestCommand) Validate(formats strfmt.Registry) erro
 }
 
 func (m *ConquestAPICreateRequestCommand) validateChangeSet(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ChangeSet) { // not required
 		return nil
 	}
@@ -44,6 +45,38 @@ func (m *ConquestAPICreateRequestCommand) validateChangeSet(formats strfmt.Regis
 		if err := m.ChangeSet.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("ChangeSet")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ChangeSet")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api create request command based on the context it is used
+func (m *ConquestAPICreateRequestCommand) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateChangeSet(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPICreateRequestCommand) contextValidateChangeSet(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ChangeSet != nil {
+		if err := m.ChangeSet.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ChangeSet")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ChangeSet")
 			}
 			return err
 		}

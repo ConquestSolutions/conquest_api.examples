@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -21,7 +22,7 @@ type ConquestAPIEnumeration struct {
 	// type is the DataType of the enumeration
 	// For example:
 	// - If the proto type is Permission, then the type is Permission
-	EnumerationType ConquestAPIEnumerationType `json:"enumerationType,omitempty"`
+	EnumerationType *ConquestAPIEnumerationType `json:"enumerationType,omitempty"`
 
 	// values
 	Values []*ConquestAPIEnumerationItem `json:"values"`
@@ -46,23 +47,25 @@ func (m *ConquestAPIEnumeration) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ConquestAPIEnumeration) validateEnumerationType(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.EnumerationType) { // not required
 		return nil
 	}
 
-	if err := m.EnumerationType.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("enumerationType")
+	if m.EnumerationType != nil {
+		if err := m.EnumerationType.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("enumerationType")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("enumerationType")
+			}
+			return err
 		}
-		return err
 	}
 
 	return nil
 }
 
 func (m *ConquestAPIEnumeration) validateValues(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Values) { // not required
 		return nil
 	}
@@ -76,6 +79,62 @@ func (m *ConquestAPIEnumeration) validateValues(formats strfmt.Registry) error {
 			if err := m.Values[i].Validate(formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("values" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("values" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api enumeration based on the context it is used
+func (m *ConquestAPIEnumeration) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateEnumerationType(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateValues(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPIEnumeration) contextValidateEnumerationType(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.EnumerationType != nil {
+		if err := m.EnumerationType.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("enumerationType")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("enumerationType")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIEnumeration) contextValidateValues(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Values); i++ {
+
+		if m.Values[i] != nil {
+			if err := m.Values[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("values" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("values" + "." + strconv.Itoa(i))
 				}
 				return err
 			}

@@ -6,6 +6,9 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
@@ -17,6 +20,9 @@ type ConquestAPICreateAssetCommand struct {
 
 	// asset description
 	AssetDescription string `json:"AssetDescription,omitempty"`
+
+	// geography data
+	GeographyData *ConquestAPIGeographyData `json:"GeographyData,omitempty"`
 
 	// ParentID is 0 if this is a Facility
 	ParentID int32 `json:"ParentID,omitempty"`
@@ -30,6 +36,64 @@ type ConquestAPICreateAssetCommand struct {
 
 // Validate validates this conquest api create asset command
 func (m *ConquestAPICreateAssetCommand) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.validateGeographyData(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPICreateAssetCommand) validateGeographyData(formats strfmt.Registry) error {
+	if swag.IsZero(m.GeographyData) { // not required
+		return nil
+	}
+
+	if m.GeographyData != nil {
+		if err := m.GeographyData.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("GeographyData")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("GeographyData")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api create asset command based on the context it is used
+func (m *ConquestAPICreateAssetCommand) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateGeographyData(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPICreateAssetCommand) contextValidateGeographyData(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.GeographyData != nil {
+		if err := m.GeographyData.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("GeographyData")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("GeographyData")
+			}
+			return err
+		}
+	}
+
 	return nil
 }
 

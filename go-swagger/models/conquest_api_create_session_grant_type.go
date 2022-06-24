@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/go-openapi/errors"
@@ -13,25 +14,20 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// ConquestAPICreateSessionGrantType  - authorization_code: code is used for exchanging an authorization code for an access token
+// ConquestAPICreateSessionGrantType - authorization_code: code is used for exchanging an authorization code for an access token
 // when an application is configured for the 'authorization code flow'
-//  - refresh_token: a refresh_token is obtained when a session has been created.
-// It is used for obtaining a new access token when a session has expired.
-//
-// A refresh token may be provided when a session is created with the 'offline' scope.
-//  - password: DO NOT USE THIS. This flow has changed. Instead of calling the API, obtain an authorization code from services.
-//
-// password is a **custom** flow where a USER provides their own credentials directly
-// to the client application the application itself generates an access token.
-//
-// For when an application is configured for the 'resource owner flow'.
-//  - pass_code: pass_code is a **custom** flow for conquest III
-// so that users can open the workplanner
-//
-// this flow must be used with the "/redirect/" endpoint
 //
 // swagger:model conquest_apiCreateSessionGrantType
 type ConquestAPICreateSessionGrantType string
+
+func NewConquestAPICreateSessionGrantType(value ConquestAPICreateSessionGrantType) *ConquestAPICreateSessionGrantType {
+	return &value
+}
+
+// Pointer returns a pointer to a freshly-allocated ConquestAPICreateSessionGrantType.
+func (m ConquestAPICreateSessionGrantType) Pointer() *ConquestAPICreateSessionGrantType {
+	return &m
+}
 
 const (
 
@@ -40,15 +36,6 @@ const (
 
 	// ConquestAPICreateSessionGrantTypeAuthorizationCode captures enum value "authorization_code"
 	ConquestAPICreateSessionGrantTypeAuthorizationCode ConquestAPICreateSessionGrantType = "authorization_code"
-
-	// ConquestAPICreateSessionGrantTypeRefreshToken captures enum value "refresh_token"
-	ConquestAPICreateSessionGrantTypeRefreshToken ConquestAPICreateSessionGrantType = "refresh_token"
-
-	// ConquestAPICreateSessionGrantTypePassword captures enum value "password"
-	ConquestAPICreateSessionGrantTypePassword ConquestAPICreateSessionGrantType = "password"
-
-	// ConquestAPICreateSessionGrantTypePassCode captures enum value "pass_code"
-	ConquestAPICreateSessionGrantTypePassCode ConquestAPICreateSessionGrantType = "pass_code"
 )
 
 // for schema
@@ -56,7 +43,7 @@ var conquestApiCreateSessionGrantTypeEnum []interface{}
 
 func init() {
 	var res []ConquestAPICreateSessionGrantType
-	if err := json.Unmarshal([]byte(`["unknown","authorization_code","refresh_token","password","pass_code"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["unknown","authorization_code"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
@@ -65,7 +52,7 @@ func init() {
 }
 
 func (m ConquestAPICreateSessionGrantType) validateConquestAPICreateSessionGrantTypeEnum(path, location string, value ConquestAPICreateSessionGrantType) error {
-	if err := validate.Enum(path, location, value, conquestApiCreateSessionGrantTypeEnum); err != nil {
+	if err := validate.EnumCase(path, location, value, conquestApiCreateSessionGrantTypeEnum, true); err != nil {
 		return err
 	}
 	return nil
@@ -83,5 +70,10 @@ func (m ConquestAPICreateSessionGrantType) Validate(formats strfmt.Registry) err
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// ContextValidate validates this conquest api create session grant type based on context it is used
+func (m ConquestAPICreateSessionGrantType) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }

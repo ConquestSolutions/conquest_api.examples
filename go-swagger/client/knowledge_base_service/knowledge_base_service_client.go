@@ -6,8 +6,6 @@ package knowledge_base_service
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"fmt"
-
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 )
@@ -25,231 +23,252 @@ type Client struct {
 	formats   strfmt.Registry
 }
 
+// ClientOption is the option for Client methods
+type ClientOption func(*runtime.ClientOperation)
+
 // ClientService is the interface for Client methods
 type ClientService interface {
-	DescribeEnumeration(params *DescribeEnumerationParams, authInfo runtime.ClientAuthInfoWriter) (*DescribeEnumerationOK, error)
+	KnowledgeBaseServiceDescribeEnumeration(params *KnowledgeBaseServiceDescribeEnumerationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*KnowledgeBaseServiceDescribeEnumerationOK, error)
 
-	GetAttributeSetFieldNames(params *GetAttributeSetFieldNamesParams, authInfo runtime.ClientAuthInfoWriter) (*GetAttributeSetFieldNamesOK, error)
+	KnowledgeBaseServiceGetAttributeSetFieldNames(params *KnowledgeBaseServiceGetAttributeSetFieldNamesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*KnowledgeBaseServiceGetAttributeSetFieldNamesOK, error)
 
-	GetCodeLists(params *GetCodeListsParams, authInfo runtime.ClientAuthInfoWriter) (*GetCodeListsOK, error)
+	KnowledgeBaseServiceGetCodeLists(params *KnowledgeBaseServiceGetCodeListsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*KnowledgeBaseServiceGetCodeListsOK, error)
 
-	ListAttributeSets(params *ListAttributeSetsParams, authInfo runtime.ClientAuthInfoWriter) (*ListAttributeSetsOK, error)
+	KnowledgeBaseServiceListAttributeSets(params *KnowledgeBaseServiceListAttributeSetsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*KnowledgeBaseServiceListAttributeSetsOK, error)
 
-	ListStandardDefectResponses(params *ListStandardDefectResponsesParams, authInfo runtime.ClientAuthInfoWriter) (*ListStandardDefectResponsesOK, error)
+	KnowledgeBaseServiceListStandardDefectResponses(params *KnowledgeBaseServiceListStandardDefectResponsesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*KnowledgeBaseServiceListStandardDefectResponsesOK, error)
 
-	ListViewFields(params *ListViewFieldsParams, authInfo runtime.ClientAuthInfoWriter) (*ListViewFieldsOK, error)
+	KnowledgeBaseServiceListViewFields(params *KnowledgeBaseServiceListViewFieldsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*KnowledgeBaseServiceListViewFieldsOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
 
 /*
-  DescribeEnumeration describe enumeration API
+  KnowledgeBaseServiceDescribeEnumeration knowledge base service describe enumeration API
 */
-func (a *Client) DescribeEnumeration(params *DescribeEnumerationParams, authInfo runtime.ClientAuthInfoWriter) (*DescribeEnumerationOK, error) {
+func (a *Client) KnowledgeBaseServiceDescribeEnumeration(params *KnowledgeBaseServiceDescribeEnumerationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*KnowledgeBaseServiceDescribeEnumerationOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewDescribeEnumerationParams()
+		params = NewKnowledgeBaseServiceDescribeEnumerationParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "DescribeEnumeration",
+	op := &runtime.ClientOperation{
+		ID:                 "KnowledgeBaseService_DescribeEnumeration",
 		Method:             "POST",
 		PathPattern:        "/api/knowledge_base/describe_enumeration",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &DescribeEnumerationReader{formats: a.formats},
+		Reader:             &KnowledgeBaseServiceDescribeEnumerationReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*DescribeEnumerationOK)
+	success, ok := result.(*KnowledgeBaseServiceDescribeEnumerationOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for DescribeEnumeration: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*KnowledgeBaseServiceDescribeEnumerationDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
-  GetAttributeSetFieldNames get attribute set field names API
+  KnowledgeBaseServiceGetAttributeSetFieldNames knowledge base service get attribute set field names API
 */
-func (a *Client) GetAttributeSetFieldNames(params *GetAttributeSetFieldNamesParams, authInfo runtime.ClientAuthInfoWriter) (*GetAttributeSetFieldNamesOK, error) {
+func (a *Client) KnowledgeBaseServiceGetAttributeSetFieldNames(params *KnowledgeBaseServiceGetAttributeSetFieldNamesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*KnowledgeBaseServiceGetAttributeSetFieldNamesOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewGetAttributeSetFieldNamesParams()
+		params = NewKnowledgeBaseServiceGetAttributeSetFieldNamesParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "GetAttributeSetFieldNames",
+	op := &runtime.ClientOperation{
+		ID:                 "KnowledgeBaseService_GetAttributeSetFieldNames",
 		Method:             "POST",
 		PathPattern:        "/api/knowledge_base/list_field_names_for_attribute_set",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &GetAttributeSetFieldNamesReader{formats: a.formats},
+		Reader:             &KnowledgeBaseServiceGetAttributeSetFieldNamesReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*GetAttributeSetFieldNamesOK)
+	success, ok := result.(*KnowledgeBaseServiceGetAttributeSetFieldNamesOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for GetAttributeSetFieldNames: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*KnowledgeBaseServiceGetAttributeSetFieldNamesDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
-  GetCodeLists get code lists API
+  KnowledgeBaseServiceGetCodeLists knowledge base service get code lists API
 */
-func (a *Client) GetCodeLists(params *GetCodeListsParams, authInfo runtime.ClientAuthInfoWriter) (*GetCodeListsOK, error) {
+func (a *Client) KnowledgeBaseServiceGetCodeLists(params *KnowledgeBaseServiceGetCodeListsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*KnowledgeBaseServiceGetCodeListsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewGetCodeListsParams()
+		params = NewKnowledgeBaseServiceGetCodeListsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "GetCodeLists",
+	op := &runtime.ClientOperation{
+		ID:                 "KnowledgeBaseService_GetCodeLists",
 		Method:             "POST",
 		PathPattern:        "/api/knowledge_base/list_code_lists",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &GetCodeListsReader{formats: a.formats},
+		Reader:             &KnowledgeBaseServiceGetCodeListsReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*GetCodeListsOK)
+	success, ok := result.(*KnowledgeBaseServiceGetCodeListsOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for GetCodeLists: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*KnowledgeBaseServiceGetCodeListsDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
-  ListAttributeSets list attribute sets API
+  KnowledgeBaseServiceListAttributeSets knowledge base service list attribute sets API
 */
-func (a *Client) ListAttributeSets(params *ListAttributeSetsParams, authInfo runtime.ClientAuthInfoWriter) (*ListAttributeSetsOK, error) {
+func (a *Client) KnowledgeBaseServiceListAttributeSets(params *KnowledgeBaseServiceListAttributeSetsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*KnowledgeBaseServiceListAttributeSetsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewListAttributeSetsParams()
+		params = NewKnowledgeBaseServiceListAttributeSetsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "ListAttributeSets",
+	op := &runtime.ClientOperation{
+		ID:                 "KnowledgeBaseService_ListAttributeSets",
 		Method:             "POST",
 		PathPattern:        "/api/knowledge_base/list_attribute_sets",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &ListAttributeSetsReader{formats: a.formats},
+		Reader:             &KnowledgeBaseServiceListAttributeSetsReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*ListAttributeSetsOK)
+	success, ok := result.(*KnowledgeBaseServiceListAttributeSetsOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for ListAttributeSets: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*KnowledgeBaseServiceListAttributeSetsDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
-  ListStandardDefectResponses list standard defect responses API
+  KnowledgeBaseServiceListStandardDefectResponses knowledge base service list standard defect responses API
 */
-func (a *Client) ListStandardDefectResponses(params *ListStandardDefectResponsesParams, authInfo runtime.ClientAuthInfoWriter) (*ListStandardDefectResponsesOK, error) {
+func (a *Client) KnowledgeBaseServiceListStandardDefectResponses(params *KnowledgeBaseServiceListStandardDefectResponsesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*KnowledgeBaseServiceListStandardDefectResponsesOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewListStandardDefectResponsesParams()
+		params = NewKnowledgeBaseServiceListStandardDefectResponsesParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "ListStandardDefectResponses",
+	op := &runtime.ClientOperation{
+		ID:                 "KnowledgeBaseService_ListStandardDefectResponses",
 		Method:             "POST",
 		PathPattern:        "/api/knowledge_base/list_standard_defect_responses",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &ListStandardDefectResponsesReader{formats: a.formats},
+		Reader:             &KnowledgeBaseServiceListStandardDefectResponsesReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*ListStandardDefectResponsesOK)
+	success, ok := result.(*KnowledgeBaseServiceListStandardDefectResponsesOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for ListStandardDefectResponses: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*KnowledgeBaseServiceListStandardDefectResponsesDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
-  ListViewFields list view fields API
+  KnowledgeBaseServiceListViewFields knowledge base service list view fields API
 */
-func (a *Client) ListViewFields(params *ListViewFieldsParams, authInfo runtime.ClientAuthInfoWriter) (*ListViewFieldsOK, error) {
+func (a *Client) KnowledgeBaseServiceListViewFields(params *KnowledgeBaseServiceListViewFieldsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*KnowledgeBaseServiceListViewFieldsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewListViewFieldsParams()
+		params = NewKnowledgeBaseServiceListViewFieldsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "ListViewFields",
+	op := &runtime.ClientOperation{
+		ID:                 "KnowledgeBaseService_ListViewFields",
 		Method:             "POST",
 		PathPattern:        "/api/knowledge_base/list_view_fields_for_context",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &ListViewFieldsReader{formats: a.formats},
+		Reader:             &KnowledgeBaseServiceListViewFieldsReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*ListViewFieldsOK)
+	success, ok := result.(*KnowledgeBaseServiceListViewFieldsOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for ListViewFields: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*KnowledgeBaseServiceListViewFieldsDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 // SetTransport changes the transport on the client

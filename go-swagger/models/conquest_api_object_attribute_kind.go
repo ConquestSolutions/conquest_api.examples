@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/go-openapi/errors"
@@ -17,6 +18,15 @@ import (
 //
 // swagger:model conquest_apiObjectAttributeKind
 type ConquestAPIObjectAttributeKind string
+
+func NewConquestAPIObjectAttributeKind(value ConquestAPIObjectAttributeKind) *ConquestAPIObjectAttributeKind {
+	return &value
+}
+
+// Pointer returns a pointer to a freshly-allocated ConquestAPIObjectAttributeKind.
+func (m ConquestAPIObjectAttributeKind) Pointer() *ConquestAPIObjectAttributeKind {
+	return &m
+}
 
 const (
 
@@ -41,7 +51,7 @@ func init() {
 }
 
 func (m ConquestAPIObjectAttributeKind) validateConquestAPIObjectAttributeKindEnum(path, location string, value ConquestAPIObjectAttributeKind) error {
-	if err := validate.Enum(path, location, value, conquestApiObjectAttributeKindEnum); err != nil {
+	if err := validate.EnumCase(path, location, value, conquestApiObjectAttributeKindEnum, true); err != nil {
 		return err
 	}
 	return nil
@@ -59,5 +69,10 @@ func (m ConquestAPIObjectAttributeKind) Validate(formats strfmt.Registry) error 
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// ContextValidate validates this conquest api object attribute kind based on context it is used
+func (m ConquestAPIObjectAttributeKind) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }

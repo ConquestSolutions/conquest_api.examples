@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/ConquestSolutions/apiv2.examples/conquest_api"
-	"github.com/ConquestSolutions/apiv2.examples/go-swagger/client/action_service"
-	"github.com/ConquestSolutions/apiv2.examples/go-swagger/client/asset_service"
-	"github.com/ConquestSolutions/apiv2.examples/go-swagger/models"
+	"github.com/ConquestSolutions/conquest_api.examples/conquest_api"
+	"github.com/ConquestSolutions/conquest_api.examples/go-swagger/client/action_service"
+	"github.com/ConquestSolutions/conquest_api.examples/go-swagger/client/asset_service"
+	"github.com/ConquestSolutions/conquest_api.examples/go-swagger/models"
 	"github.com/go-openapi/strfmt"
 	"github.com/stretchr/testify/require"
 	"testing"
@@ -35,7 +35,7 @@ func TestActionCRUD(t *testing.T) {
 	newDescription := "TestActionCRUD"
 
 	createActionCommand := asset_service.NewCreateActionForAssetParams().WithBody(&models.ConquestAPICreateActionForAssetCommand{
-		AssetID: facilityId,
+		AssetID:           facilityId,
 		ActionDescription: newDescription,
 	})
 	createActionResult, err := api.AssetService.CreateActionForAsset(createActionCommand, nil)

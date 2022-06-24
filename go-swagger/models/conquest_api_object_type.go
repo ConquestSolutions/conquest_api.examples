@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/go-openapi/errors"
@@ -22,13 +23,22 @@ import (
 //  - ObjectType_InspectionProgram: InspectionProgram (HPC key)
 //  - ObjectType_Location: Values
 //  - ObjectType_ResourceAssignment: ResourceAssignment is a resource entry on an Action
-//  - ObjectType_ConditionInspection: A ConditionInspection saves attributes (under InspectionHististory.(InspectionID,AssetID) ) of the current Asset record to history
-//  - ObjectType_AssetInspection: An AssetInspection saves attributes (under AssetInspection.(AssetID+InspectionID) ) for a given StandardInspection
-//  - ObjectType_DefectInspection: A DefectInspection saves attributes of a Defect (under DefectInspectionXRef.(Defect+InspectionID) ) to history
+//  - ObjectType_ConditionHistory: ConditionHistory is the saved attributes at a point in time of an Asset to ConditionHistory (tblInspectionHist). Keyed by ConditionHistory.(AssetID,InspectionID)
+//  - ObjectType_AssetInspection: An AssetInspection is the saved attributes at a point in time determined by the type of Standard Inspection. Keyed by AssetInspection.(AssetID,InspectionID)
+//  - ObjectType_DefectHistory: DefectHistory is the saved attributes at a point in time of a Defect to DefectHistory. Keyed with DefectHistory.(Defect,InspectionID)
 //  - ObjectType_AssetType: Archetypes / Templates / Descriptions
 //
 // swagger:model conquest_apiObjectType
 type ConquestAPIObjectType string
+
+func NewConquestAPIObjectType(value ConquestAPIObjectType) *ConquestAPIObjectType {
+	return &value
+}
+
+// Pointer returns a pointer to a freshly-allocated ConquestAPIObjectType.
+func (m ConquestAPIObjectType) Pointer() *ConquestAPIObjectType {
+	return &m
+}
 
 const (
 
@@ -80,6 +90,9 @@ const (
 	// ConquestAPIObjectTypeObjectTypeRiskEvent captures enum value "ObjectType_RiskEvent"
 	ConquestAPIObjectTypeObjectTypeRiskEvent ConquestAPIObjectType = "ObjectType_RiskEvent"
 
+	// ConquestAPIObjectTypeObjectTypeMapView captures enum value "ObjectType_MapView"
+	ConquestAPIObjectTypeObjectTypeMapView ConquestAPIObjectType = "ObjectType_MapView"
+
 	// ConquestAPIObjectTypeObjectTypeInspectionProgram captures enum value "ObjectType_InspectionProgram"
 	ConquestAPIObjectTypeObjectTypeInspectionProgram ConquestAPIObjectType = "ObjectType_InspectionProgram"
 
@@ -119,14 +132,14 @@ const (
 	// ConquestAPIObjectTypeObjectTypeDocumentContainer captures enum value "ObjectType_DocumentContainer"
 	ConquestAPIObjectTypeObjectTypeDocumentContainer ConquestAPIObjectType = "ObjectType_DocumentContainer"
 
-	// ConquestAPIObjectTypeObjectTypeConditionInspection captures enum value "ObjectType_ConditionInspection"
-	ConquestAPIObjectTypeObjectTypeConditionInspection ConquestAPIObjectType = "ObjectType_ConditionInspection"
+	// ConquestAPIObjectTypeObjectTypeConditionHistory captures enum value "ObjectType_ConditionHistory"
+	ConquestAPIObjectTypeObjectTypeConditionHistory ConquestAPIObjectType = "ObjectType_ConditionHistory"
 
 	// ConquestAPIObjectTypeObjectTypeAssetInspection captures enum value "ObjectType_AssetInspection"
 	ConquestAPIObjectTypeObjectTypeAssetInspection ConquestAPIObjectType = "ObjectType_AssetInspection"
 
-	// ConquestAPIObjectTypeObjectTypeDefectInspection captures enum value "ObjectType_DefectInspection"
-	ConquestAPIObjectTypeObjectTypeDefectInspection ConquestAPIObjectType = "ObjectType_DefectInspection"
+	// ConquestAPIObjectTypeObjectTypeDefectHistory captures enum value "ObjectType_DefectHistory"
+	ConquestAPIObjectTypeObjectTypeDefectHistory ConquestAPIObjectType = "ObjectType_DefectHistory"
 
 	// ConquestAPIObjectTypeObjectTypeAssetType captures enum value "ObjectType_AssetType"
 	ConquestAPIObjectTypeObjectTypeAssetType ConquestAPIObjectType = "ObjectType_AssetType"
@@ -155,7 +168,7 @@ var conquestApiObjectTypeEnum []interface{}
 
 func init() {
 	var res []ConquestAPIObjectType
-	if err := json.Unmarshal([]byte(`["ObjectType_None","ObjectType_Asset","ObjectType_Action","ObjectType_Request","ObjectType_Defect","ObjectType_LogBook","ObjectType_LogReading","ObjectType_CyclicAction","ObjectType_Inspection","ObjectType_OrganisationUnit","ObjectType_Contractor","ObjectType_Filter","ObjectType_View","ObjectType_Query","ObjectType_Report","ObjectType_RiskEvent","ObjectType_InspectionProgram","ObjectType_Location","ObjectType_Function","ObjectType_Resource","ObjectType_ResourceAssignment","ObjectType_Hierarchy","ObjectType_CodeField","ObjectType_Code","ObjectType_Document","ObjectType_DiaryEntry","ObjectType_DeteriorationCurve","ObjectType_ValuationTransaction","ObjectType_DocumentContainer","ObjectType_ConditionInspection","ObjectType_AssetInspection","ObjectType_DefectInspection","ObjectType_AssetType","ObjectType_StandardAction","ObjectType_StandardDefect","ObjectType_StandardInspection","ObjectType_StandardRiskEvent","ObjectType_ActionCategory","ObjectType_AttributeSet"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["ObjectType_None","ObjectType_Asset","ObjectType_Action","ObjectType_Request","ObjectType_Defect","ObjectType_LogBook","ObjectType_LogReading","ObjectType_CyclicAction","ObjectType_Inspection","ObjectType_OrganisationUnit","ObjectType_Contractor","ObjectType_Filter","ObjectType_View","ObjectType_Query","ObjectType_Report","ObjectType_RiskEvent","ObjectType_MapView","ObjectType_InspectionProgram","ObjectType_Location","ObjectType_Function","ObjectType_Resource","ObjectType_ResourceAssignment","ObjectType_Hierarchy","ObjectType_CodeField","ObjectType_Code","ObjectType_Document","ObjectType_DiaryEntry","ObjectType_DeteriorationCurve","ObjectType_ValuationTransaction","ObjectType_DocumentContainer","ObjectType_ConditionHistory","ObjectType_AssetInspection","ObjectType_DefectHistory","ObjectType_AssetType","ObjectType_StandardAction","ObjectType_StandardDefect","ObjectType_StandardInspection","ObjectType_StandardRiskEvent","ObjectType_ActionCategory","ObjectType_AttributeSet"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
@@ -164,7 +177,7 @@ func init() {
 }
 
 func (m ConquestAPIObjectType) validateConquestAPIObjectTypeEnum(path, location string, value ConquestAPIObjectType) error {
-	if err := validate.Enum(path, location, value, conquestApiObjectTypeEnum); err != nil {
+	if err := validate.EnumCase(path, location, value, conquestApiObjectTypeEnum, true); err != nil {
 		return err
 	}
 	return nil
@@ -182,5 +195,10 @@ func (m ConquestAPIObjectType) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// ContextValidate validates this conquest api object type based on context it is used
+func (m ConquestAPIObjectType) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }

@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/go-openapi/errors"
@@ -17,6 +18,15 @@ import (
 //
 // swagger:model conquest_apiObjectAttributeParameterType
 type ConquestAPIObjectAttributeParameterType string
+
+func NewConquestAPIObjectAttributeParameterType(value ConquestAPIObjectAttributeParameterType) *ConquestAPIObjectAttributeParameterType {
+	return &value
+}
+
+// Pointer returns a pointer to a freshly-allocated ConquestAPIObjectAttributeParameterType.
+func (m ConquestAPIObjectAttributeParameterType) Pointer() *ConquestAPIObjectAttributeParameterType {
+	return &m
+}
 
 const (
 
@@ -37,6 +47,15 @@ const (
 
 	// ConquestAPIObjectAttributeParameterTypeObjectAttributeParameterTypeCodeID captures enum value "ObjectAttributeParameterType_CodeID"
 	ConquestAPIObjectAttributeParameterTypeObjectAttributeParameterTypeCodeID ConquestAPIObjectAttributeParameterType = "ObjectAttributeParameterType_CodeID"
+
+	// ConquestAPIObjectAttributeParameterTypeObjectAttributeParameterTypeLineStyleValue captures enum value "ObjectAttributeParameterType_LineStyleValue"
+	ConquestAPIObjectAttributeParameterTypeObjectAttributeParameterTypeLineStyleValue ConquestAPIObjectAttributeParameterType = "ObjectAttributeParameterType_LineStyleValue"
+
+	// ConquestAPIObjectAttributeParameterTypeObjectAttributeParameterTypeFontStyleValue captures enum value "ObjectAttributeParameterType_FontStyleValue"
+	ConquestAPIObjectAttributeParameterTypeObjectAttributeParameterTypeFontStyleValue ConquestAPIObjectAttributeParameterType = "ObjectAttributeParameterType_FontStyleValue"
+
+	// ConquestAPIObjectAttributeParameterTypeObjectAttributeParameterTypeShapeStyleValue captures enum value "ObjectAttributeParameterType_ShapeStyleValue"
+	ConquestAPIObjectAttributeParameterTypeObjectAttributeParameterTypeShapeStyleValue ConquestAPIObjectAttributeParameterType = "ObjectAttributeParameterType_ShapeStyleValue"
 )
 
 // for schema
@@ -44,7 +63,7 @@ var conquestApiObjectAttributeParameterTypeEnum []interface{}
 
 func init() {
 	var res []ConquestAPIObjectAttributeParameterType
-	if err := json.Unmarshal([]byte(`["ObjectAttributeParameterType_Unknown","ObjectAttributeParameterType_CodeListID","ObjectAttributeParameterType_CodeListName","ObjectAttributeParameterType_EnumerationValue","ObjectAttributeParameterType_EnumerationDisplayName","ObjectAttributeParameterType_CodeID"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["ObjectAttributeParameterType_Unknown","ObjectAttributeParameterType_CodeListID","ObjectAttributeParameterType_CodeListName","ObjectAttributeParameterType_EnumerationValue","ObjectAttributeParameterType_EnumerationDisplayName","ObjectAttributeParameterType_CodeID","ObjectAttributeParameterType_LineStyleValue","ObjectAttributeParameterType_FontStyleValue","ObjectAttributeParameterType_ShapeStyleValue"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
@@ -53,7 +72,7 @@ func init() {
 }
 
 func (m ConquestAPIObjectAttributeParameterType) validateConquestAPIObjectAttributeParameterTypeEnum(path, location string, value ConquestAPIObjectAttributeParameterType) error {
-	if err := validate.Enum(path, location, value, conquestApiObjectAttributeParameterTypeEnum); err != nil {
+	if err := validate.EnumCase(path, location, value, conquestApiObjectAttributeParameterTypeEnum, true); err != nil {
 		return err
 	}
 	return nil
@@ -71,5 +90,10 @@ func (m ConquestAPIObjectAttributeParameterType) Validate(formats strfmt.Registr
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// ContextValidate validates this conquest api object attribute parameter type based on context it is used
+func (m ConquestAPIObjectAttributeParameterType) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }

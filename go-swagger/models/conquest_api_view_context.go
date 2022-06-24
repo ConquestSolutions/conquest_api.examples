@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -40,7 +41,6 @@ func (m *ConquestAPIViewContext) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ConquestAPIViewContext) validateViewFields(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ViewFields) { // not required
 		return nil
 	}
@@ -54,6 +54,42 @@ func (m *ConquestAPIViewContext) validateViewFields(formats strfmt.Registry) err
 			if err := m.ViewFields[i].Validate(formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("ViewFields" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("ViewFields" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api view context based on the context it is used
+func (m *ConquestAPIViewContext) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateViewFields(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPIViewContext) contextValidateViewFields(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.ViewFields); i++ {
+
+		if m.ViewFields[i] != nil {
+			if err := m.ViewFields[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("ViewFields" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("ViewFields" + "." + strconv.Itoa(i))
 				}
 				return err
 			}

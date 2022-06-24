@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -21,10 +22,10 @@ type ConquestAPIListDocumentLocationsResponse struct {
 	// document locations
 	DocumentLocations []*ConquestAPIDocumentContainer `json:"DocumentLocations"`
 
-	// The PreferredPrefix is selected by default.
+	// The PreferredLocationPrefix is selected by default.
 	// It does *not* mean production. Every configured location *is* production.
 	// It "can" mean a sub folder!
-	PreferredPrefix string `json:"PreferredPrefix,omitempty"`
+	PreferredLocationPrefix string `json:"PreferredLocationPrefix,omitempty"`
 }
 
 // Validate validates this conquest api list document locations response
@@ -42,7 +43,6 @@ func (m *ConquestAPIListDocumentLocationsResponse) Validate(formats strfmt.Regis
 }
 
 func (m *ConquestAPIListDocumentLocationsResponse) validateDocumentLocations(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.DocumentLocations) { // not required
 		return nil
 	}
@@ -56,6 +56,42 @@ func (m *ConquestAPIListDocumentLocationsResponse) validateDocumentLocations(for
 			if err := m.DocumentLocations[i].Validate(formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("DocumentLocations" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("DocumentLocations" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api list document locations response based on the context it is used
+func (m *ConquestAPIListDocumentLocationsResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateDocumentLocations(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPIListDocumentLocationsResponse) contextValidateDocumentLocations(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.DocumentLocations); i++ {
+
+		if m.DocumentLocations[i] != nil {
+			if err := m.DocumentLocations[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("DocumentLocations" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("DocumentLocations" + "." + strconv.Itoa(i))
 				}
 				return err
 			}

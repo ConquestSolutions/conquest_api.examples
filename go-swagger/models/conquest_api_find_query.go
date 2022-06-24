@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -26,6 +28,13 @@ type ConquestAPIFindQuery struct {
 	// The Criteria that filters the Context
 	Criteria *ConquestAPICriteria `json:"Criteria,omitempty"`
 
+	// Query Context for Extension Module
+	// When extension module context is used
+	// - Query SQL is defined in extension module, and made available to AppEngine  throught ExtensionHub
+	// - Flat list of CriteriaFields under single CriteriaItem is used for pass parameters to SQL query
+	// - FieldNames is ignored
+	ExtensionModuleContext *ConquestAPIExtensionModuleContext `json:"ExtensionModuleContext,omitempty"`
+
 	// FieldNames is the list of fields that will be returned in the RecordSet.
 	//
 	// If empty, the default selection of fields will be provided. Otherwise the selected field names, if defined by
@@ -38,8 +47,18 @@ type ConquestAPIFindQuery struct {
 	// limit
 	Limit int32 `json:"Limit,omitempty"`
 
+	// The ID for a MapView. A MapView is a collection of UserViews.
+	// The ResultSet will have many groups.
+	MapViewID int32 `json:"MapViewID,omitempty"`
+
 	// parameter object key
 	ParameterObjectKey *ConquestAPIObjectKey `json:"ParameterObjectKey,omitempty"`
+
+	// parameter object key2
+	ParameterObjectKey2 *ConquestAPIObjectKey `json:"ParameterObjectKey2,omitempty"`
+
+	// with in bounds
+	WithInBounds *ConquestAPILatLngBounds `json:"WithInBounds,omitempty"`
 
 	// If true, the PredefinedContextCriteria, enabled by default are not applied.
 	WithoutDefaultCriteria bool `json:"WithoutDefaultCriteria,omitempty"`
@@ -59,7 +78,19 @@ func (m *ConquestAPIFindQuery) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateExtensionModuleContext(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateParameterObjectKey(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateParameterObjectKey2(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateWithInBounds(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -70,7 +101,6 @@ func (m *ConquestAPIFindQuery) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ConquestAPIFindQuery) validateCriteria(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Criteria) { // not required
 		return nil
 	}
@@ -79,6 +109,27 @@ func (m *ConquestAPIFindQuery) validateCriteria(formats strfmt.Registry) error {
 		if err := m.Criteria.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("Criteria")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("Criteria")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIFindQuery) validateExtensionModuleContext(formats strfmt.Registry) error {
+	if swag.IsZero(m.ExtensionModuleContext) { // not required
+		return nil
+	}
+
+	if m.ExtensionModuleContext != nil {
+		if err := m.ExtensionModuleContext.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ExtensionModuleContext")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ExtensionModuleContext")
 			}
 			return err
 		}
@@ -88,7 +139,6 @@ func (m *ConquestAPIFindQuery) validateCriteria(formats strfmt.Registry) error {
 }
 
 func (m *ConquestAPIFindQuery) validateParameterObjectKey(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ParameterObjectKey) { // not required
 		return nil
 	}
@@ -97,6 +147,156 @@ func (m *ConquestAPIFindQuery) validateParameterObjectKey(formats strfmt.Registr
 		if err := m.ParameterObjectKey.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("ParameterObjectKey")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ParameterObjectKey")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIFindQuery) validateParameterObjectKey2(formats strfmt.Registry) error {
+	if swag.IsZero(m.ParameterObjectKey2) { // not required
+		return nil
+	}
+
+	if m.ParameterObjectKey2 != nil {
+		if err := m.ParameterObjectKey2.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ParameterObjectKey2")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ParameterObjectKey2")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIFindQuery) validateWithInBounds(formats strfmt.Registry) error {
+	if swag.IsZero(m.WithInBounds) { // not required
+		return nil
+	}
+
+	if m.WithInBounds != nil {
+		if err := m.WithInBounds.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("WithInBounds")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("WithInBounds")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api find query based on the context it is used
+func (m *ConquestAPIFindQuery) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCriteria(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateExtensionModuleContext(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateParameterObjectKey(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateParameterObjectKey2(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateWithInBounds(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPIFindQuery) contextValidateCriteria(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Criteria != nil {
+		if err := m.Criteria.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("Criteria")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("Criteria")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIFindQuery) contextValidateExtensionModuleContext(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ExtensionModuleContext != nil {
+		if err := m.ExtensionModuleContext.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ExtensionModuleContext")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ExtensionModuleContext")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIFindQuery) contextValidateParameterObjectKey(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ParameterObjectKey != nil {
+		if err := m.ParameterObjectKey.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ParameterObjectKey")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ParameterObjectKey")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIFindQuery) contextValidateParameterObjectKey2(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ParameterObjectKey2 != nil {
+		if err := m.ParameterObjectKey2.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ParameterObjectKey2")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ParameterObjectKey2")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIFindQuery) contextValidateWithInBounds(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.WithInBounds != nil {
+		if err := m.WithInBounds.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("WithInBounds")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("WithInBounds")
 			}
 			return err
 		}

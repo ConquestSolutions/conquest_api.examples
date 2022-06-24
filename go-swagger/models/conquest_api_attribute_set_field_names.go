@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -20,7 +22,7 @@ type ConquestAPIAttributeSetFieldNames struct {
 	FieldNames []string `json:"FieldNames"`
 
 	// object type
-	ObjectType ConquestAPIObjectType `json:"ObjectType,omitempty"`
+	ObjectType *ConquestAPIObjectType `json:"ObjectType,omitempty"`
 }
 
 // Validate validates this conquest api attribute set field names
@@ -38,16 +40,49 @@ func (m *ConquestAPIAttributeSetFieldNames) Validate(formats strfmt.Registry) er
 }
 
 func (m *ConquestAPIAttributeSetFieldNames) validateObjectType(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ObjectType) { // not required
 		return nil
 	}
 
-	if err := m.ObjectType.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("ObjectType")
+	if m.ObjectType != nil {
+		if err := m.ObjectType.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ObjectType")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ObjectType")
+			}
+			return err
 		}
-		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api attribute set field names based on the context it is used
+func (m *ConquestAPIAttributeSetFieldNames) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateObjectType(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPIAttributeSetFieldNames) contextValidateObjectType(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ObjectType != nil {
+		if err := m.ObjectType.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ObjectType")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ObjectType")
+			}
+			return err
+		}
 	}
 
 	return nil

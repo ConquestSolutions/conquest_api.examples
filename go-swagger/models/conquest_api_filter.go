@@ -6,6 +6,9 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+	"strconv"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -16,39 +19,44 @@ import (
 // swagger:model conquest_apiFilter
 type ConquestAPIFilter struct {
 
-	// attribute ID
-	AttributeID int32 `json:"AttributeID,omitempty"`
-
-	// category ID
-	CategoryID int32 `json:"CategoryID,omitempty"`
-
-	// context
+	// Context is a selection of fields with a predefined Criteria. It is like the 'from' clause if a SQL query, a set of "joined tables".
+	//
+	// Contexts are defined in the Field Dictionary
+	//
+	// This Context is parameterised with the ObjectID for it's respective ObjectType
 	Context string `json:"Context,omitempty"`
 
 	// description
 	Description string `json:"Description,omitempty"`
 
-	// filter ID
+	// The ID for a UserView. A UserView is constructed using the filter builder.
 	FilterID int32 `json:"FilterID,omitempty"`
 
 	// filter name
 	FilterName string `json:"FilterName,omitempty"`
 
-	// filter type
-	FilterType ConquestAPIFilterType `json:"FilterType,omitempty"`
+	// is available to mobile
+	IsAvailableToMobile bool `json:"IsAvailableToMobile,omitempty"`
+
+	// The ID for a MapView. A MapView is a collection of UserViews.
+	// The ResultSet will have many groups.
+	MapViewID int32 `json:"MapViewID,omitempty"`
+
+	// owner
+	Owner string `json:"Owner,omitempty"`
 
 	// system
 	System bool `json:"System,omitempty"`
 
-	// usr
-	Usr string `json:"Usr,omitempty"`
+	// user views
+	UserViews []*ConquestAPIUserViewFilter `json:"UserViews"`
 }
 
 // Validate validates this conquest api filter
 func (m *ConquestAPIFilter) Validate(formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.validateFilterType(formats); err != nil {
+	if err := m.validateUserViews(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -58,17 +66,61 @@ func (m *ConquestAPIFilter) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *ConquestAPIFilter) validateFilterType(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.FilterType) { // not required
+func (m *ConquestAPIFilter) validateUserViews(formats strfmt.Registry) error {
+	if swag.IsZero(m.UserViews) { // not required
 		return nil
 	}
 
-	if err := m.FilterType.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("FilterType")
+	for i := 0; i < len(m.UserViews); i++ {
+		if swag.IsZero(m.UserViews[i]) { // not required
+			continue
 		}
-		return err
+
+		if m.UserViews[i] != nil {
+			if err := m.UserViews[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("UserViews" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("UserViews" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api filter based on the context it is used
+func (m *ConquestAPIFilter) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateUserViews(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPIFilter) contextValidateUserViews(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.UserViews); i++ {
+
+		if m.UserViews[i] != nil {
+			if err := m.UserViews[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("UserViews" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("UserViews" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
 	}
 
 	return nil

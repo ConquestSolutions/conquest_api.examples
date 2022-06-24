@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
@@ -21,6 +23,11 @@ type ConquestAPIInspectionsForAssetQuery struct {
 
 // Validate validates this conquest api inspections for asset query
 func (m *ConquestAPIInspectionsForAssetQuery) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validates this conquest api inspections for asset query based on context it is used
+func (m *ConquestAPIInspectionsForAssetQuery) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/go-openapi/errors"
@@ -28,9 +29,24 @@ import (
 //  - JobType_RiskRecalculation: Risk Score Re-calculation
 //  - JobType_PostTransactions: Post Transactions
 //  - JobType_Bundler: Bundler (used for zipping stuff up)
+//  - JobType_GeoPackageImport: GeoPackage Import
+//  - JobType_GeoUpdate: GeoUpdate / Refresh
+//  - JobType_IssueWorkOrder: Issue work order
+//  - JobType_SendEmail: Send email
+//  - JobType_DownloadDocument: Download document
+//  - JobType_AddDocument: Add document
 //
 // swagger:model conquest_apiJobType
 type ConquestAPIJobType string
+
+func NewConquestAPIJobType(value ConquestAPIJobType) *ConquestAPIJobType {
+	return &value
+}
+
+// Pointer returns a pointer to a freshly-allocated ConquestAPIJobType.
+func (m ConquestAPIJobType) Pointer() *ConquestAPIJobType {
+	return &m
+}
 
 const (
 
@@ -78,6 +94,24 @@ const (
 
 	// ConquestAPIJobTypeJobTypeBundler captures enum value "JobType_Bundler"
 	ConquestAPIJobTypeJobTypeBundler ConquestAPIJobType = "JobType_Bundler"
+
+	// ConquestAPIJobTypeJobTypeGeoPackageImport captures enum value "JobType_GeoPackageImport"
+	ConquestAPIJobTypeJobTypeGeoPackageImport ConquestAPIJobType = "JobType_GeoPackageImport"
+
+	// ConquestAPIJobTypeJobTypeGeoUpdate captures enum value "JobType_GeoUpdate"
+	ConquestAPIJobTypeJobTypeGeoUpdate ConquestAPIJobType = "JobType_GeoUpdate"
+
+	// ConquestAPIJobTypeJobTypeIssueWorkOrder captures enum value "JobType_IssueWorkOrder"
+	ConquestAPIJobTypeJobTypeIssueWorkOrder ConquestAPIJobType = "JobType_IssueWorkOrder"
+
+	// ConquestAPIJobTypeJobTypeSendEmail captures enum value "JobType_SendEmail"
+	ConquestAPIJobTypeJobTypeSendEmail ConquestAPIJobType = "JobType_SendEmail"
+
+	// ConquestAPIJobTypeJobTypeDownloadDocument captures enum value "JobType_DownloadDocument"
+	ConquestAPIJobTypeJobTypeDownloadDocument ConquestAPIJobType = "JobType_DownloadDocument"
+
+	// ConquestAPIJobTypeJobTypeAddDocument captures enum value "JobType_AddDocument"
+	ConquestAPIJobTypeJobTypeAddDocument ConquestAPIJobType = "JobType_AddDocument"
 )
 
 // for schema
@@ -85,7 +119,7 @@ var conquestApiJobTypeEnum []interface{}
 
 func init() {
 	var res []ConquestAPIJobType
-	if err := json.Unmarshal([]byte(`["JobType_Unknown","JobType_Other","JobType_CsvImport","JobType_CompleteActions","ForwardPlanningDateChange","JobType_ConditionRecalculation","JobType_DepreciationRecalculation","JobType_IndexationUpdate","JobType_Revaluation","JobType_ReplacementCostModification","JobType_TransactionRollback","JobType_ExpiryDateRecalculation","JobType_RiskRecalculation","JobType_PostTransactions","JobType_Bundler"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["JobType_Unknown","JobType_Other","JobType_CsvImport","JobType_CompleteActions","ForwardPlanningDateChange","JobType_ConditionRecalculation","JobType_DepreciationRecalculation","JobType_IndexationUpdate","JobType_Revaluation","JobType_ReplacementCostModification","JobType_TransactionRollback","JobType_ExpiryDateRecalculation","JobType_RiskRecalculation","JobType_PostTransactions","JobType_Bundler","JobType_GeoPackageImport","JobType_GeoUpdate","JobType_IssueWorkOrder","JobType_SendEmail","JobType_DownloadDocument","JobType_AddDocument"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
@@ -94,7 +128,7 @@ func init() {
 }
 
 func (m ConquestAPIJobType) validateConquestAPIJobTypeEnum(path, location string, value ConquestAPIJobType) error {
-	if err := validate.Enum(path, location, value, conquestApiJobTypeEnum); err != nil {
+	if err := validate.EnumCase(path, location, value, conquestApiJobTypeEnum, true); err != nil {
 		return err
 	}
 	return nil
@@ -112,5 +146,10 @@ func (m ConquestAPIJobType) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// ContextValidate validates this conquest api job type based on context it is used
+func (m ConquestAPIJobType) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }

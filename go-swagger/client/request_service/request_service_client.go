@@ -6,8 +6,6 @@ package request_service
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"fmt"
-
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 )
@@ -25,157 +23,172 @@ type Client struct {
 	formats   strfmt.Registry
 }
 
+// ClientOption is the option for Client methods
+type ClientOption func(*runtime.ClientOperation)
+
 // ClientService is the interface for Client methods
 type ClientService interface {
-	CreateRequest(params *CreateRequestParams, authInfo runtime.ClientAuthInfoWriter) (*CreateRequestOK, error)
+	RequestServiceCreateRequest(params *RequestServiceCreateRequestParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RequestServiceCreateRequestOK, error)
 
-	DeleteRequest(params *DeleteRequestParams, authInfo runtime.ClientAuthInfoWriter) (*DeleteRequestOK, error)
+	RequestServiceDeleteRequest(params *RequestServiceDeleteRequestParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RequestServiceDeleteRequestOK, error)
 
-	GetRequest(params *GetRequestParams, authInfo runtime.ClientAuthInfoWriter) (*GetRequestOK, error)
+	RequestServiceGetRequest(params *RequestServiceGetRequestParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RequestServiceGetRequestOK, error)
 
-	UpdateRequest(params *UpdateRequestParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateRequestOK, error)
+	RequestServiceUpdateRequest(params *RequestServiceUpdateRequestParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RequestServiceUpdateRequestOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
 
 /*
-  CreateRequest create request API
+  RequestServiceCreateRequest request service create request API
 */
-func (a *Client) CreateRequest(params *CreateRequestParams, authInfo runtime.ClientAuthInfoWriter) (*CreateRequestOK, error) {
+func (a *Client) RequestServiceCreateRequest(params *RequestServiceCreateRequestParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RequestServiceCreateRequestOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewCreateRequestParams()
+		params = NewRequestServiceCreateRequestParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "CreateRequest",
+	op := &runtime.ClientOperation{
+		ID:                 "RequestService_CreateRequest",
 		Method:             "POST",
 		PathPattern:        "/api/requests/create_request",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &CreateRequestReader{formats: a.formats},
+		Reader:             &RequestServiceCreateRequestReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*CreateRequestOK)
+	success, ok := result.(*RequestServiceCreateRequestOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for CreateRequest: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*RequestServiceCreateRequestDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
-  DeleteRequest delete request API
+  RequestServiceDeleteRequest request service delete request API
 */
-func (a *Client) DeleteRequest(params *DeleteRequestParams, authInfo runtime.ClientAuthInfoWriter) (*DeleteRequestOK, error) {
+func (a *Client) RequestServiceDeleteRequest(params *RequestServiceDeleteRequestParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RequestServiceDeleteRequestOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewDeleteRequestParams()
+		params = NewRequestServiceDeleteRequestParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "DeleteRequest",
+	op := &runtime.ClientOperation{
+		ID:                 "RequestService_DeleteRequest",
 		Method:             "POST",
 		PathPattern:        "/api/requests/delete_request",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &DeleteRequestReader{formats: a.formats},
+		Reader:             &RequestServiceDeleteRequestReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*DeleteRequestOK)
+	success, ok := result.(*RequestServiceDeleteRequestOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for DeleteRequest: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*RequestServiceDeleteRequestDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
-  GetRequest get request API
+  RequestServiceGetRequest request service get request API
 */
-func (a *Client) GetRequest(params *GetRequestParams, authInfo runtime.ClientAuthInfoWriter) (*GetRequestOK, error) {
+func (a *Client) RequestServiceGetRequest(params *RequestServiceGetRequestParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RequestServiceGetRequestOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewGetRequestParams()
+		params = NewRequestServiceGetRequestParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "GetRequest",
+	op := &runtime.ClientOperation{
+		ID:                 "RequestService_GetRequest",
 		Method:             "GET",
 		PathPattern:        "/api/requests/{value}",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &GetRequestReader{formats: a.formats},
+		Reader:             &RequestServiceGetRequestReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*GetRequestOK)
+	success, ok := result.(*RequestServiceGetRequestOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for GetRequest: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*RequestServiceGetRequestDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
-  UpdateRequest update request API
+  RequestServiceUpdateRequest request service update request API
 */
-func (a *Client) UpdateRequest(params *UpdateRequestParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateRequestOK, error) {
+func (a *Client) RequestServiceUpdateRequest(params *RequestServiceUpdateRequestParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RequestServiceUpdateRequestOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewUpdateRequestParams()
+		params = NewRequestServiceUpdateRequestParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "UpdateRequest",
+	op := &runtime.ClientOperation{
+		ID:                 "RequestService_UpdateRequest",
 		Method:             "POST",
 		PathPattern:        "/api/requests/update_request",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &UpdateRequestReader{formats: a.formats},
+		Reader:             &RequestServiceUpdateRequestReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*UpdateRequestOK)
+	success, ok := result.(*RequestServiceUpdateRequestOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for UpdateRequest: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*RequestServiceUpdateRequestDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 // SetTransport changes the transport on the client

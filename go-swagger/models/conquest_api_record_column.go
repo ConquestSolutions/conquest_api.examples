@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -43,7 +45,7 @@ type ConquestAPIRecordColumn struct {
 	Relation *ConquestAPIRelation `json:"relation,omitempty"`
 
 	// If ValueType == ObjectKey, Relation is always set
-	ValueType ConquestAPIValueType `json:"valueType,omitempty"`
+	ValueType *ConquestAPIValueType `json:"valueType,omitempty"`
 }
 
 // Validate validates this conquest api record column
@@ -65,7 +67,6 @@ func (m *ConquestAPIRecordColumn) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ConquestAPIRecordColumn) validateRelation(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Relation) { // not required
 		return nil
 	}
@@ -74,6 +75,8 @@ func (m *ConquestAPIRecordColumn) validateRelation(formats strfmt.Registry) erro
 		if err := m.Relation.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("relation")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("relation")
 			}
 			return err
 		}
@@ -83,16 +86,69 @@ func (m *ConquestAPIRecordColumn) validateRelation(formats strfmt.Registry) erro
 }
 
 func (m *ConquestAPIRecordColumn) validateValueType(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ValueType) { // not required
 		return nil
 	}
 
-	if err := m.ValueType.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("valueType")
+	if m.ValueType != nil {
+		if err := m.ValueType.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("valueType")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("valueType")
+			}
+			return err
 		}
-		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api record column based on the context it is used
+func (m *ConquestAPIRecordColumn) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateRelation(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateValueType(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPIRecordColumn) contextValidateRelation(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Relation != nil {
+		if err := m.Relation.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("relation")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("relation")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIRecordColumn) contextValidateValueType(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ValueType != nil {
+		if err := m.ValueType.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("valueType")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("valueType")
+			}
+			return err
+		}
 	}
 
 	return nil

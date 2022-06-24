@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -16,24 +18,77 @@ import (
 // swagger:model conquest_apiStandardActionRecord
 type ConquestAPIStandardActionRecord struct {
 
+	// account
+	Account string `json:"Account,omitempty"`
+
 	// action category
 	ActionCategory int32 `json:"ActionCategory,omitempty"`
 
+	// action task list
+	ActionTaskList *ConquestAPIActionTaskList `json:"ActionTaskList,omitempty"`
+
 	// action type
-	ActionType ConquestAPIActionType `json:"ActionType,omitempty"`
+	ActionType *ConquestAPIActionType `json:"ActionType,omitempty"`
+
+	// completed icon file
+	CompletedIconFile *ConquestAPIStyle `json:"CompletedIconFile,omitempty"`
+
+	// google.protobuf.Int32Value ConditionPercent = 5;
+	// google.protobuf.DoubleValue Cycle = 6;
+	// bool CycleAuto = 7;
+	// google.protobuf.StringValue CycleUnits = 8;
+	// bool Deleted = 9;
+	Department int32 `json:"Department,omitempty"`
+
+	// dim rate multiplier
+	DimRateMultiplier int32 `json:"DimRateMultiplier,omitempty"`
+
+	// icon file
+	IconFile *ConquestAPIStyle `json:"IconFile,omitempty"`
+
+	// bool IncludeLogChildren = 13;
+	// bool Inherited = 14;
+	// google.protobuf.StringValue Instrctns = 15;
+	// google.protobuf.StringValue Layout = 16;
+	// google.protobuf.DoubleValue LogMaxVal = 17;
+	// bool LogNoRepeat = 18;
+	// google.protobuf.DoubleValue LogWarnVal = 19;
+	// google.protobuf.Int32Value LowerConditionPercent = 20;
+	// google.protobuf.Int32Value NewConditionPercent = 21;
+	NewWorks bool `json:"NewWorks,omitempty"`
+
+	// google.protobuf.Int32Value Ordr = 23;
+	// google.protobuf.Int32Value Priority = 24;
+	// google.protobuf.DoubleValue Quantity = 25;
+	Rehabilitation bool `json:"Rehabilitation,omitempty"`
 
 	// request response
 	RequestResponse bool `json:"RequestResponse,omitempty"`
 
 	// std action description
 	StdActionDescription string `json:"StdActionDescription,omitempty"`
+
+	// google.protobuf.Int32Value UOM = 29;
+	Urgency int32 `json:"Urgency,omitempty"`
 }
 
 // Validate validates this conquest api standard action record
 func (m *ConquestAPIStandardActionRecord) Validate(formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.validateActionTaskList(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateActionType(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateCompletedIconFile(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateIconFile(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -43,17 +98,167 @@ func (m *ConquestAPIStandardActionRecord) Validate(formats strfmt.Registry) erro
 	return nil
 }
 
-func (m *ConquestAPIStandardActionRecord) validateActionType(formats strfmt.Registry) error {
+func (m *ConquestAPIStandardActionRecord) validateActionTaskList(formats strfmt.Registry) error {
+	if swag.IsZero(m.ActionTaskList) { // not required
+		return nil
+	}
 
+	if m.ActionTaskList != nil {
+		if err := m.ActionTaskList.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ActionTaskList")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ActionTaskList")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIStandardActionRecord) validateActionType(formats strfmt.Registry) error {
 	if swag.IsZero(m.ActionType) { // not required
 		return nil
 	}
 
-	if err := m.ActionType.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("ActionType")
+	if m.ActionType != nil {
+		if err := m.ActionType.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ActionType")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ActionType")
+			}
+			return err
 		}
-		return err
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIStandardActionRecord) validateCompletedIconFile(formats strfmt.Registry) error {
+	if swag.IsZero(m.CompletedIconFile) { // not required
+		return nil
+	}
+
+	if m.CompletedIconFile != nil {
+		if err := m.CompletedIconFile.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("CompletedIconFile")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("CompletedIconFile")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIStandardActionRecord) validateIconFile(formats strfmt.Registry) error {
+	if swag.IsZero(m.IconFile) { // not required
+		return nil
+	}
+
+	if m.IconFile != nil {
+		if err := m.IconFile.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("IconFile")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("IconFile")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api standard action record based on the context it is used
+func (m *ConquestAPIStandardActionRecord) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateActionTaskList(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateActionType(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCompletedIconFile(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateIconFile(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPIStandardActionRecord) contextValidateActionTaskList(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ActionTaskList != nil {
+		if err := m.ActionTaskList.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ActionTaskList")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ActionTaskList")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIStandardActionRecord) contextValidateActionType(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ActionType != nil {
+		if err := m.ActionType.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ActionType")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ActionType")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIStandardActionRecord) contextValidateCompletedIconFile(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CompletedIconFile != nil {
+		if err := m.CompletedIconFile.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("CompletedIconFile")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("CompletedIconFile")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIStandardActionRecord) contextValidateIconFile(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.IconFile != nil {
+		if err := m.IconFile.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("IconFile")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("IconFile")
+			}
+			return err
+		}
 	}
 
 	return nil

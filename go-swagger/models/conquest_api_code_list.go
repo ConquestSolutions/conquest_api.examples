@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -31,7 +32,7 @@ type ConquestAPICodeList struct {
 	Items []*ConquestAPICodeListItem `json:"Items"`
 
 	// type
-	Type ConquestAPICodeListType `json:"Type,omitempty"`
+	Type *ConquestAPICodeListType `json:"Type,omitempty"`
 }
 
 // Validate validates this conquest api code list
@@ -53,7 +54,6 @@ func (m *ConquestAPICodeList) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ConquestAPICodeList) validateItems(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Items) { // not required
 		return nil
 	}
@@ -67,6 +67,8 @@ func (m *ConquestAPICodeList) validateItems(formats strfmt.Registry) error {
 			if err := m.Items[i].Validate(formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("Items" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("Items" + "." + strconv.Itoa(i))
 				}
 				return err
 			}
@@ -78,16 +80,73 @@ func (m *ConquestAPICodeList) validateItems(formats strfmt.Registry) error {
 }
 
 func (m *ConquestAPICodeList) validateType(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Type) { // not required
 		return nil
 	}
 
-	if err := m.Type.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("Type")
+	if m.Type != nil {
+		if err := m.Type.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("Type")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("Type")
+			}
+			return err
 		}
-		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api code list based on the context it is used
+func (m *ConquestAPICodeList) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateItems(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateType(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPICodeList) contextValidateItems(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Items); i++ {
+
+		if m.Items[i] != nil {
+			if err := m.Items[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("Items" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("Items" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *ConquestAPICodeList) contextValidateType(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Type != nil {
+		if err := m.Type.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("Type")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("Type")
+			}
+			return err
+		}
 	}
 
 	return nil

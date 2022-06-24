@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -25,6 +27,9 @@ type ConquestAPIAssetInspectionEntity struct {
 
 	// attribute ID
 	AttributeID int32 `json:"AttributeID,omitempty"`
+
+	// document location
+	DocumentLocation string `json:"DocumentLocation,omitempty"`
 
 	// edit date
 	// Format: date-time
@@ -69,7 +74,6 @@ func (m *ConquestAPIAssetInspectionEntity) Validate(formats strfmt.Registry) err
 }
 
 func (m *ConquestAPIAssetInspectionEntity) validateEditDate(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.EditDate) { // not required
 		return nil
 	}
@@ -82,7 +86,6 @@ func (m *ConquestAPIAssetInspectionEntity) validateEditDate(formats strfmt.Regis
 }
 
 func (m *ConquestAPIAssetInspectionEntity) validateRecord(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Record) { // not required
 		return nil
 	}
@@ -91,6 +94,8 @@ func (m *ConquestAPIAssetInspectionEntity) validateRecord(formats strfmt.Registr
 		if err := m.Record.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("Record")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("Record")
 			}
 			return err
 		}
@@ -100,7 +105,6 @@ func (m *ConquestAPIAssetInspectionEntity) validateRecord(formats strfmt.Registr
 }
 
 func (m *ConquestAPIAssetInspectionEntity) validateLock(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Lock) { // not required
 		return nil
 	}
@@ -109,6 +113,58 @@ func (m *ConquestAPIAssetInspectionEntity) validateLock(formats strfmt.Registry)
 		if err := m.Lock.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("lock")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("lock")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api asset inspection entity based on the context it is used
+func (m *ConquestAPIAssetInspectionEntity) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateRecord(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLock(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPIAssetInspectionEntity) contextValidateRecord(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Record != nil {
+		if err := m.Record.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("Record")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("Record")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIAssetInspectionEntity) contextValidateLock(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Lock != nil {
+		if err := m.Lock.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("lock")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("lock")
 			}
 			return err
 		}

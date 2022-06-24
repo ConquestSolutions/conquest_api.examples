@@ -6,8 +6,6 @@ package asset_service
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"fmt"
-
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 )
@@ -25,379 +23,492 @@ type Client struct {
 	formats   strfmt.Registry
 }
 
+// ClientOption is the option for Client methods
+type ClientOption func(*runtime.ClientOperation)
+
 // ClientService is the interface for Client methods
 type ClientService interface {
-	ChangeAssetType(params *ChangeAssetTypeParams, authInfo runtime.ClientAuthInfoWriter) (*ChangeAssetTypeOK, error)
+	AssetServiceChangeAssetType(params *AssetServiceChangeAssetTypeParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*AssetServiceChangeAssetTypeOK, error)
 
-	CreateActionForAsset(params *CreateActionForAssetParams, authInfo runtime.ClientAuthInfoWriter) (*CreateActionForAssetOK, error)
+	AssetServiceCopyAsset(params *AssetServiceCopyAssetParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*AssetServiceCopyAssetOK, error)
 
-	CreateAsset(params *CreateAssetParams, authInfo runtime.ClientAuthInfoWriter) (*CreateAssetOK, error)
+	AssetServiceCreateActionForAsset(params *AssetServiceCreateActionForAssetParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*AssetServiceCreateActionForAssetOK, error)
 
-	CreateDefectForAsset(params *CreateDefectForAssetParams, authInfo runtime.ClientAuthInfoWriter) (*CreateDefectForAssetOK, error)
+	AssetServiceCreateAsset(params *AssetServiceCreateAssetParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*AssetServiceCreateAssetOK, error)
 
-	DeleteAsset(params *DeleteAssetParams, authInfo runtime.ClientAuthInfoWriter) (*DeleteAssetOK, error)
+	AssetServiceCreateDefectForAsset(params *AssetServiceCreateDefectForAssetParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*AssetServiceCreateDefectForAssetOK, error)
 
-	GetAsset(params *GetAssetParams, authInfo runtime.ClientAuthInfoWriter) (*GetAssetOK, error)
+	AssetServiceDeleteAsset(params *AssetServiceDeleteAssetParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*AssetServiceDeleteAssetOK, error)
 
-	ListInspectionsForAsset(params *ListInspectionsForAssetParams, authInfo runtime.ClientAuthInfoWriter) (*ListInspectionsForAssetOK, error)
+	AssetServiceGetAsset(params *AssetServiceGetAssetParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*AssetServiceGetAssetOK, error)
 
-	MoveAsset(params *MoveAssetParams, authInfo runtime.ClientAuthInfoWriter) (*MoveAssetOK, error)
+	AssetServiceListInspectionsForAsset(params *AssetServiceListInspectionsForAssetParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*AssetServiceListInspectionsForAssetOK, error)
 
-	NewConditionInspection(params *NewConditionInspectionParams, authInfo runtime.ClientAuthInfoWriter) (*NewConditionInspectionOK, error)
+	AssetServiceMoveAsset(params *AssetServiceMoveAssetParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*AssetServiceMoveAssetOK, error)
 
-	UpdateAsset(params *UpdateAssetParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateAssetOK, error)
+	AssetServiceNewConditionInspection(params *AssetServiceNewConditionInspectionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*AssetServiceNewConditionInspectionOK, error)
+
+	AssetServiceTagAsInspected(params *AssetServiceTagAsInspectedParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*AssetServiceTagAsInspectedOK, error)
+
+	AssetServiceUpdateAsset(params *AssetServiceUpdateAssetParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*AssetServiceUpdateAssetOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
 
 /*
-  ChangeAssetType change asset type API
+  AssetServiceChangeAssetType asset service change asset type API
 */
-func (a *Client) ChangeAssetType(params *ChangeAssetTypeParams, authInfo runtime.ClientAuthInfoWriter) (*ChangeAssetTypeOK, error) {
+func (a *Client) AssetServiceChangeAssetType(params *AssetServiceChangeAssetTypeParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*AssetServiceChangeAssetTypeOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewChangeAssetTypeParams()
+		params = NewAssetServiceChangeAssetTypeParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "ChangeAssetType",
+	op := &runtime.ClientOperation{
+		ID:                 "AssetService_ChangeAssetType",
 		Method:             "POST",
 		PathPattern:        "/api/assets/change_asset_type",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &ChangeAssetTypeReader{formats: a.formats},
+		Reader:             &AssetServiceChangeAssetTypeReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*ChangeAssetTypeOK)
+	success, ok := result.(*AssetServiceChangeAssetTypeOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for ChangeAssetType: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*AssetServiceChangeAssetTypeDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
-  CreateActionForAsset create action for asset API
+  AssetServiceCopyAsset asset service copy asset API
 */
-func (a *Client) CreateActionForAsset(params *CreateActionForAssetParams, authInfo runtime.ClientAuthInfoWriter) (*CreateActionForAssetOK, error) {
+func (a *Client) AssetServiceCopyAsset(params *AssetServiceCopyAssetParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*AssetServiceCopyAssetOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewCreateActionForAssetParams()
+		params = NewAssetServiceCopyAssetParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "AssetService_CopyAsset",
+		Method:             "POST",
+		PathPattern:        "/api/assets/copy_asset",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &AssetServiceCopyAssetReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
 	}
 
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "CreateActionForAsset",
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*AssetServiceCopyAssetOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*AssetServiceCopyAssetDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+  AssetServiceCreateActionForAsset asset service create action for asset API
+*/
+func (a *Client) AssetServiceCreateActionForAsset(params *AssetServiceCreateActionForAssetParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*AssetServiceCreateActionForAssetOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewAssetServiceCreateActionForAssetParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "AssetService_CreateActionForAsset",
 		Method:             "POST",
 		PathPattern:        "/api/assets/create_action",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &CreateActionForAssetReader{formats: a.formats},
+		Reader:             &AssetServiceCreateActionForAssetReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*CreateActionForAssetOK)
+	success, ok := result.(*AssetServiceCreateActionForAssetOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for CreateActionForAsset: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*AssetServiceCreateActionForAssetDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
-  CreateAsset create asset API
+  AssetServiceCreateAsset asset service create asset API
 */
-func (a *Client) CreateAsset(params *CreateAssetParams, authInfo runtime.ClientAuthInfoWriter) (*CreateAssetOK, error) {
+func (a *Client) AssetServiceCreateAsset(params *AssetServiceCreateAssetParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*AssetServiceCreateAssetOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewCreateAssetParams()
+		params = NewAssetServiceCreateAssetParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "CreateAsset",
+	op := &runtime.ClientOperation{
+		ID:                 "AssetService_CreateAsset",
 		Method:             "POST",
 		PathPattern:        "/api/assets/create_asset",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &CreateAssetReader{formats: a.formats},
+		Reader:             &AssetServiceCreateAssetReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*CreateAssetOK)
+	success, ok := result.(*AssetServiceCreateAssetOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for CreateAsset: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*AssetServiceCreateAssetDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
-  CreateDefectForAsset create defect for asset API
+  AssetServiceCreateDefectForAsset asset service create defect for asset API
 */
-func (a *Client) CreateDefectForAsset(params *CreateDefectForAssetParams, authInfo runtime.ClientAuthInfoWriter) (*CreateDefectForAssetOK, error) {
+func (a *Client) AssetServiceCreateDefectForAsset(params *AssetServiceCreateDefectForAssetParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*AssetServiceCreateDefectForAssetOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewCreateDefectForAssetParams()
+		params = NewAssetServiceCreateDefectForAssetParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "CreateDefectForAsset",
+	op := &runtime.ClientOperation{
+		ID:                 "AssetService_CreateDefectForAsset",
 		Method:             "POST",
 		PathPattern:        "/api/assets/create_defect",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &CreateDefectForAssetReader{formats: a.formats},
+		Reader:             &AssetServiceCreateDefectForAssetReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*CreateDefectForAssetOK)
+	success, ok := result.(*AssetServiceCreateDefectForAssetOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for CreateDefectForAsset: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*AssetServiceCreateDefectForAssetDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
-  DeleteAsset delete asset API
+  AssetServiceDeleteAsset asset service delete asset API
 */
-func (a *Client) DeleteAsset(params *DeleteAssetParams, authInfo runtime.ClientAuthInfoWriter) (*DeleteAssetOK, error) {
+func (a *Client) AssetServiceDeleteAsset(params *AssetServiceDeleteAssetParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*AssetServiceDeleteAssetOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewDeleteAssetParams()
+		params = NewAssetServiceDeleteAssetParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "DeleteAsset",
+	op := &runtime.ClientOperation{
+		ID:                 "AssetService_DeleteAsset",
 		Method:             "POST",
 		PathPattern:        "/api/assets/delete_asset",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &DeleteAssetReader{formats: a.formats},
+		Reader:             &AssetServiceDeleteAssetReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*DeleteAssetOK)
+	success, ok := result.(*AssetServiceDeleteAssetOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for DeleteAsset: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*AssetServiceDeleteAssetDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
-  GetAsset get asset API
+  AssetServiceGetAsset asset service get asset API
 */
-func (a *Client) GetAsset(params *GetAssetParams, authInfo runtime.ClientAuthInfoWriter) (*GetAssetOK, error) {
+func (a *Client) AssetServiceGetAsset(params *AssetServiceGetAssetParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*AssetServiceGetAssetOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewGetAssetParams()
+		params = NewAssetServiceGetAssetParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "GetAsset",
+	op := &runtime.ClientOperation{
+		ID:                 "AssetService_GetAsset",
 		Method:             "GET",
 		PathPattern:        "/api/assets/{value}",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &GetAssetReader{formats: a.formats},
+		Reader:             &AssetServiceGetAssetReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*GetAssetOK)
+	success, ok := result.(*AssetServiceGetAssetOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for GetAsset: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*AssetServiceGetAssetDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
-  ListInspectionsForAsset list inspections for asset API
+  AssetServiceListInspectionsForAsset asset service list inspections for asset API
 */
-func (a *Client) ListInspectionsForAsset(params *ListInspectionsForAssetParams, authInfo runtime.ClientAuthInfoWriter) (*ListInspectionsForAssetOK, error) {
+func (a *Client) AssetServiceListInspectionsForAsset(params *AssetServiceListInspectionsForAssetParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*AssetServiceListInspectionsForAssetOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewListInspectionsForAssetParams()
+		params = NewAssetServiceListInspectionsForAssetParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "ListInspectionsForAsset",
+	op := &runtime.ClientOperation{
+		ID:                 "AssetService_ListInspectionsForAsset",
 		Method:             "POST",
 		PathPattern:        "/api/assets/list_inspections",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &ListInspectionsForAssetReader{formats: a.formats},
+		Reader:             &AssetServiceListInspectionsForAssetReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*ListInspectionsForAssetOK)
+	success, ok := result.(*AssetServiceListInspectionsForAssetOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for ListInspectionsForAsset: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*AssetServiceListInspectionsForAssetDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
-  MoveAsset move asset API
+  AssetServiceMoveAsset asset service move asset API
 */
-func (a *Client) MoveAsset(params *MoveAssetParams, authInfo runtime.ClientAuthInfoWriter) (*MoveAssetOK, error) {
+func (a *Client) AssetServiceMoveAsset(params *AssetServiceMoveAssetParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*AssetServiceMoveAssetOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewMoveAssetParams()
+		params = NewAssetServiceMoveAssetParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "MoveAsset",
+	op := &runtime.ClientOperation{
+		ID:                 "AssetService_MoveAsset",
 		Method:             "POST",
 		PathPattern:        "/api/assets/move_asset",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &MoveAssetReader{formats: a.formats},
+		Reader:             &AssetServiceMoveAssetReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*MoveAssetOK)
+	success, ok := result.(*AssetServiceMoveAssetOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for MoveAsset: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*AssetServiceMoveAssetDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
-  NewConditionInspection new condition inspection API
+  AssetServiceNewConditionInspection asset service new condition inspection API
 */
-func (a *Client) NewConditionInspection(params *NewConditionInspectionParams, authInfo runtime.ClientAuthInfoWriter) (*NewConditionInspectionOK, error) {
+func (a *Client) AssetServiceNewConditionInspection(params *AssetServiceNewConditionInspectionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*AssetServiceNewConditionInspectionOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewNewConditionInspectionParams()
+		params = NewAssetServiceNewConditionInspectionParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "NewConditionInspection",
+	op := &runtime.ClientOperation{
+		ID:                 "AssetService_NewConditionInspection",
 		Method:             "POST",
 		PathPattern:        "/api/assets/new_condition_inspection",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &NewConditionInspectionReader{formats: a.formats},
+		Reader:             &AssetServiceNewConditionInspectionReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*NewConditionInspectionOK)
+	success, ok := result.(*AssetServiceNewConditionInspectionOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for NewConditionInspection: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*AssetServiceNewConditionInspectionDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
-  UpdateAsset update asset API
+  AssetServiceTagAsInspected asset service tag as inspected API
 */
-func (a *Client) UpdateAsset(params *UpdateAssetParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateAssetOK, error) {
+func (a *Client) AssetServiceTagAsInspected(params *AssetServiceTagAsInspectedParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*AssetServiceTagAsInspectedOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewUpdateAssetParams()
+		params = NewAssetServiceTagAsInspectedParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "AssetService_TagAsInspected",
+		Method:             "POST",
+		PathPattern:        "/api/assets/tag_as_inspected",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &AssetServiceTagAsInspectedReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
 	}
 
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "UpdateAsset",
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*AssetServiceTagAsInspectedOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*AssetServiceTagAsInspectedDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+  AssetServiceUpdateAsset asset service update asset API
+*/
+func (a *Client) AssetServiceUpdateAsset(params *AssetServiceUpdateAssetParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*AssetServiceUpdateAssetOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewAssetServiceUpdateAssetParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "AssetService_UpdateAsset",
 		Method:             "POST",
 		PathPattern:        "/api/assets/update_asset",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &UpdateAssetReader{formats: a.formats},
+		Reader:             &AssetServiceUpdateAssetReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*UpdateAssetOK)
+	success, ok := result.(*AssetServiceUpdateAssetOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for UpdateAsset: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
+	unexpectedSuccess := result.(*AssetServiceUpdateAssetDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 // SetTransport changes the transport on the client

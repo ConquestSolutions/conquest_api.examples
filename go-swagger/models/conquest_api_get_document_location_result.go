@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -26,7 +28,7 @@ type ConquestAPIGetDocumentLocationResult struct {
 	ObjectKey *ConquestAPIObjectKey `json:"ObjectKey,omitempty"`
 
 	// upload status
-	UploadStatus ConquestAPIUploadStatus `json:"UploadStatus,omitempty"`
+	UploadStatus *ConquestAPIUploadStatus `json:"UploadStatus,omitempty"`
 }
 
 // Validate validates this conquest api get document location result
@@ -48,7 +50,6 @@ func (m *ConquestAPIGetDocumentLocationResult) Validate(formats strfmt.Registry)
 }
 
 func (m *ConquestAPIGetDocumentLocationResult) validateObjectKey(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ObjectKey) { // not required
 		return nil
 	}
@@ -57,6 +58,8 @@ func (m *ConquestAPIGetDocumentLocationResult) validateObjectKey(formats strfmt.
 		if err := m.ObjectKey.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("ObjectKey")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ObjectKey")
 			}
 			return err
 		}
@@ -66,16 +69,69 @@ func (m *ConquestAPIGetDocumentLocationResult) validateObjectKey(formats strfmt.
 }
 
 func (m *ConquestAPIGetDocumentLocationResult) validateUploadStatus(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UploadStatus) { // not required
 		return nil
 	}
 
-	if err := m.UploadStatus.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("UploadStatus")
+	if m.UploadStatus != nil {
+		if err := m.UploadStatus.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("UploadStatus")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UploadStatus")
+			}
+			return err
 		}
-		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this conquest api get document location result based on the context it is used
+func (m *ConquestAPIGetDocumentLocationResult) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateObjectKey(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUploadStatus(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConquestAPIGetDocumentLocationResult) contextValidateObjectKey(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ObjectKey != nil {
+		if err := m.ObjectKey.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ObjectKey")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ObjectKey")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConquestAPIGetDocumentLocationResult) contextValidateUploadStatus(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UploadStatus != nil {
+		if err := m.UploadStatus.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("UploadStatus")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("UploadStatus")
+			}
+			return err
+		}
 	}
 
 	return nil

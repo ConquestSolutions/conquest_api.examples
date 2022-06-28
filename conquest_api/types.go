@@ -41,3 +41,8 @@ type Empty struct {
 type RawMessage struct {
 	Json json.RawMessage
 }
+
+type RequestError interface {
+	Code() int
+	Error() string
+}

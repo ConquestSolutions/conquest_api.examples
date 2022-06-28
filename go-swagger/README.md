@@ -8,7 +8,7 @@
 
 > Hint: Download the github release and put it in this folder.
 
-3. Generate the client using `./swagger generate client -f https://raw.githubusercontent.com/ConquestSolutions/conquest.openapi/master/4.1.5.json`
+3. Generate the client using `./swagger generate client -f https://raw.githubusercontent.com/ConquestSolutions/conquest_api.openapi/master/4.1.5.json`
 
 4. Then fetch the dependencies for the new client (as suggested in the output).
 

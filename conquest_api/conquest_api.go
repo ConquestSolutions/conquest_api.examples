@@ -43,7 +43,7 @@ func useAccessToken(accessToken string) runtime.ClientAuthInfoWriterFunc {
 	}
 }
 
-func NewClient(config Config) (*client.ConquestAPIV2, error) {
+func NewClient(config Config) (*client.ConquestAPIV4, error) {
 	u, err := url.Parse(config.Address)
 	if err != nil {
 		return nil, fmt.Errorf("invalid Conquest API 'address'")
@@ -78,7 +78,7 @@ func DefaultConfig() (*Config, error) {
 	return LoadConfig("conquest_api.credentials.json")
 }
 
-func New() (*client.ConquestAPIV2, error) {
+func New() (*client.ConquestAPIV4, error) {
 	cfg, err := DefaultConfig()
 	if err != nil {
 		return nil, err
@@ -87,10 +87,3 @@ func New() (*client.ConquestAPIV2, error) {
 }
 
 var _ runtime.ClientResponseReaderFunc
-
-func ErrStatusCode(err error) int {
-	if e, ok := err.(*runtime.APIError); ok {
-		return e.Code
-	}
-	return 0
-}

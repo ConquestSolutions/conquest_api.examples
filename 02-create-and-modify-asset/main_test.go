@@ -24,22 +24,24 @@ func TestAssetCRUD(t *testing.T) {
 
 	newDescription := "TestAssetCRUD"
 
-	createAssetCommand := asset_service.NewCreateAssetParams().WithBody(&models.ConquestAPICreateAssetCommand{
+	createAssetCommand := asset_service.NewAssetServiceCreateAssetParams()
+	createAssetCommand.WithBody(&models.ConquestAPICreateAssetCommand{
 		Proposed:         true,
 		AssetDescription: newDescription,
 	})
-	createAssetResult, err := api.AssetService.CreateAsset(createAssetCommand, nil)
+	createAssetResult, err := api.AssetService.AssetServiceCreateAsset(createAssetCommand, nil)
 	require.NoError(t, err)
 	facilityId := createAssetResult.GetPayload()
 
 	// Retrieve the object for viewing or editing
 
-	getAssetRequest := asset_service.NewGetAssetParams().WithValue(facilityId)
-	getAssetResponse, err := api.AssetService.GetAsset(getAssetRequest, nil)
+	getAssetRequest1 := asset_service.NewAssetServiceGetAssetParams()
+	getAssetRequest1.WithValue(facilityId)
+	getAssetResponse1, err := api.AssetService.AssetServiceGetAsset(getAssetRequest1, nil)
 	require.NoError(t, err)
 
-	lastEdit := getAssetResponse.GetPayload().EditDate
-	originalAsset := getAssetResponse.GetPayload().Record
+	lastEdit := getAssetResponse1.GetPayload().EditDate
+	originalAsset := getAssetResponse1.GetPayload().Record
 	require.Equal(t, newDescription, originalAsset.AssetDescription)
 
 	// Make an edit
@@ -50,7 +52,8 @@ func TestAssetCRUD(t *testing.T) {
 	updatedAsset.AssetDescription = newDescription
 	updatedAsset.YearCreated = &models.ConquestAPITimestampValue{Value: now}
 
-	updateAssetCommand := asset_service.NewUpdateAssetParams().WithBody(&models.ConquestAPIAssetRecordChangeSet{
+	updateAssetCommand1 := asset_service.NewAssetServiceUpdateAssetParams()
+	updateAssetCommand1.WithBody(&models.ConquestAPIAssetRecordChangeSet{
 		AssetID: facilityId,
 		Changes: []string{
 			"AssetDescription",
@@ -60,17 +63,18 @@ func TestAssetCRUD(t *testing.T) {
 		Original: originalAsset,
 		Updated:  &updatedAsset,
 	})
-	updateAssetResult, err := api.AssetService.UpdateAsset(updateAssetCommand, nil)
+	updateAssetResult1, err := api.AssetService.AssetServiceUpdateAsset(updateAssetCommand1, nil)
 	require.NoError(t, err)
-	require.True(t, updateAssetResult.GetPayload().Accepted)
+	require.True(t, updateAssetResult1.GetPayload().Accepted)
 
 	// Retrieve the updated object to verify the change
 
-	getAssetRequest = asset_service.NewGetAssetParams().WithValue(facilityId)
-	getAssetResponse, err = api.AssetService.GetAsset(getAssetRequest, nil)
+	getAssetRequest2 := asset_service.NewAssetServiceGetAssetParams()
+	getAssetRequest2 = getAssetRequest1.WithValue(facilityId)
+	getAssetResponse2, err := api.AssetService.AssetServiceGetAsset(getAssetRequest2, nil)
 	require.NoError(t, err)
-	lastEdit = getAssetResponse.GetPayload().EditDate
-	retrievedAsset := getAssetResponse.GetPayload().Record
+	lastEdit = getAssetResponse2.GetPayload().EditDate
+	retrievedAsset := getAssetResponse2.GetPayload().Record
 	require.Equal(t, newDescription, retrievedAsset.AssetDescription)
 	require.NotNil(t, retrievedAsset.YearCreated)
 
@@ -82,7 +86,9 @@ func TestAssetCRUD(t *testing.T) {
 	// Unset the year created
 	updatedAsset = *retrievedAsset // shallow copy
 	updatedAsset.YearCreated = nil
-	updateAssetCommand = asset_service.NewUpdateAssetParams().WithBody(&models.ConquestAPIAssetRecordChangeSet{
+
+	updateAssetCommand2 := asset_service.NewAssetServiceUpdateAssetParams()
+	updateAssetCommand2 = updateAssetCommand2.WithBody(&models.ConquestAPIAssetRecordChangeSet{
 		AssetID: facilityId,
 		Changes: []string{
 			"YearCreated",
@@ -91,30 +97,34 @@ func TestAssetCRUD(t *testing.T) {
 		Original: retrievedAsset,
 		Updated:  &updatedAsset,
 	})
-	updateAssetResult, err = api.AssetService.UpdateAsset(updateAssetCommand, nil)
+	updateAssetResult2, err := api.AssetService.AssetServiceUpdateAsset(updateAssetCommand2, nil)
 	require.NoError(t, err)
-	require.True(t, updateAssetResult.GetPayload().Accepted)
+	require.True(t, updateAssetResult2.GetPayload().Accepted)
 
 	// Retrieve the updated object and verify the change
 
-	getAssetRequest = asset_service.NewGetAssetParams().WithValue(facilityId)
-	getAssetResponse, err = api.AssetService.GetAsset(getAssetRequest, nil)
+	getAssetRequest3 := asset_service.NewAssetServiceGetAssetParams()
+	getAssetRequest3 = getAssetRequest3.WithValue(facilityId)
+	getAssetResponse3, err := api.AssetService.AssetServiceGetAsset(getAssetRequest3, nil)
 	require.NoError(t, err)
-	retrievedAsset = getAssetResponse.GetPayload().Record
+	retrievedAsset = getAssetResponse3.GetPayload().Record
 	require.Nil(t, retrievedAsset.YearCreated)
 
 	// Clean up our test data
 
-	deleteAssetCommand := asset_service.NewDeleteAssetParams().WithBody(&models.ConquestAPIDeleteAssetCommand{
+	deleteAssetCommand := asset_service.NewAssetServiceDeleteAssetParams()
+	deleteAssetCommand.WithBody(&models.ConquestAPIDeleteAssetCommand{
 		AssetID: facilityId,
 	})
-	_, err = api.AssetService.DeleteAsset(deleteAssetCommand, nil)
+	_, err = api.AssetService.AssetServiceDeleteAsset(deleteAssetCommand, nil)
 	require.NoError(t, err)
 
 	// Confirm it's gone
 
-	getAssetRequest = asset_service.NewGetAssetParams().WithValue(facilityId)
-	_, err = api.AssetService.GetAsset(getAssetRequest, nil)
-	require.Error(t, err)
-	require.Equal(t, conquest_api.ErrStatusCode(err), 404)
+	getAssetRequest4 := asset_service.NewAssetServiceGetAssetParams()
+	getAssetRequest4.WithValue(facilityId)
+	_, err = api.AssetService.AssetServiceGetAsset(getAssetRequest4, nil)
+	rerr, ok := err.(conquest_api.RequestError)
+	require.True(t, ok)
+	require.Equal(t, 404, rerr.Code())
 }

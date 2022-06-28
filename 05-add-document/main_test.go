@@ -8,6 +8,7 @@ import (
 	"github.com/ConquestSolutions/conquest_api.examples/go-swagger/models"
 	"github.com/stretchr/testify/require"
 	"io/ioutil"
+	"os"
 	"strings"
 	"testing"
 )
@@ -26,11 +27,12 @@ func TestAddDocument(t *testing.T) {
 
 	// Create a Facility (ParentID = 0)
 
-	createAssetCommand := asset_service.NewCreateAssetParams().WithBody(&models.ConquestAPICreateAssetCommand{
+	createAssetCommand := asset_service.NewAssetServiceCreateAssetParams()
+	createAssetCommand.WithBody(&models.ConquestAPICreateAssetCommand{
 		Proposed:         true,
 		AssetDescription: "TestAddDocumentToAsset",
 	})
-	createAssetResult, err := api.AssetService.CreateAsset(createAssetCommand, nil)
+	createAssetResult, err := api.AssetService.AssetServiceCreateAsset(createAssetCommand, nil)
 	require.NoError(t, err)
 	assetId := createAssetResult.GetPayload()
 
@@ -38,7 +40,9 @@ func TestAddDocument(t *testing.T) {
 
 	// Create a document record and get an upload link
 
-	addDocumentCommand := document_service.NewAddDocumentParams().WithBody(&models.ConquestAPIAddDocumentCommand{
+	addDocumentCommand := document_service.NewDocumentServiceAddDocumentParams()
+	objectType := models.ConquestAPIObjectTypeObjectTypeAsset
+	addDocumentCommand.WithBody(&models.ConquestAPIAddDocumentCommand{
 		// There's a bug here in how ObjectKey is serialised. Although we expect 'oneof' int32Value, stringValue or timestampValue; the go-swagger output looks like:
 		//
 		// "ObjectKey":{"int32Value":2610,"objectType":"ObjectType_Asset","timestampValue":"0001-01-01T00:00:00.000Z"}
@@ -51,7 +55,7 @@ func TestAddDocument(t *testing.T) {
 		//
 		// 'oneof' appears in OpenAPI 3.0, 'go-swagger' implements OpenAPI 2.0
 		ObjectKey: &models.ConquestAPIObjectKey{
-			ObjectType: models.ConquestAPIObjectTypeObjectTypeAsset,
+			ObjectType: &objectType,
 			Int32Value: assetId,
 		},
 		DocumentDescription: "Test document",
@@ -59,7 +63,7 @@ func TestAddDocument(t *testing.T) {
 		ContentType:         "text/plain",
 	})
 
-	addDocumentResult, err := api.DocumentService.AddDocument(addDocumentCommand, nil)
+	addDocumentResult, err := api.DocumentService.DocumentServiceAddDocument(addDocumentCommand, nil)
 	require.NoError(t, err)
 	uploadInfo := addDocumentResult.GetPayload()
 
@@ -68,4 +72,25 @@ func TestAddDocument(t *testing.T) {
 	fileData := ioutil.NopCloser(strings.NewReader("some text"))
 
 	require.NoError(t, cfg.UploadFile(fileData, uploadInfo))
+
+	// get the document thumbnail
+
+	doc := addDocumentResult.GetPayload().Document
+
+	generateThumbnailCommand := document_service.NewDocumentServiceGenerateDocumentLinkParams()
+	generateThumbnailCommand.WithBody(&models.ConquestAPIGenerateDocumentLinkCommand{
+		DocumentID:          doc.DocumentID,
+		ObjectKey:           doc.ObjectKey,
+		XThumbnailParameter: "medium",
+	})
+	generateThumbnailResult, err := api.DocumentService.DocumentServiceGenerateDocumentLink(generateThumbnailCommand, nil)
+	require.NoError(t, err)
+
+	linkResult := generateThumbnailResult.GetPayload()
+
+	println("document link: " + linkResult.Link)
+
+	ioutil.WriteFile("document-link.txt", []byte(linkResult.Link), os.ModePerm)
+
+	println("wrote: " + "document-link.txt")
 }

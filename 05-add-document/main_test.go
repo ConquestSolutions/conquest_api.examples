@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"github.com/ConquestSolutions/conquest_api.examples/conquest_api"
 	"github.com/ConquestSolutions/conquest_api.examples/go-swagger/client/asset_service"
@@ -9,7 +10,6 @@ import (
 	"github.com/stretchr/testify/require"
 	"io/ioutil"
 	"os"
-	"strings"
 	"testing"
 )
 
@@ -59,8 +59,8 @@ func TestAddDocument(t *testing.T) {
 			Int32Value: assetId,
 		},
 		DocumentDescription: "Test document",
-		Address:             fmt.Sprintf("file://conquest_documents/Asset/%d/TestAddDocument.txt", assetId),
-		ContentType:         "text/plain",
+		Address:             fmt.Sprintf("file://conquest_documents/Asset/%d/TestAddDocument.png", assetId),
+		ContentType:         "image/png",
 	})
 
 	addDocumentResult, err := api.DocumentService.DocumentServiceAddDocument(addDocumentCommand, nil)
@@ -69,8 +69,11 @@ func TestAddDocument(t *testing.T) {
 
 	// Upload the document
 	// require.Equal(t, "PUT", uploadInfo.UploadMethod)
-	fileData := ioutil.NopCloser(strings.NewReader("some text"))
 
+	data, err := ioutil.ReadFile("logo.png")
+	require.NoError(t, err)
+
+	fileData := ioutil.NopCloser(bytes.NewReader(data))
 	require.NoError(t, cfg.UploadFile(fileData, uploadInfo))
 
 	// get the document thumbnail

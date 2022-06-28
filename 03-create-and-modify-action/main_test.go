@@ -23,33 +23,36 @@ func TestActionCRUD(t *testing.T) {
 
 	// Create a Facility (ParentID = 0)
 
-	createAssetCommand := asset_service.NewCreateAssetParams().WithBody(&models.ConquestAPICreateAssetCommand{
+	createAssetCommand := asset_service.NewAssetServiceCreateAssetParams()
+	createAssetCommand.WithBody(&models.ConquestAPICreateAssetCommand{
 		Proposed:         true,
 		AssetDescription: "TestAssetWithAction",
 	})
-	createAssetResult, err := api.AssetService.CreateAsset(createAssetCommand, nil)
+	createAssetResult, err := api.AssetService.AssetServiceCreateAsset(createAssetCommand, nil)
 	require.NoError(t, err)
 	facilityId := createAssetResult.GetPayload()
 
 	// Create an Action for that Facility
 	newDescription := "TestActionCRUD"
 
-	createActionCommand := asset_service.NewCreateActionForAssetParams().WithBody(&models.ConquestAPICreateActionForAssetCommand{
+	createActionCommand := asset_service.NewAssetServiceCreateActionForAssetParams()
+	createActionCommand.WithBody(&models.ConquestAPICreateActionForAssetCommand{
 		AssetID:           facilityId,
 		ActionDescription: newDescription,
 	})
-	createActionResult, err := api.AssetService.CreateActionForAsset(createActionCommand, nil)
+	createActionResult, err := api.AssetService.AssetServiceCreateActionForAsset(createActionCommand, nil)
 	require.NoError(t, err)
 	actionId := createActionResult.GetPayload()
 
 	// Retrieve the object for viewing or editing
 
-	getActionRequest := action_service.NewGetActionParams().WithValue(actionId)
-	getActionResponse, err := api.ActionService.GetAction(getActionRequest, nil)
+	getActionRequest1 := action_service.NewActionServiceGetActionParams()
+	getActionRequest1.WithValue(actionId)
+	getActionResponse1, err := api.ActionService.ActionServiceGetAction(getActionRequest1, nil)
 	require.NoError(t, err)
 
-	lastEdit := getActionResponse.GetPayload().EditDate
-	originalAction := getActionResponse.GetPayload().Record
+	lastEdit := getActionResponse1.GetPayload().EditDate
+	originalAction := getActionResponse1.GetPayload().Record
 	require.Equal(t, newDescription, originalAction.ActionDescription)
 
 	// Make an edit
@@ -60,7 +63,8 @@ func TestActionCRUD(t *testing.T) {
 	updatedAction.ActionDescription = newDescription
 	updatedAction.StartDate = &models.ConquestAPITimestampValue{Value: now}
 
-	updateActionCommand := action_service.NewUpdateActionParams().WithBody(&models.ConquestAPIActionRecordChangeSet{
+	updateActionCommand := action_service.NewActionServiceUpdateActionParams()
+	updateActionCommand.WithBody(&models.ConquestAPIActionRecordChangeSet{
 		ActionID: actionId,
 		Changes: []string{
 			"ActionDescription",
@@ -70,31 +74,35 @@ func TestActionCRUD(t *testing.T) {
 		Original: originalAction,
 		Updated:  &updatedAction,
 	})
-	updateActionResult, err := api.ActionService.UpdateAction(updateActionCommand, nil)
+	updateActionResult, err := api.ActionService.ActionServiceUpdateAction(updateActionCommand, nil)
 	require.NoError(t, err)
 	require.True(t, updateActionResult.GetPayload().Accepted)
 
 	// Retrieve the updated object to verify the change
 
-	getActionRequest = action_service.NewGetActionParams().WithValue(actionId)
-	getActionResponse, err = api.ActionService.GetAction(getActionRequest, nil)
+	getActionRequest2 := action_service.NewActionServiceGetActionParams()
+	getActionRequest2.WithValue(actionId)
+	getActionResponse2, err := api.ActionService.ActionServiceGetAction(getActionRequest2, nil)
 	require.NoError(t, err)
-	lastEdit = getActionResponse.GetPayload().EditDate
-	retrievedAction := getActionResponse.GetPayload().Record
+	lastEdit = getActionResponse2.GetPayload().EditDate
+	retrievedAction := getActionResponse2.GetPayload().Record
 	require.Equal(t, newDescription, retrievedAction.ActionDescription)
 
 	// Clean up our test data
 
-	deleteActionCommand := action_service.NewDeleteActionParams().WithBody(&models.ConquestAPIDeleteActionCommand{
+	deleteActionCommand := action_service.NewActionServiceDeleteActionParams()
+	deleteActionCommand.WithBody(&models.ConquestAPIDeleteActionCommand{
 		ActionID: actionId,
 	})
-	_, err = api.ActionService.DeleteAction(deleteActionCommand, nil)
+	_, err = api.ActionService.ActionServiceDeleteAction(deleteActionCommand, nil)
 	require.NoError(t, err)
 
 	// Confirm it's gone
 
-	getActionRequest = action_service.NewGetActionParams().WithValue(actionId)
-	_, err = api.ActionService.GetAction(getActionRequest, nil)
-	require.Error(t, err)
-	require.Equal(t, conquest_api.ErrStatusCode(err), 404)
+	getActionRequest3 := action_service.NewActionServiceGetActionParams()
+	getActionRequest3.WithValue(actionId)
+	_, err = api.ActionService.ActionServiceGetAction(getActionRequest3, nil)
+	rerr, ok := err.(conquest_api.RequestError)
+	require.True(t, ok)
+	require.Equal(t, 404, rerr.Code())
 }

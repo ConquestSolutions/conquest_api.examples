@@ -7,12 +7,15 @@ replace github.com/ConquestSolutions/conquest_api.examples/go-swagger v0.0.0 => 
 replace github.com/ConquestSolutions/conquest_api.examples/conquest_api v0.0.0 => ../conquest_api
 
 require (
+	github.com/Azure/azure-sdk-for-go/sdk/storage/azblob v0.4.1
 	github.com/ConquestSolutions/conquest_api.examples/conquest_api v0.0.0
 	github.com/ConquestSolutions/conquest_api.examples/go-swagger v0.0.0
-	github.com/stretchr/testify v1.7.0
+	github.com/stretchr/testify v1.7.1
 )
 
 require (
+	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.0.0 // indirect
+	github.com/Azure/azure-sdk-for-go/sdk/internal v1.0.0 // indirect
 	github.com/PuerkitoBio/purell v1.1.1 // indirect
 	github.com/PuerkitoBio/urlesc v0.0.0-20170810143723-de5bf2ad4578 // indirect
 	github.com/asaskevich/govalidator v0.0.0-20210307081110-f21760c49a8d // indirect
@@ -35,7 +38,7 @@ require (
 	github.com/opentracing/opentracing-go v1.2.0 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	go.mongodb.org/mongo-driver v1.8.3 // indirect
-	golang.org/x/net v0.0.0-20220127200216-cd36cc0744dd // indirect
+	golang.org/x/net v0.0.0-20220425223048-2871e0cb64e4 // indirect
 	golang.org/x/text v0.3.7 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect

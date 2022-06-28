@@ -10,7 +10,6 @@ import (
 	"mime/multipart"
 	"net/http"
 	"path/filepath"
-	"strconv"
 	"strings"
 
 	"github.com/ConquestSolutions/conquest_api.examples/go-swagger/models"
@@ -30,7 +29,7 @@ func (config *Config) UploadFile(body io.ReadCloser, contentLength int, uploadIn
 	return fmt.Errorf("unknown upload method: " + uploadInfo.UploadMethod)
 }
 
-// curl --upload-file "${ApiHost}${UploadUri}"
+// curl --upload-file "${ApiHost}${UploadUri}"  -H "x-ms-blob-type: BlockBlob" -H "Content-Type: image/png" -H "Content-Length: 4553"
 func (config *Config) uploadFileViaPut(file io.ReadCloser, contentLength int, uploadInfo *models.ConquestAPIAddDocumentResult) error {
 
 	// Instantiate a request with the provided parameters.
@@ -38,12 +37,13 @@ func (config *Config) uploadFileViaPut(file io.ReadCloser, contentLength int, up
 	if err != nil {
 		return err
 	}
+
+	// Add API provided headers
 	for k, v := range uploadInfo.UploadHeaders {
-		// Don't use Add, header is case sensitive for
 		httpReq.Header[k] = []string{v}
 	}
+	// Add content headers
 	httpReq.Header.Set("Content-Type", uploadInfo.Document.ContentType)
-	httpReq.Header.Set("Content-Length", strconv.Itoa(contentLength))
 
 	// Send
 	return executeHttpRequest(config.InsecureSkipVerify, httpReq, &Empty{})
@@ -83,7 +83,6 @@ func (config *Config) uploadFileViaPost(file io.ReadCloser, contentLength int, u
 		httpReq.Header.Add("Authorization", "Bearer "+config.AccessToken)
 	}
 	httpReq.Header.Set("Content-Type", writer.FormDataContentType())
-	httpReq.Header.Set("Content-Length", strconv.Itoa(contentLength))
 
 	// Send
 	return executeHttpRequest(config.InsecureSkipVerify, httpReq, &Empty{})
@@ -97,6 +96,11 @@ func executeHttpRequest(insecureSkipVerify bool, httpReq *http.Request, resp int
 				InsecureSkipVerify: insecureSkipVerify,
 			},
 		}
+	}
+
+	fmt.Printf("\n%s %s\n", httpReq.Method, httpReq.URL.String())
+	for k, vs := range httpReq.Header {
+		fmt.Printf("%s: %s\n", k, vs[0])
 	}
 
 	httpResp, err := cli.Do(httpReq)

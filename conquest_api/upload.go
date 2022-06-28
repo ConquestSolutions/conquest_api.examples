@@ -6,10 +6,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"mime/multipart"
 	"net/http"
 	"path/filepath"
-	"reflect"
+	"strconv"
 	"strings"
 
 	"github.com/ConquestSolutions/conquest_api.examples/go-swagger/models"
@@ -18,19 +19,19 @@ import (
 // Implements an upload strategy based on parameters provided by the API
 //
 // The API will supply a method, an endpoint and required headers that an upload is parameterised.
-func (config *Config) UploadFile(body io.ReadCloser, uploadInfo *models.ConquestAPIAddDocumentResult) error {
+func (config *Config) UploadFile(body io.ReadCloser, contentLength int, uploadInfo *models.ConquestAPIAddDocumentResult) error {
 	switch strings.ToUpper(uploadInfo.UploadMethod) {
 	// Preferred
 	case "PUT":
-		return config.uploadFileViaPut(body, uploadInfo)
+		return config.uploadFileViaPut(body, contentLength, uploadInfo)
 	case "POST":
-		return config.uploadFileViaPost(body, uploadInfo)
+		return config.uploadFileViaPost(body, contentLength, uploadInfo)
 	}
 	return fmt.Errorf("unknown upload method: " + uploadInfo.UploadMethod)
 }
 
 // curl --upload-file "${ApiHost}${UploadUri}"
-func (config *Config) uploadFileViaPut(file io.ReadCloser, uploadInfo *models.ConquestAPIAddDocumentResult) error {
+func (config *Config) uploadFileViaPut(file io.ReadCloser, contentLength int, uploadInfo *models.ConquestAPIAddDocumentResult) error {
 
 	// Instantiate a request with the provided parameters.
 	httpReq, err := http.NewRequest(http.MethodPut, uploadInfo.UploadURI, file)
@@ -38,16 +39,18 @@ func (config *Config) uploadFileViaPut(file io.ReadCloser, uploadInfo *models.Co
 		return err
 	}
 	for k, v := range uploadInfo.UploadHeaders {
-		httpReq.Header.Add(k, v)
+		// Don't use Add, header is case sensitive for
+		httpReq.Header[k] = []string{v}
 	}
-	httpReq.Header.Add("Content-Type", uploadInfo.Document.ContentType)
+	httpReq.Header.Set("Content-Type", uploadInfo.Document.ContentType)
+	httpReq.Header.Set("Content-Length", strconv.Itoa(contentLength))
 
 	// Send
 	return executeHttpRequest(config.InsecureSkipVerify, httpReq, &Empty{})
 }
 
 // curl -i -X POST -H "Authorization: Bearer ACCESS_TOKEN" -H "Content-Type: multipart/form-data" -F "document=@inspection-photo.png" "${ApiHost}${UploadUri}"
-func (config *Config) uploadFileViaPost(file io.ReadCloser, uploadInfo *models.ConquestAPIAddDocumentResult) error {
+func (config *Config) uploadFileViaPost(file io.ReadCloser, contentLength int, uploadInfo *models.ConquestAPIAddDocumentResult) error {
 
 	useCredentials := false
 
@@ -74,12 +77,13 @@ func (config *Config) uploadFileViaPost(file io.ReadCloser, uploadInfo *models.C
 		return err
 	}
 	for k, v := range uploadInfo.UploadHeaders {
-		httpReq.Header.Add(k, v)
+		httpReq.Header[k] = []string{v}
 	}
 	if useCredentials {
 		httpReq.Header.Add("Authorization", "Bearer "+config.AccessToken)
 	}
 	httpReq.Header.Set("Content-Type", writer.FormDataContentType())
+	httpReq.Header.Set("Content-Length", strconv.Itoa(contentLength))
 
 	// Send
 	return executeHttpRequest(config.InsecureSkipVerify, httpReq, &Empty{})
@@ -94,21 +98,25 @@ func executeHttpRequest(insecureSkipVerify bool, httpReq *http.Request, resp int
 			},
 		}
 	}
+
 	httpResp, err := cli.Do(httpReq)
 	if err != nil {
 		return err
 	}
 
 	// Handle the case where nothing was returned
-	respType := reflect.TypeOf(resp)
-	if httpResp.ContentLength == 0 ||
-		respType.Elem() == reflect.TypeOf(Empty{}) {
-		if httpResp.StatusCode != http.StatusOK {
-			return UnknownResponse{
-				Status: httpResp.StatusCode,
+	if httpResp.StatusCode != http.StatusOK {
+		content := ""
+		if httpResp.ContentLength > 0 {
+			if data, err := ioutil.ReadAll(httpResp.Body); err == nil {
+				content = string(data)
 			}
 		}
-		return nil
+		return UnknownResponse{
+			Status:     httpResp.Status,
+			StatusCode: httpResp.StatusCode,
+			Content:    content,
+		}
 	}
 
 	// Read the data
@@ -137,7 +145,8 @@ func executeHttpRequest(insecureSkipVerify bool, httpReq *http.Request, resp int
 	// That could be handled later.
 
 	return UnknownResponse{
-		Status:      httpResp.StatusCode,
+		Status:      httpResp.Status,
+		StatusCode:  httpResp.StatusCode,
 		ContentType: contentType,
 		Content:     respData.String(),
 	}

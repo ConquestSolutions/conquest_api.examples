@@ -14,10 +14,6 @@ import (
 )
 
 // TestAddDocument is a complete demonstration of how to add a document to an object
-//
-// This test is flaky due to how the ObjectKey is serialized with the default generated code in go-swagger.
-//
-// The work around is to make ObjectKey.TimestampValue a pointer, that way, if it's not set, it's not serialized.
 func TestAddDocument(t *testing.T) {
 
 	cfg, err := conquest_api.DefaultConfig()
@@ -43,23 +39,12 @@ func TestAddDocument(t *testing.T) {
 	addDocumentCommand := document_service.NewDocumentServiceAddDocumentParams()
 	objectType := models.ConquestAPIObjectTypeObjectTypeAsset
 	addDocumentCommand.WithBody(&models.ConquestAPIAddDocumentCommand{
-		// There's a bug here in how ObjectKey is serialised. Although we expect 'oneof' int32Value, stringValue or timestampValue; the go-swagger output looks like:
-		//
-		// "ObjectKey":{"int32Value":2610,"objectType":"ObjectType_Asset","timestampValue":"0001-01-01T00:00:00.000Z"}
-		//
-		// Instead of
-		//
-		// "ObjectKey":{"int32Value":2610,"objectType":"ObjectType_Asset"}
-		//
-		// This is an instance of the problem https://conquestsolutions.github.io/specification/optional_values/
-		//
-		// 'oneof' appears in OpenAPI 3.0, 'go-swagger' implements OpenAPI 2.0
 		ObjectKey: &models.ConquestAPIObjectKey{
 			ObjectType: &objectType,
 			Int32Value: assetId,
 		},
 		DocumentDescription: "Test document",
-		Address:             fmt.Sprintf("file://conquest_documents/Asset/%d/TestAddDocument.png", assetId),
+		Address:             fmt.Sprintf("Asset/%d/TestAddDocument.png", assetId),
 		ContentType:         "image/png",
 	})
 
@@ -67,23 +52,20 @@ func TestAddDocument(t *testing.T) {
 	require.NoError(t, err)
 	uploadInfo := addDocumentResult.GetPayload()
 
-	// Upload the document
-	// require.Equal(t, "PUT", uploadInfo.UploadMethod)
+	addDoc := addDocumentResult.GetPayload()
 
 	data, err := ioutil.ReadFile("logo.png")
 	require.NoError(t, err)
 
 	fileData := ioutil.NopCloser(bytes.NewReader(data))
-	require.NoError(t, cfg.UploadFile(fileData, uploadInfo))
+	require.NoError(t, cfg.UploadFile(fileData, len(data), uploadInfo))
 
 	// get the document thumbnail
 
-	doc := addDocumentResult.GetPayload().Document
-
 	generateThumbnailCommand := document_service.NewDocumentServiceGenerateDocumentLinkParams()
 	generateThumbnailCommand.WithBody(&models.ConquestAPIGenerateDocumentLinkCommand{
-		DocumentID:          doc.DocumentID,
-		ObjectKey:           doc.ObjectKey,
+		DocumentID:          addDoc.Document.DocumentID,
+		ObjectKey:           addDoc.Document.ObjectKey,
 		XThumbnailParameter: "medium",
 	})
 	generateThumbnailResult, err := api.DocumentService.DocumentServiceGenerateDocumentLink(generateThumbnailCommand, nil)

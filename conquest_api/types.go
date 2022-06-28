@@ -8,14 +8,15 @@ import (
 // The response was not OK, not JSON and not a standard ErrorResponse
 // This is returned as an error, which you could handle elsewhere
 type UnknownResponse struct {
-	Status      int
+	Status      string
+	StatusCode  int
 	ContentType string
 	Content     string
 }
 
 func (e UnknownResponse) Error() string {
 	if e.Content == "" {
-		return fmt.Sprint(e.Status)
+		return fmt.Sprintf("%d %s", e.StatusCode, e.Status)
 	}
 	return fmt.Sprintf(e.Content)
 }

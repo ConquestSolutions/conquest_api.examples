@@ -2,3 +2,5 @@
 conquest_api.credentials.json
 */conquest_api.credentials.json
 */*.txt
+*.exe
+*/*.exe

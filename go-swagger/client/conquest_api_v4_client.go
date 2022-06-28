@@ -16,6 +16,7 @@ import (
 	"github.com/ConquestSolutions/conquest_api.examples/go-swagger/client/csv_import_service"
 	"github.com/ConquestSolutions/conquest_api.examples/go-swagger/client/defect_service"
 	"github.com/ConquestSolutions/conquest_api.examples/go-swagger/client/document_service"
+	"github.com/ConquestSolutions/conquest_api.examples/go-swagger/client/geo_service"
 	"github.com/ConquestSolutions/conquest_api.examples/go-swagger/client/jobs_service"
 	"github.com/ConquestSolutions/conquest_api.examples/go-swagger/client/knowledge_base_service"
 	"github.com/ConquestSolutions/conquest_api.examples/go-swagger/client/request_service"
@@ -71,6 +72,7 @@ func New(transport runtime.ClientTransport, formats strfmt.Registry) *ConquestAP
 	cli.CsvImportService = csv_import_service.New(transport, formats)
 	cli.DefectService = defect_service.New(transport, formats)
 	cli.DocumentService = document_service.New(transport, formats)
+	cli.GeoService = geo_service.New(transport, formats)
 	cli.JobsService = jobs_service.New(transport, formats)
 	cli.KnowledgeBaseService = knowledge_base_service.New(transport, formats)
 	cli.RequestService = request_service.New(transport, formats)
@@ -132,6 +134,8 @@ type ConquestAPIV4 struct {
 
 	DocumentService document_service.ClientService
 
+	GeoService geo_service.ClientService
+
 	JobsService jobs_service.ClientService
 
 	KnowledgeBaseService knowledge_base_service.ClientService
@@ -154,6 +158,7 @@ func (c *ConquestAPIV4) SetTransport(transport runtime.ClientTransport) {
 	c.CsvImportService.SetTransport(transport)
 	c.DefectService.SetTransport(transport)
 	c.DocumentService.SetTransport(transport)
+	c.GeoService.SetTransport(transport)
 	c.JobsService.SetTransport(transport)
 	c.KnowledgeBaseService.SetTransport(transport)
 	c.RequestService.SetTransport(transport)

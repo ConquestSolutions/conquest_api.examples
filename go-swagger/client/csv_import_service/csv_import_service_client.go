@@ -28,6 +28,8 @@ type ClientOption func(*runtime.ClientOperation)
 
 // ClientService is the interface for Client methods
 type ClientService interface {
+	CsvImportServiceAddCsvImport(params *CsvImportServiceAddCsvImportParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CsvImportServiceAddCsvImportOK, error)
+
 	CsvImportServiceDeleteCsvImport(params *CsvImportServiceDeleteCsvImportParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CsvImportServiceDeleteCsvImportOK, error)
 
 	CsvImportServiceGetCsvImportState(params *CsvImportServiceGetCsvImportStateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CsvImportServiceGetCsvImportStateOK, error)
@@ -35,6 +37,44 @@ type ClientService interface {
 	CsvImportServiceStartCsvImport(params *CsvImportServiceStartCsvImportParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CsvImportServiceStartCsvImportOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
+}
+
+/*
+  CsvImportServiceAddCsvImport csv import service add csv import API
+*/
+func (a *Client) CsvImportServiceAddCsvImport(params *CsvImportServiceAddCsvImportParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CsvImportServiceAddCsvImportOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCsvImportServiceAddCsvImportParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "CsvImportService_AddCsvImport",
+		Method:             "POST",
+		PathPattern:        "/api/import/add/{ImportType}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"multipart/form-data"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &CsvImportServiceAddCsvImportReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CsvImportServiceAddCsvImportOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*CsvImportServiceAddCsvImportDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*

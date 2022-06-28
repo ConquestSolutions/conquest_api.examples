@@ -53,7 +53,7 @@ type ConquestAPIObjectKey struct {
 	//       Unfortunately, this is not always the case, so please make sure you JSON client
 	//       doesn't serialize this when not set.
 	// Format: date-time
-	TimestampValue strfmt.DateTime `json:"timestampValue,omitempty"`
+	TimestampValue *strfmt.DateTime `json:"timestampValue,omitempty"`
 }
 
 // Validate validates this conquest api object key
